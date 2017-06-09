@@ -3,11 +3,15 @@
 
 import sys
 import binascii
+import ctypes
 import struct
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit
 
 
 class DriverDataShow(QWidget):
+    """
+    数字板串口数据读取显示
+    """
     def __init__(self):
         super().__init__()
 
@@ -15,8 +19,9 @@ class DriverDataShow(QWidget):
 
     def initUI(self):
         grid = QGridLayout()
-        self.setLayout(grid)
+        self.setLayout(grid)  # 网格布局
 
+        # 需显示的标签，linedit坐标
         positons = [
             (0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7),
             (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
@@ -36,18 +41,18 @@ class DriverDataShow(QWidget):
                   '36 45 43 35 41 30 46 46 34 42 31 33 31 43 30 30 ' \
                   '30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 ' \
                   '30 30 30 30 38 32 36 32 30 31 30 30 30 30 30 30'
-        hex_bytes = hex_str.replace(' ', '').encode('ascii')
+        hex_bytes = hex_str.replace(' ', '').encode('ascii')  # 转为16进制字符串
         bytes_list = []
         data_list = []
         for i in range(len(hex_bytes)):
             if i % 8 == 0:
-                # bytes_list.append(hex_bytes[i:i+8])
                 data_hex = binascii.a2b_hex(hex_bytes[i:i+8])
                 data = ((int(data_hex, 16) & 0xff) << 8) + (int(data_hex, 16) >> 8)
-                data_list.append(data)
+                data_c = ctypes.c_int16(data).value  # ctype 有符号整数
+                data_list.append(data_c)
 
         print(bytes_list,data_list)
-
+        #  所有参数转为有符号10进制数显示
 
 
         for name, position in zip(range(64), positons):
@@ -56,8 +61,9 @@ class DriverDataShow(QWidget):
                 grid.addWidget(label, *position)
             else:
                 text = 'data'+str(name//2)
-                linedit = QLineEdit(str(data_list[name//2]))
+                linedit = QLineEdit(str(data_list[name // 2]))  # 转为字符串类型并显示
                 linedit.setObjectName(text)
+                linedit.set(True)
                 grid.addWidget(linedit, *position)
 
         self.move(300, 150)
