@@ -1,0 +1,4 @@
+'''
+使用setup安装，命令如下：
+python setup.py install --prefix=D:\\PythonWork\\安装包\\模块\\PyUserInput-master\\setup.py --record files.txt
+'''

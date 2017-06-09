@@ -1,0 +1,113 @@
+class HidDevice(HidDeviceBaseClass)
+     |  This class is the main interface to physical HID devices
+     |  
+     |  Method resolution order:
+     |      HidDevice
+     |      HidDeviceBaseClass
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, device_path, parent_instance_id=0, instance_id='')
+     |      Interface for HID device as referenced by device_path parameter
+     |  
+     |  __repr__(self)
+     |  
+     |  add_event_handler(self, full_usage_id, handler_function, event_kind=1, aux_data=None)
+     |      Add event handler for usage value/button changes,
+     |      returns True if the handler function was updated
+     |  
+     |  close(self)
+     |      Release system resources
+     |  
+     |  count_all_feature_reports(self)
+     |      Retreive total number of available feature reports
+     |  
+     |  find_any_reports(self, usage_page=0, usage_id=0)
+     |      Find any report type referencing HID usage control/data item.
+     |      Results are returned in a dictionary mapping report_type to usage
+     |      lists.
+     |  
+     |  find_feature_reports(self, usage_page=0, usage_id=0)
+     |      Find feature report referencing HID usage control/data item
+     |  
+     |  find_input_reports(self, usage_page=0, usage_id=0)
+     |      Find input reports referencing HID usage item
+     |  
+     |  find_input_usage(self, full_usage_id)
+     |      Check if full usage Id included in input reports set
+     |      Parameters:
+     |          full_usage_id       Full target usage, use get_full_usage_id
+     |      
+     |      Returns:
+     |          Report ID as integer value, or None if report does not exist with
+     |          target usage. Nottice that report ID 0 is a valid report.
+     |  
+     |  find_output_reports(self, usage_page=0, usage_id=0)
+     |      Find output report referencing HID usage control/data item
+     |  
+     |  get_parent_device(self)
+     |      Retreive parent device string id
+     |  
+     |  get_parent_instance_id(self)
+     |      Retreive system instance id (numerical value)
+     |  
+     |  get_physical_descriptor(self)
+     |      Returns physical HID device descriptor
+     |  
+     |  is_active(self)
+     |      Poll if device is still valid
+     |  
+     |  is_opened(self)
+     |      Check if device path resource open status
+     |  
+     |  is_plugged(self)
+     |      Check if device still plugged to USB host
+     |  
+     |  open(self, output_only=False, shared=True)
+     |      Open HID device and obtain 'Collection Information'.
+     |      It effectively prepares the HidDevice object for reading and writing
+     |  
+     |  send_feature_report(self, data)
+     |      Send input/output/feature report ID = report_id, data should be a
+     |      c_byte object with included the required report data
+     |  
+     |  send_output_report(self, data)
+     |      Send input/output/feature report ID = report_id, data should be a
+     |      c_ubyte object with included the required report data
+     |  
+     |  set_raw_data_handler(self, funct)
+     |      Set external raw data handler, set to None to restore default
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  InputReportProcessingThread = <class 'pywinusb.hid.core.HidDevice.Inpu...
+     |      Input reports handler helper class
+     |  
+     |  InputReportQueue = <class 'pywinusb.hid.core.HidDevice.InputReportQueu...
+     |      Multi-threaded queue. Allows to queue reports from reading thread
+     |  
+     |  InputReportReaderThread = <class 'pywinusb.hid.core.HidDevice.InputRep...
+     |      Helper to receive input reports
+     |  
+     |  MAX_MANUFACTURER_STRING_LEN = 128
+     |  
+     |  MAX_PRODUCT_STRING_LEN = 128
+     |  
+     |  MAX_SERIAL_NUMBER_LEN = 64
+     |  
+     |  evt_decision = {0: <function HidDevice.<lambda>>, 1: <function HidDevi...
+     |  
+     |  filter_attributes = ['vendor_id', 'product_id', 'version_number', 'pro...
+     |  
+     |  max_input_queue_size = 20
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from HidDeviceBaseClass:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)

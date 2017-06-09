@@ -1,0 +1,6 @@
+'''
+3.有时候还会遇到一个某些模块在Python3.5中无法安装，可以按以下方法解决
+访问Unofficial Windows Binaries for Python Extension Packages(http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml)
+按ctrl+F 搜索相应模块，下载与你Python和操作系统对应的版本的文件下载
+在控制台执行 pip install [文件本地完整路径]进行安装，括号内必须包含完整路径+文件名+后缀
+'''

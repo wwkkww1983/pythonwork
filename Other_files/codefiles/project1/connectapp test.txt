@@ -1,0 +1,295 @@
+Python 2.7.12 (v2.7.12:d33e0cf91556, Jun 27 2016, 15:19:22) [MSC v.1500 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> 
+=== RESTART: C:\Python27\PYTHONWORKFILES\codefiles\project1\connectapp.py ===
+
+Traceback (most recent call last):
+  File "C:\Python27\PYTHONWORKFILES\codefiles\project1\connectapp.py", line 1, in <module>
+    app= Application()
+NameError: name 'Application' is not defined
+>>> 
+=== RESTART: C:\Python27\PYTHONWORKFILES\codefiles\project1\connectapp.py ===
+
+Traceback (most recent call last):
+  File "C:\Python27\PYTHONWORKFILES\codefiles\project1\connectapp.py", line 1, in <module>
+    app= application()
+NameError: name 'application' is not defined
+>>> import pywinauto
+>>> 
+=== RESTART: C:\Python27\PYTHONWORKFILES\codefiles\project1\connectapp.py ===
+
+Traceback (most recent call last):
+  File "C:\Python27\PYTHONWORKFILES\codefiles\project1\connectapp.py", line 1, in <module>
+    app= Application()
+NameError: name 'Application' is not defined
+>>> help pywinauto
+SyntaxError: invalid syntax
+>>> help module
+SyntaxError: invalid syntax
+>>> import pywinauto
+>>> app= Application()
+
+Traceback (most recent call last):
+  File "<pyshell#4>", line 1, in <module>
+    app= Application()
+NameError: name 'Application' is not defined
+>>>  from pywinauto import application
+ 
+  File "<pyshell#5>", line 2
+    from pywinauto import application
+    ^
+IndentationError: unexpected indent
+>>>  from pywinauto import application
+ 
+  File "<pyshell#6>", line 2
+    from pywinauto import application
+    ^
+IndentationError: unexpected indent
+>>> from pywinauto import application
+>>> app=application()
+
+Traceback (most recent call last):
+  File "<pyshell#8>", line 1, in <module>
+    app=application()
+TypeError: 'module' object is not callable
+>>> 
+>>> app = application.Application.start("notepad.exe")
+>>> app.notepad.TypeKeys("%FX")
+SyntaxError: invalid syntax
+>>> app = application.Application.start("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#10>", line 1, in <module>
+    app = application.Application.start("notepad.exe")
+TypeError: unbound method start() must be called with Application instance as first argument (got str instance instead)
+>>> app = application.Application.start("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#11>", line 1, in <module>
+    app = application.Application.start("notepad.exe")
+TypeError: unbound method start() must be called with Application instance as first argument (got str instance instead)
+>>> app = application.Application()
+>>> app.start_("notepad.exe"）
+	   
+SyntaxError: invalid syntax
+>>> app.startt_("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#14>", line 1, in <module>
+    app.startt_("notepad.exe")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1103, in __getattr__
+    return self[key]
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1090, in __getitem__
+    return self.window_(best_match = key)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1076, in window_
+    self.process = win_spec.WrapperObject().ProcessID()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 145, in WrapperObject
+    ctrls = _resolve_control(self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'startt_' in '[u'CabinetWClass', u'Chrome_WidgetWin_1', u'BaseGui', u'TkTopLevel', u'Program ManagerProgman', u'Python\u5b98\u65b9\u6587\u6863\u548c\u5b66\u4e60\u624b\u518c', u'Python\u5b98\u65b9\u6587\u6863\u548c\u5b66\u4e60\u624b\u518cCabinetWClass', u'\u6b22\u8fce\u4f7f\u7528\u767e\u5ea6\u4e91\u7ba1\u5bb6BaseGui', u'Afx:00160000:8:00010003:00000000:0006030D', u'Microsoft Spy++Afx:00160000:8:00010003:00000000:0006030D', u'Microsoft Spy++', u'connectapp.py - C:\\Python27\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py (2.7.12)TkTopLevel', u'Notepad++', u'dummyLayeredWnd', u'D:\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py - Notepad++ [Administrator]Notepad++', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google ChromeChrome_WidgetWin_1', u'\u7cfb\u7edfCabinetWClass', u'Shell_TrayWnd', u'TkTopLevel1', u'TkTopLevel0', u'TkTopLevel2', u'D:\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py - Notepad++ [Administrator]', u'Program Manager', u'docs', u'\u5f00\u59cbButton', u'\u65b0\u52a0\u5377 (D:)', u'docsCabinetWClass', u'\u6b22\u8fce\u4f7f\u7528\u767e\u5ea6\u4e91\u7ba1\u5bb6', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google Chrome', u'\u5f00\u59cb', u'Button', u'Progman', u'CabinetWClass1', u'CabinetWClass0', u'CabinetWClass3', u'CabinetWClass2', u'CabinetWClass4', u'connectapp.py - C:\\Python27\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py (2.7.12)', u'dummyLayeredWndDuiHostWnd', u'\u65b0\u52a0\u5377 (D:)CabinetWClass', u'TX_{82DD453B-4260-4306-AFED-60E4BD6883F0}', u'\u7cfb\u7edf', u'DuiHostWnd', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google ChromeShell_TrayWnd', u'\u5f00\u59cbTX_{82DD453B-4260-4306-AFED-60E4BD6883F0}', u'*Python 2.7.12 Shell*TkTopLevel', u'*Python 2.7.12 Shell*']'
+>>> 
+KeyboardInterrupt
+>>> app.starrt_("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#15>", line 1, in <module>
+    app.starrt_("notepad.exe")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1103, in __getattr__
+    return self[key]
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1090, in __getitem__
+    return self.window_(best_match = key)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1076, in window_
+    self.process = win_spec.WrapperObject().ProcessID()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 145, in WrapperObject
+    ctrls = _resolve_control(self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'starrt_' in '[u'CabinetWClass', u'Chrome_WidgetWin_1', u'BaseGui', u'TkTopLevel', u'Program ManagerProgman', u'Python\u5b98\u65b9\u6587\u6863\u548c\u5b66\u4e60\u624b\u518c', u'Python\u5b98\u65b9\u6587\u6863\u548c\u5b66\u4e60\u624b\u518cCabinetWClass', u'\u6b22\u8fce\u4f7f\u7528\u767e\u5ea6\u4e91\u7ba1\u5bb6BaseGui', u'Afx:00160000:8:00010003:00000000:0006030D', u'Microsoft Spy++Afx:00160000:8:00010003:00000000:0006030D', u'Notepad++', u'dummyLayeredWnd', u'D:\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py - Notepad++ [Administrator]Notepad++', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google ChromeChrome_WidgetWin_1', u'\u7cfb\u7edfCabinetWClass', u'Shell_TrayWnd', u'TkTopLevel1', u'TkTopLevel0', u'TkTopLevel2', u'D:\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py - Notepad++ [Administrator]', u'Program Manager', u'\u5f00\u59cb', u'Microsoft Spy++', u'\u65b0\u52a0\u5377 (D:)', u'*connectapp.py - C:\\Python27\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py (2.7.12)*', u'docsCabinetWClass', u'\u6b22\u8fce\u4f7f\u7528\u767e\u5ea6\u4e91\u7ba1\u5bb6', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google Chrome', u'docs', u'Button', u'Progman', u'*connectapp.py - C:\\Python27\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py (2.7.12)*TkTopLevel', u'CabinetWClass1', u'CabinetWClass0', u'CabinetWClass3', u'CabinetWClass2', u'CabinetWClass4', u'\u5f00\u59cbButton', u'dummyLayeredWndDuiHostWnd', u'\u65b0\u52a0\u5377 (D:)CabinetWClass', u'TX_{82DD453B-4260-4306-AFED-60E4BD6883F0}', u'\u7cfb\u7edf', u'DuiHostWnd', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google ChromeShell_TrayWnd', u'\u5f00\u59cbTX_{82DD453B-4260-4306-AFED-60E4BD6883F0}', u'*Python 2.7.12 Shell*TkTopLevel', u'*Python 2.7.12 Shell*']'
+>>> app.starrt("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#16>", line 1, in <module>
+    app.starrt("notepad.exe")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1103, in __getattr__
+    return self[key]
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1090, in __getitem__
+    return self.window_(best_match = key)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1076, in window_
+    self.process = win_spec.WrapperObject().ProcessID()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 145, in WrapperObject
+    ctrls = _resolve_control(self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'starrt' in '[u'CabinetWClass', u'Chrome_WidgetWin_1', u'BaseGui', u'TkTopLevel', u'Program ManagerProgman', u'Python\u5b98\u65b9\u6587\u6863\u548c\u5b66\u4e60\u624b\u518c', u'Python\u5b98\u65b9\u6587\u6863\u548c\u5b66\u4e60\u624b\u518cCabinetWClass', u'\u6b22\u8fce\u4f7f\u7528\u767e\u5ea6\u4e91\u7ba1\u5bb6BaseGui', u'Afx:00160000:8:00010003:00000000:0006030D', u'Microsoft Spy++Afx:00160000:8:00010003:00000000:0006030D', u'Notepad++', u'dummyLayeredWnd', u'D:\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py - Notepad++ [Administrator]Notepad++', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google ChromeChrome_WidgetWin_1', u'\u7cfb\u7edfCabinetWClass', u'Shell_TrayWnd', u'TkTopLevel1', u'TkTopLevel0', u'TkTopLevel2', u'D:\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py - Notepad++ [Administrator]', u'Program Manager', u'\u5f00\u59cb', u'Microsoft Spy++', u'\u65b0\u52a0\u5377 (D:)', u'*connectapp.py - C:\\Python27\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py (2.7.12)*', u'docsCabinetWClass', u'\u6b22\u8fce\u4f7f\u7528\u767e\u5ea6\u4e91\u7ba1\u5bb6', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google Chrome', u'docs', u'Button', u'Progman', u'*connectapp.py - C:\\Python27\\PYTHONWORKFILES\\codefiles\\project1\\connectapp.py (2.7.12)*TkTopLevel', u'CabinetWClass1', u'CabinetWClass0', u'CabinetWClass3', u'CabinetWClass2', u'CabinetWClass4', u'\u5f00\u59cbButton', u'dummyLayeredWndDuiHostWnd', u'\u65b0\u52a0\u5377 (D:)CabinetWClass', u'TX_{82DD453B-4260-4306-AFED-60E4BD6883F0}', u'\u7cfb\u7edf', u'DuiHostWnd', u'\u4f7f\u7528pywinauto\u6d4b\u8bd5winform\u7a0b\u5e8f - zcpygo - \u535a\u5ba2\u9891\u9053 - CSDN.NET - Google ChromeShell_TrayWnd', u'\u5f00\u59cbTX_{82DD453B-4260-4306-AFED-60E4BD6883F0}', u'*Python 2.7.12 Shell*TkTopLevel', u'*Python 2.7.12 Shell*']'
+>>> app.start("notepad.exe")
+<pywinauto.application.Application object at 0x02A362F0>
+>>> kill_("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#18>", line 1, in <module>
+    kill_("notepad.exe")
+NameError: name 'kill_' is not defined
+>>> kill("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#19>", line 1, in <module>
+    kill("notepad.exe")
+NameError: name 'kill' is not defined
+>>> app.start_("notepad.exe")
+
+Warning (from warnings module):
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 859
+    PendingDeprecationWarning)
+PendingDeprecationWarning: start_()/Start_() methods are deprecated, please switch to instance method start(). Start() is an alias to the start() method. Please note that both Start() and start() are instance methods.
+<pywinauto.application.Application object at 0x02A362F0>
+>>> app.start("notepad.exe")
+<pywinauto.application.Application object at 0x02A362F0>
+>>> app.conect(path=r"c:\windows\system32\notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#22>", line 1, in <module>
+    app.conect(path=r"c:\windows\system32\notepad.exe")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 131, in __call__
+    self.criteria[-1]['best_match'])
+AttributeError: WindowSpecification class has no 'conect' method
+>>> app.conect_(path=r"c:\windows\system32\notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#23>", line 1, in <module>
+    app.conect_(path=r"c:\windows\system32\notepad.exe")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 131, in __call__
+    self.criteria[-1]['best_match'])
+AttributeError: WindowSpecification class has no 'conect_' method
+>>> app.connect(path=r"c:\windows\system32\notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#24>", line 1, in <module>
+    app.connect(path=r"c:\windows\system32\notepad.exe")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 829, in connect
+    self.process = process_from_module(kwargs['path'])
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1266, in process_from_module
+    raise ProcessNotFoundError(message)
+ProcessNotFoundError: Could not find any process with a module of 'c:\windows\system32\notepad.exe'
+>>> app.connect("notepad.exe")
+
+Traceback (most recent call last):
+  File "<pyshell#25>", line 1, in <module>
+    app.connect("notepad.exe")
+TypeError: connect() takes exactly 1 argument (2 given)
+>>> app.connect(handle = 0x001006A8)
+<pywinauto.application.Application object at 0x02A362F0>
+>>> app.connect(process = ox15e8)
+
+Traceback (most recent call last):
+  File "<pyshell#27>", line 1, in <module>
+    app.connect(process = ox15e8)
+NameError: name 'ox15e8' is not defined
+>>> app.connect(process = 15e8)
+
+Traceback (most recent call last):
+  File "<pyshell#28>", line 1, in <module>
+    app.connect(process = 15e8)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 814, in connect
+    assert_valid_process(self.process)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 1184, in assert_valid_process
+    process_handle = win32api.OpenProcess(win32con.MAXIMUM_ALLOWED, 0, process_id)
+TypeError: integer argument expected, got float
+>>> dlg = app.window(title_re=u"无标题")
+
+Traceback (most recent call last):
+  File "<pyshell#29>", line 1, in <module>
+    dlg = app.window(title_re=u"无标题")
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 131, in __call__
+    self.criteria[-1]['best_match'])
+AttributeError: WindowSpecification class has no 'window' method
+>>> dlg = app.window_(title_re=u"无标题")
+>>> app.YourDialog.print_control_identifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#31>", line 1, in <module>
+    app.YourDialog.print_control_identifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'YourDialog' in '[]'
+>>> app.dlg.print_control_identifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#32>", line 1, in <module>
+    app.dlg.print_control_identifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'dlg' in '[]'
+>>> dlg.PrintControlIdentifiers
+<bound method WindowSpecification.PrintControlIdentifiers of <pywinauto.application.WindowSpecification object at 0x031E1450>>
+>>> dlg.print_control_identifiers
+<bound method WindowSpecification.PrintControlIdentifiers of <pywinauto.application.WindowSpecification object at 0x031E1450>>
+>>> dlg.print_control_identifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#35>", line 1, in <module>
+    dlg.print_control_identifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+WindowNotFoundError
+>>> dlg.Exists
+<bound method WindowSpecification.Exists of <pywinauto.application.WindowSpecification object at 0x031E1450>>
+>>> dlg.PrintControlIdentifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#37>", line 1, in <module>
+    dlg.PrintControlIdentifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+WindowNotFoundError
+>>> dlg.ChildWindow
+<bound method WindowSpecification.ChildWindow of <pywinauto.application.WindowSpecification object at 0x031E1450>>
+>>> app.dlg.print_control_identifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#39>", line 1, in <module>
+    app.dlg.print_control_identifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'dlg' in '[]'
+>>> app.window_(title_re=u"无标题").print_control_identifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#40>", line 1, in <module>
+    app.window_(title_re=u"无标题").print_control_identifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+WindowNotFoundError
+>>> dlg.PrintControlIdentifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#41>", line 1, in <module>
+    dlg.PrintControlIdentifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+WindowNotFoundError
+>>> app.dlg.PrintControlIdentifiers()
+
+Traceback (most recent call last):
+  File "<pyshell#42>", line 1, in <module>
+    app.dlg.PrintControlIdentifiers()
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 462, in PrintControlIdentifiers
+    self.criteria)
+  File "C:\Python27\lib\site-packages\pywinauto\application.py", line 758, in _resolve_control
+    raise e.original_exception
+MatchError: Could not find 'dlg' in '[]'
+>>> 

@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_Set</class>
+ <widget class="QDialog" name="Dialog_Set">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>690</width>
+    <height>346</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="pushButton_Open_Port">
+   <property name="geometry">
+    <rect>
+     <x>184</x>
+     <y>264</y>
+     <width>185</width>
+     <height>57</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&gt;&gt; 打开串口</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_Go_Calibration">
+   <property name="geometry">
+    <rect>
+     <x>456</x>
+     <y>264</y>
+     <width>185</width>
+     <height>57</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>进入校准 &gt;&gt;</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>48</x>
+     <y>56</y>
+     <width>321</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_Portset">
+    <item row="4" column="3">
+     <widget class="QLabel" name="label_PortB_Paudrate">
+      <property name="text">
+       <string>波特率</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="4">
+     <widget class="QComboBox" name="comboBox_PortB_Parity">
+      <item>
+       <property name="text">
+        <string>EVEN</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ODD</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NONE</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_PortA_Datasize">
+      <property name="text">
+       <string>数据长度</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_PortA_Stopbits">
+      <property name="text">
+       <string>停止位</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QComboBox" name="comboBox_PortA_Stopbits">
+      <item>
+       <property name="text">
+        <string>1位</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2位</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>无</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="5" column="4">
+     <widget class="QComboBox" name="comboBox_PortB_Datasize">
+      <item>
+       <property name="text">
+        <string>7位</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>8位</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="5" column="3">
+     <widget class="QLabel" name="label_PortB_Datasize">
+      <property name="text">
+       <string>数据长度</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="3">
+     <widget class="QLabel" name="label_PortB_Stopbits">
+      <property name="text">
+       <string>停止位</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="comboBox_PortA_Datasize">
+      <item>
+       <property name="text">
+        <string>7位</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>8位</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="3">
+     <widget class="QLabel" name="label_PortB_Parity">
+      <property name="text">
+       <string>校验</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="4">
+     <widget class="QComboBox" name="comboBox_PortB_Stopbits">
+      <item>
+       <property name="text">
+        <string>1位</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2位</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>无</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="comboBox_PortA_Parity">
+      <item>
+       <property name="text">
+        <string>EVEN</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ODD</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NONE</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_PortA_Parity">
+      <property name="text">
+       <string>校验</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLabel" name="label_PortB_Id">
+      <property name="text">
+       <string>端口</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QComboBox" name="comboBox_PortB_Id">
+      <item>
+       <property name="text">
+        <string>COM1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM3</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM5</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM6</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM7</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM8</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM9</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM10</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_PortA_Paudrate">
+      <property name="text">
+       <string>波特率</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_PortA_Id">
+      <property name="text">
+       <string>端口</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="comboBox_PortA_Id">
+      <item>
+       <property name="text">
+        <string>COM1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM3</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM5</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM6</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM7</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM8</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM9</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM10</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="label_PortA">
+      <property name="text">
+       <string>Port A 连接被测板</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="label_PortB_Id_2">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3" colspan="2">
+     <widget class="QLabel" name="label_PortB">
+      <property name="text">
+       <string>Port B 连接工装</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QComboBox" name="comboBox_PortA_Paudrate">
+      <item>
+       <property name="text">
+        <string>9600</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>19200</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>38400</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>57600</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>115200</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="4" column="4">
+     <widget class="QComboBox" name="comboBox_PortB_Paudrate">
+      <item>
+       <property name="text">
+        <string>9600</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>19200</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>38400</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>57600</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>115200</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>456</x>
+     <y>56</y>
+     <width>193</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_Moduename">
+    <item row="0" column="0">
+     <widget class="QRadioButton" name="radioButton_Select_8pt">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>LX 8PT 模块</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QRadioButton" name="radioButton_Select_8tc">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>LX 8TC 模块</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>104</x>
+     <y>32</y>
+     <width>281</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_8">
+   <property name="geometry">
+    <rect>
+     <x>504</x>
+     <y>32</y>
+     <width>145</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>32</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>串口设置</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>32</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>校准对象</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

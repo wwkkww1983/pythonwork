@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>usb2CanDataAnalTool</class>
+ <widget class="QDialog" name="usb2CanDataAnalTool">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>877</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>宋体</family>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>mainlog</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::RightToLeft</enum>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <widget class="QPushButton" name="Click_me">
+   <property name="geometry">
+    <rect>
+     <x>773</x>
+     <y>544</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>296</x>
+     <y>8</y>
+     <width>321</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>13</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="lineWidth">
+    <number>2</number>
+   </property>
+   <property name="midLineWidth">
+    <number>1</number>
+   </property>
+   <property name="text">
+    <string>USBCANII2CANOpen Conversion Tool</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>48</x>
+     <y>544</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>打开...</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>53</x>
+     <y>80</y>
+     <width>92</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>CAN1波特率：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>80</y>
+     <width>45</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>日期：</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>80</y>
+     <width>45</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>时间：</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>48</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>设置信息</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>150</y>
+     <width>801</width>
+     <height>385</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <row>
+    <property name="text">
+     <string>Data</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>序列ID</string>
+    </property>
+    <property name="background">
+     <color>
+      <red>0</red>
+      <green>170</green>
+      <blue>255</blue>
+     </color>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>方向</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>描述</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>节点状态</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>COB-ID</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>节点ID</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>子索引</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>主索引</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>数据</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>112</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>帧解析</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelBaudrateSet">
+   <property name="geometry">
+    <rect>
+     <x>144</x>
+     <y>80</y>
+     <width>145</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelTimeSet">
+   <property name="geometry">
+    <rect>
+     <x>728</x>
+     <y>80</y>
+     <width>73</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelDateSet">
+   <property name="geometry">
+    <rect>
+     <x>568</x>
+     <y>80</y>
+     <width>97</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelFileNameset">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>552</y>
+     <width>97</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>当前：无数据</string>
+   </property>
+  </widget>
+  <zorder>tableWidget_2</zorder>
+  <zorder>Click_me</zorder>
+  <zorder>label</zorder>
+  <zorder>pushButton</zorder>
+  <zorder>label_2</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>label_7</zorder>
+  <zorder>labelBaudrateSet</zorder>
+  <zorder>labelTimeSet</zorder>
+  <zorder>labelDateSet</zorder>
+  <zorder>labelFileNameset</zorder>
+ </widget>
+ <layoutdefault spacing="5" margin="10"/>
+ <tabstops>
+  <tabstop>tableWidget_2</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>Click_me</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>Click_me</sender>
+   <signal>clicked()</signal>
+   <receiver>usb2CanDataAnalTool</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>590</x>
+     <y>450</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>203</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,5 @@
+app= Application()
+app.startt_("notepad.exe")
+app.conect_(path=r"c:\windows\system32\notepad.exe")
+app.conect_(process = 2331)
+app.conect_(handle = 0x010f0c)

@@ -1,0 +1,8 @@
+'''
+#命令：cmd /k C:\Python\Python35\python.exe "$(FULL_CURRENT_PATH)" & PAUSE & EXIT 
+#说明：设置从Nopadd++启动Python并运行当前代码文件
+#步骤：
+		1.在代码界面按F5,出现输入框将上述命令插入，其中“C:\Python\Python35\python.exe”是PYthon所在路径
+		2.点击“保存”，在快捷键设置界面设置如何用键盘组合运行Python，比如“CTRL”+“F5”。
+		3.保存设置回到代码界面，输入刚才设置的快捷键或快捷键组合运行当前程序
+'''

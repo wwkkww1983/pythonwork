@@ -1,0 +1,19 @@
+class HidPUsageCaps(builtins.object)
+     |  Allow to keep usage parameters (regarless of windows type)
+     |  in a common class.
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, caps)
+     |  
+     |  inspect(self)
+     |      Retreive dictionary of 'Field: Value' attributes
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)

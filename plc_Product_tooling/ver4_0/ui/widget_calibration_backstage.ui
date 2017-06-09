@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>widget_Calibration_Backstage</class>
+ <widget class="QWidget" name="widget_Calibration_Backstage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>818</width>
+    <height>369</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>8</x>
+     <y>88</y>
+     <width>801</width>
+     <height>265</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_Ch1">
+      <property name="minimumSize">
+       <size>
+        <width>86</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>CH 1</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_00"/>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLineEdit" name="lineEdit_10"/>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="lineEdit_20"/>
+    </item>
+    <item row="0" column="4">
+     <widget class="QLineEdit" name="lineEdit_30"/>
+    </item>
+    <item row="0" column="5">
+     <widget class="QLineEdit" name="lineEdit_40"/>
+    </item>
+    <item row="0" column="6">
+     <widget class="QLineEdit" name="lineEdit_50"/>
+    </item>
+    <item row="0" column="7">
+     <widget class="QLineEdit" name="lineEdit_60"/>
+    </item>
+    <item row="0" column="8">
+     <widget class="QLabel" name="label_Ch1_Result">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>83</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_Ch2">
+      <property name="text">
+       <string>CH 2</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_01"/>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLineEdit" name="lineEdit_11"/>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="lineEdit_21"/>
+    </item>
+    <item row="1" column="4">
+     <widget class="QLineEdit" name="lineEdit_31"/>
+    </item>
+    <item row="1" column="5">
+     <widget class="QLineEdit" name="lineEdit_41"/>
+    </item>
+    <item row="1" column="6">
+     <widget class="QLineEdit" name="lineEdit_51"/>
+    </item>
+    <item row="1" column="7">
+     <widget class="QLineEdit" name="lineEdit_61"/>
+    </item>
+    <item row="1" column="8">
+     <widget class="QLabel" name="label_Ch2_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_Ch3">
+      <property name="text">
+       <string>CH 3</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_02"/>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLineEdit" name="lineEdit_12"/>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLineEdit" name="lineEdit_22"/>
+    </item>
+    <item row="2" column="4">
+     <widget class="QLineEdit" name="lineEdit_32"/>
+    </item>
+    <item row="2" column="5">
+     <widget class="QLineEdit" name="lineEdit_42"/>
+    </item>
+    <item row="2" column="6">
+     <widget class="QLineEdit" name="lineEdit_52"/>
+    </item>
+    <item row="2" column="7">
+     <widget class="QLineEdit" name="lineEdit_62"/>
+    </item>
+    <item row="2" column="8">
+     <widget class="QLabel" name="label_Ch3_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_Ch4">
+      <property name="text">
+       <string>CH 4</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_03"/>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLineEdit" name="lineEdit_13"/>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLineEdit" name="lineEdit_23"/>
+    </item>
+    <item row="3" column="4">
+     <widget class="QLineEdit" name="lineEdit_33"/>
+    </item>
+    <item row="3" column="5">
+     <widget class="QLineEdit" name="lineEdit_43"/>
+    </item>
+    <item row="3" column="6">
+     <widget class="QLineEdit" name="lineEdit_53"/>
+    </item>
+    <item row="3" column="7">
+     <widget class="QLineEdit" name="lineEdit_63"/>
+    </item>
+    <item row="3" column="8">
+     <widget class="QLabel" name="label_Ch4_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_Ch5">
+      <property name="text">
+       <string>CH 5</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_04"/>
+    </item>
+    <item row="4" column="2">
+     <widget class="QLineEdit" name="lineEdit_14"/>
+    </item>
+    <item row="4" column="3">
+     <widget class="QLineEdit" name="lineEdit_24"/>
+    </item>
+    <item row="4" column="4">
+     <widget class="QLineEdit" name="lineEdit_34"/>
+    </item>
+    <item row="4" column="5">
+     <widget class="QLineEdit" name="lineEdit_44"/>
+    </item>
+    <item row="4" column="6">
+     <widget class="QLineEdit" name="lineEdit_54"/>
+    </item>
+    <item row="4" column="7">
+     <widget class="QLineEdit" name="lineEdit_64"/>
+    </item>
+    <item row="4" column="8">
+     <widget class="QLabel" name="label_Ch5_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_Ch6">
+      <property name="text">
+       <string>CH 6</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_05"/>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLineEdit" name="lineEdit_15"/>
+    </item>
+    <item row="5" column="3">
+     <widget class="QLineEdit" name="lineEdit_25"/>
+    </item>
+    <item row="5" column="4">
+     <widget class="QLineEdit" name="lineEdit_35"/>
+    </item>
+    <item row="5" column="5">
+     <widget class="QLineEdit" name="lineEdit_45"/>
+    </item>
+    <item row="5" column="6">
+     <widget class="QLineEdit" name="lineEdit_55"/>
+    </item>
+    <item row="5" column="7">
+     <widget class="QLineEdit" name="lineEdit_65"/>
+    </item>
+    <item row="5" column="8">
+     <widget class="QLabel" name="label_Ch6_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_Ch7">
+      <property name="text">
+       <string>CH 7</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="lineEdit_06"/>
+    </item>
+    <item row="6" column="2">
+     <widget class="QLineEdit" name="lineEdit_16"/>
+    </item>
+    <item row="6" column="3">
+     <widget class="QLineEdit" name="lineEdit_26"/>
+    </item>
+    <item row="6" column="4">
+     <widget class="QLineEdit" name="lineEdit_36"/>
+    </item>
+    <item row="6" column="5">
+     <widget class="QLineEdit" name="lineEdit_46"/>
+    </item>
+    <item row="6" column="6">
+     <widget class="QLineEdit" name="lineEdit_56"/>
+    </item>
+    <item row="6" column="7">
+     <widget class="QLineEdit" name="lineEdit_66"/>
+    </item>
+    <item row="6" column="8">
+     <widget class="QLabel" name="label_Ch7_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_Ch8">
+      <property name="text">
+       <string>CH 8</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_07"/>
+    </item>
+    <item row="7" column="2">
+     <widget class="QLineEdit" name="lineEdit_17"/>
+    </item>
+    <item row="7" column="3">
+     <widget class="QLineEdit" name="lineEdit_27"/>
+    </item>
+    <item row="7" column="4">
+     <widget class="QLineEdit" name="lineEdit_37"/>
+    </item>
+    <item row="7" column="5">
+     <widget class="QLineEdit" name="lineEdit_47"/>
+    </item>
+    <item row="7" column="6">
+     <widget class="QLineEdit" name="lineEdit_57"/>
+    </item>
+    <item row="7" column="7">
+     <widget class="QLineEdit" name="lineEdit_67"/>
+    </item>
+    <item row="7" column="8">
+     <widget class="QLabel" name="label_Ch8_Result">
+      <property name="text">
+       <string>检测中...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>8</x>
+     <y>9</y>
+     <width>801</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_Ch_Id">
+      <property name="minimumSize">
+       <size>
+        <width>86</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>  通道 ID</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="label_Init">
+      <property name="text">
+       <string>初始采样值</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label_CaliA">
+      <property name="text">
+       <string>A 点校准</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLabel" name="label_CaliB">
+      <property name="text">
+       <string>B 点校准</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <widget class="QLabel" name="label_Bench1">
+      <property name="text">
+       <string>基准1检测</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QLabel" name="label_Bench2">
+      <property name="text">
+       <string>基准2检测</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="6">
+     <widget class="QLabel" name="label_Bench3">
+      <property name="text">
+       <string>基准3检测</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="7">
+     <widget class="QLabel" name="label_Error">
+      <property name="text">
+       <string>平均误差</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="8">
+     <widget class="QLabel" name="label_Result">
+      <property name="text">
+       <string>校准结果</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>8</x>
+     <y>48</y>
+     <width>801</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_Unit_Show">
+      <property name="minimumSize">
+       <size>
+        <width>86</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>单位</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="label_Unit1">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label_Unit2">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLabel" name="label_Unit3">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <widget class="QLabel" name="label_Unit4">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QLabel" name="label_Unit5">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="6">
+     <widget class="QLabel" name="label_Unit6">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="7">
+     <widget class="QLabel" name="label_Unit7">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="8">
+     <widget class="QLabel" name="label_43">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

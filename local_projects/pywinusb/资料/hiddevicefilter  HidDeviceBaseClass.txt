@@ -1,0 +1,42 @@
+    class HidDeviceBaseClass(builtins.object)
+     |  Utility parent class for main HID device class
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |      initializer
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class HidDeviceFilter(builtins.object)
+     |  This class allows searching for HID devices currently connected to
+     |  the system, it also allows to search for specific devices  (by filtering)
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, **kwrds)
+     |      Initialize filter from a named target parameters.
+     |      I.e. product_id=0x0123
+     |  
+     |  get_devices(self, hid_filter=None)
+     |      Filter a HID device list by current object parameters. Devices
+     |      must match the all of the filtering parameters
+     |  
+     |  get_devices_by_parent(self, hid_filter=None)
+     |      Group devices returned from filter query in order         by devcice parent id.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)

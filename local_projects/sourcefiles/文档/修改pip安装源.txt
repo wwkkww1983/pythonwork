@@ -1,0 +1,11 @@
+'''
+1.修改pip安装源
+从开始菜单运行框输入“%APPDATA%”，进入APPDATA目录，搜索\pip目录，没有则新建一个
+在\pip目录下新建文本文件，保存为“pip.ini”，用文本编辑器添加以下代码
+[global]
+index-url       = https://pypi.tuna.tsinghua.edu.cn/simple/  #表示将pip安装默认的安装包服务器修改为清华大学的镜像服务器
+trusted-host  = pypi.tuna.tsinghua.edu.cn     #信任该服务器，避免某些错误              
+timeout         = 1000#超时时间，视网络和连接情况调整
+也可以在控制台执行安装时，按以下格式填写来修改安装来源
+pip install pywinauto -i https://pypi.tuna.tsinghua.edu.cn/simple/
+'''

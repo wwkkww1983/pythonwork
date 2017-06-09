@@ -1,0 +1,56 @@
+class ReportItem(builtins.object)
+     |  Represents a single usage field in a report.
+     |  
+     |  Methods defined here:
+     |  
+     |  __getitem__(self, index)
+     |      Allow to access value array by index
+     |  
+     |  __init__(self, hid_report, caps_record, usage_id=0)
+     |  
+     |  __len__(self)
+     |  
+     |  __repr__(self)
+     |  
+     |  __setitem__(self, index, value)
+     |      Allow to access value array by index
+     |  
+     |  get_usage_string(self)
+     |      Returns usage representation string (as embedded in HID device
+     |      if available)
+     |  
+     |  get_value(self)
+     |      Retreive usage value within report
+     |  
+     |  is_button(self)
+     |      Validate if usage is button (not value)
+     |  
+     |  is_value(self)
+     |      Validate if usage is value (not 'button')
+     |  
+     |  is_value_array(self)
+     |      Validate if usage was described as value array
+     |  
+     |  key(self)
+     |      returns unique usage page & id long value
+     |  
+     |  set_value(self, value)
+     |      Set usage value within report
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  report_id
+     |      Retreive Report Id numeric value
+     |  
+     |  value
+     |      Retreive usage value within report
+     |  
+     |  value_array
+     |      Retreive usage value as value array

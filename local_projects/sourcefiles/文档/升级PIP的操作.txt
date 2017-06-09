@@ -1,0 +1,4 @@
+'''
+4.Éý¼¶PIPµÄ²Ù×÷
+ python -m pip install -U pip
+'''

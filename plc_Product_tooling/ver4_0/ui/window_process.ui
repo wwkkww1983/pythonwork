@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1030</width>
+    <height>657</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>source/window_24_24.png</normaloff>source/window_24_24.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>168</x>
+      <y>16</y>
+      <width>841</width>
+      <height>65</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QComboBox" name="comboBox_Select_page">
+     <property name="geometry">
+      <rect>
+       <x>288</x>
+       <y>16</y>
+       <width>121</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>下载固件</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>校准画面</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>工装后台</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Open_Ports">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>16</y>
+       <width>113</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>打开串口</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Reset_Module">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>16</y>
+       <width>113</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>复位被测板</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_1">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>8</y>
+      <width>137</width>
+      <height>73</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>选择模块</string>
+    </property>
+    <widget class="QComboBox" name="comboBox_Select_Module">
+     <property name="geometry">
+      <rect>
+       <x>8</x>
+       <y>24</y>
+       <width>119</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>LX 8PT</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>LX 8TC</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>96</y>
+      <width>137</width>
+      <height>425</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>8</x>
+       <y>8</y>
+       <width>121</width>
+       <height>409</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page"/>
+     <widget class="QWidget" name="page_2"/>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>168</x>
+      <y>96</y>
+      <width>841</width>
+      <height>425</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QStackedWidget" name="stackedWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>8</x>
+       <y>8</y>
+       <width>825</width>
+       <height>409</height>
+      </rect>
+     </property>
+     <widget class="QWidget" name="page_3"/>
+     <widget class="QWidget" name="page_4"/>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>536</y>
+      <width>993</width>
+      <height>113</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QStackedWidget" name="stackedWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>8</x>
+       <y>8</y>
+       <width>977</width>
+       <height>97</height>
+      </rect>
+     </property>
+     <widget class="QWidget" name="page_7"/>
+     <widget class="QWidget" name="page_8"/>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

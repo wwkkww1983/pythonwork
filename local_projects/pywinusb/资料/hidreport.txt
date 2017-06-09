@@ -1,0 +1,76 @@
+class HidReport(builtins.object)
+     |  This class interfaces an actual HID physical report, providing a wrapper
+     |  that exposes specific usages (usage page and usage ID) as a usage_id value
+     |  map (dictionary).
+     |  
+     |  Example: A HID device might have an output report ID = 0x01, with the
+     |  following usages; 0x20 as a boolean (button), and 0x21 as a 3 bit value,
+     |  then querying the HID object for the output report (by using
+     |  hid_object.get_output_report(0x01))
+     |  
+     |  Methods defined here:
+     |  
+     |  __contains__(self, key)
+     |  
+     |  __getitem__(self, key)
+     |  
+     |  __init__(self, hid_object, report_type, report_id)
+     |  
+     |  __len__(self)
+     |  
+     |  __repr__(self)
+     |  
+     |  __setitem__(self, key, value)
+     |      set report item value
+     |  
+     |  get(self, do_process_raw_report=True)
+     |      Read report from device
+     |  
+     |  get_hid_object(self)
+     |      Retreive reference to parent HID device
+     |  
+     |  get_raw_data(self)
+     |      Get raw HID report based on internal report item settings,
+     |      creates new c_ubytes storage
+     |  
+     |  get_usages(self)
+     |      Return a dictionary mapping full usages Ids to plain values
+     |  
+     |  has_key(self, key)
+     |      Test for key (as standard dicts)
+     |  
+     |  items(self)
+     |      Return key, value pairs (as standard dicts)
+     |  
+     |  keys(self)
+     |      Return stored element keys (as standard dicts)
+     |  
+     |  send(self, raw_data=None)
+     |      Prepare HID raw report (unless raw_data is provided) and send
+     |      it to HID device
+     |  
+     |  set_raw_data(self, raw_data)
+     |      Set usage values based on given raw data, item[0] is report_id,
+     |      length should match 'raw_data_length' value, best performance if
+     |      raw_data is c_ubyte ctypes array object type
+     |  
+     |  values(self)
+     |      Return stored elements (as standard dicts)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  hid_object
+     |      Retreive asociated HID device instance
+     |  
+     |  report_id
+     |      Retreive asociated report Id value
+     |  
+     |  report_type
+     |      Retreive report type as numeric value (input, output, feature)

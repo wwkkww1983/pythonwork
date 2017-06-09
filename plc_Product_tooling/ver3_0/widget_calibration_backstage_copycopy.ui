@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>widget_Calibration_Backstage</class>
+ <widget class="QWidget" name="widget_Calibration_Backstage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>842</width>
+    <height>396</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>8</y>
+     <width>833</width>
+     <height>377</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>16</y>
+      <width>681</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>  通道 ID</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>当前采样</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>A 点校准</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>B 点校准</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>R68 检测(℃)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>R150检测(℃)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>R200检测(℃)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>平均误差(℃)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>校准结果</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>288</y>
+      <width>681</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_10">
+     <item>
+      <widget class="QLabel" name="label_16">
+       <property name="text">
+        <string>    CH 8    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_14"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_28"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_29"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_39"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_44"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_50"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_56"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_26">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>160</y>
+      <width>681</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>    CH 4    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_10"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_21"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_33"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_20"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_19"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_18"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_17"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_22">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>88</y>
+      <width>681</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>    CH 2    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_8"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_15"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_22"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_23"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_24"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_45"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_51"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_18">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>224</y>
+      <width>681</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>    CH 6    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_12"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_26"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_31"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_37"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_42"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_48"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_54"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_24">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>48</y>
+      <width>681</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>    CH 1    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_2"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_3"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_4"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_5"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_6"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_7"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>128</y>
+      <width>681</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>    CH 3    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_9"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_16"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_34"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_35"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_40"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_46"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_52"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_21">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>192</y>
+      <width>681</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>    CH 5    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_11"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_27"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_32"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_36"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_41"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_47"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_53"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>256</y>
+      <width>681</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <item>
+      <widget class="QLabel" name="label_15">
+       <property name="text">
+        <string>    CH 7    </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_13"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_25"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_30"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_38"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_43"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_49"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_55"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_25">
+       <property name="text">
+        <string>检测中...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
