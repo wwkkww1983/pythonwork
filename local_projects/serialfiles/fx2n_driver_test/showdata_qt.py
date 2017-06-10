@@ -63,7 +63,6 @@ class DriverDataShow(QWidget):
                 text = 'data'+str(name//2)
                 linedit = QLineEdit(str(data_list[name // 2]))  # 转为字符串类型并显示
                 linedit.setObjectName(text)
-                linedit.set(True)
                 grid.addWidget(linedit, *position)
 
         self.move(300, 150)
