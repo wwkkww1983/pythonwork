@@ -1,15 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# 一些网上的UI教学
-# 图标下载 http://www.easyicon.net/505471-tool_icon.html
-# 窗体嵌套：http://blog.csdn.net/a359680405/article/details/45172155
-# 设置背景图片等 http://www.cnblogs.com/dcb3688/p/4237204.html
-# 窗体风格https://jingyan.baidu.com/article/ac6a9a5e7a79312b653eacc0.html
-# 样式表：http://blog.csdn.net/yansmile1/article/details/52882965
-# 关于串口的调试 https://my.oschina.net/u/2306127/blog/616002
-# qss属性大全 http://www.cnblogs.com/laihuayan/archive/2012/07/27/2611111.html
-
-
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtCore import Qt
