@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-class CalibrationTool(object):
+class PlcBoardTestTool(object):
     def __init__(self):
         self.poweron = False
         self.digital_board_ch_id = 0x0

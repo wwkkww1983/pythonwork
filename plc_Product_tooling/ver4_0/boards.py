@@ -8,10 +8,9 @@ TESTTYPECODE = dict(
     ADI=0x1, DAI=0x2, ADV=0x3, DAV=0x4, PT=0x4, TCV=0x5, TCR=0x6, NTC=0x7)
 config = configparser.ConfigParser()
 try:
-    config.read('config_v2.ini', encoding='utf-8')
+    config.read('config.ini', encoding='utf-8')
 except:
     print('config.ini file is not found')
-
 
 
 class TESTEDBOARD(object):
@@ -28,8 +27,8 @@ class TESTEDBOARD(object):
         resistances: 基准电阻列表（包含顺序）
         remarks: 当前被测板备注信息
         """
-        self.name = '未知名称'
-        self.board_type = '未知类型'
+        self.name = 'unknow name'
+        self.board_type = 'unknow type'
         self.test_types = []
         self.unit = ''
         self.channel_quantity = 0
@@ -37,10 +36,12 @@ class TESTEDBOARD(object):
         self.use_resistance = False
         self.resistances = [0, 0, 0, 0]
         self.remarks = ''
+        self.vi_limited1_values = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        self.vi_limited2_values = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-        self.error = ''
         self.boardlist = config['TOTAL']['BOARDLIST'].split(',')
         self.ready = False
+        self.error = ''
 
     def get_board(self, board_type=''):
         if board_type not in self.boardlist:
@@ -52,6 +53,8 @@ class TESTEDBOARD(object):
             self.test_types = section['test type']
             self.unit = section['display unit']
             self.channel_quantity = int(section['channel quantity'])
+            self.vi_limited1_values = section['vi limited1 values']
+            self.vi_limited2_values = section['vi limited2 values']
 
             self.use_resistance = section.getboolean('use resistance')
             if self.use_resistance:
@@ -76,9 +79,12 @@ class TESTEDBOARD(object):
                 channel quantity: {4}
                 use resistance: {5}
                 resistances: {6}
-                remarks: {7}
+                vi limited1 values: {7}
+                vi limited2 values: {8}
+                remarks: {9}
                 """.format(self.name, self.board_type, self.test_types, self.unit, self.channel_quantity,
-                           self.use_resistance, self.resistances, self.remarks))
+                           self.use_resistance, self.resistances, self.vi_limited1_values, self.vi_limited2_values,
+                           self.remarks))
         self.print_error()
 
     def print_error(self):
