@@ -34,7 +34,7 @@ class TESTEDBOARD(object):
         self.channel_quantity = 0
 
         self.use_resistance = False
-        self.resistances = [0, 0, 0, 0]
+        self.resistances = ''
         self.remarks = ''
         self.vi_limited1_values = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         self.vi_limited2_values = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -57,11 +57,8 @@ class TESTEDBOARD(object):
             self.vi_limited2_values = section['vi limited2 values']
 
             self.use_resistance = section.getboolean('use resistance')
-            if self.use_resistance:
-                self.resistances = [int(section['resistance1']),
-                                    int(section['resistance2']),
-                                    int(section['resistance3']),
-                                    int(section['resistance4'])]
+            if self.use_resistance is not None:
+                self.resistances = section['resistances']
 
             self.remarks = section['remarks']
 
