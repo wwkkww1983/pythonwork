@@ -21,7 +21,6 @@ class CALIBRATION(object):
         self.check_value = 0
         self.cali_parameter = 0
         self.varify_value = 0
-        self.tested_board = 'abc'
         self.tested_board = self.get_selected_board('8TC')
         # 这里“8TC”信息由UI设置中获取
 
