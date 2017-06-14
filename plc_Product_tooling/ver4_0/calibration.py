@@ -22,18 +22,18 @@ class CALIBRATION(object):
         self.cali_parameter = 0
         self.varify_value = 0
         self.tested_board = 'abc'
-        self.tested_board = self.get_tested_board('8TC')
+        self.tested_board = self.get_selected_board('8TC')
         # 这里“8TC”信息由UI设置中获取
 
-    def get_tested_board(self, tstbdtype):
-        tstbd = board()
-        tstbd.get_board(tstbdtype)
-        if tstbd.board_type == 'unknow type':
-            log.warning('被测板型号不可用，请检查')
+    def get_selected_board(self, slctbdtype):
+        slctbd = board()
+        slctbd.get_board(slctbdtype)
+        if slctbd.board_type == 'unknow type':
+            log.warning('选择型号不可用，请检查')
             return None
-        if tstbd.board_type in tstbd.boardlist:
-            log.info('被测板 {} 信息已载入'.format(tstbd.name))
-            return tstbd
+        if slctbd.board_type in slctbd.boardlist:
+            log.info('选择型号{} 信息已载入'.format(slctbd.name))
+            return slctbd
 
     def select_benchmark(self):
         """
@@ -83,7 +83,7 @@ def main():
     # b.board_type = '8TC'
     # b.print_board_info()
     c = CALIBRATION()
-    print(c.tested_board)
+    log.info('selected board={}'.format(c.get_selected_board('8TC')))
 
 
 
