@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtCore import Qt
 import configparser
 import ctypes
-from calc import modules
+
 from ui import ui_window_process, ui_widget_setting, ui_widget_calibration_backstage,\
     ui_widget_result, ui_widget_calibration, ui_widget_download
 
