@@ -140,6 +140,7 @@ class MainUSBToolUI(HID_TestUI.HIDTestUI):
                             target=self.UsbRead)
                         self.thread_read.setDaemon(True)
                         self.thread_read.start()
+
                 if self.usbDev.alive:
                     self.frm_status_label["text"] = "Open Device [{0}] Successful!".format(
                         self.currentStrUsb)
