@@ -54,25 +54,25 @@ class hidHelper(object):
         '''
         print([hex(item).upper() for item in data[1:]])
 
-    # def write(self, send_list):
-    #     '''
-    #     向HID设备发送数据
-    #     原demo定义的函数
-    #     '''
-    #     if self.device:
-    #         if self.report:
-    #             self.report[0].set_raw_data(send_list)
-    #             bytes_num = self.report[0].send()
-    #             return bytes_num
     def write(self, send_list):
         '''
-        向设备发送数据
-        PLC USB HID协议专用
+        向HID设备发送数据
+        原demo定义的函数
         '''
         if self.device:
             if self.report:
-                self.device.send_output_report(send_list)
-                return 65
+                self.report[0].set_raw_data(send_list)
+                bytes_num = self.report[0].send()
+                return bytes_num
+    # def write(self, send_list):
+    #     '''
+    #     向设备发送数据
+    #     PLC USB HID协议专用
+    #     '''
+    #     if self.device:
+    #         if self.report:
+    #             self.device.send_output_report(send_list)
+    #             return 65
 
 if __name__ == '__main__':
     myhid = hidHelper()

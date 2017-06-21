@@ -137,8 +137,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# Pycharm
-# ============================
-
-.idea/workspace.xml
