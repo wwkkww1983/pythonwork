@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Pyqt_files/canopen/canOpenAnal.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/local_projects/IO/canOpenAnal.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/local_projects/pywinusb/plc_usb_hid/testmonitordata.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/selenium_/help/资料网站.txt" charset="GBK" />
   </component>
 </project>

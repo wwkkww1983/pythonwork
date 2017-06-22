@@ -4,7 +4,7 @@
 import serial
 import time
 import logging as log
-from crccheck.checksum import Checksum8
+
 from PyQt5.QtWidgets import QWidget
 
 log.basicConfig(level=log.INFO,
@@ -28,7 +28,7 @@ def set_com(com_id, com_baudrate):
             com.bytesize = 7
             com.parity = 'E'
             com.stopbits = 1
-            com.xonxoff
+            com.xonxoff = None
 
             log.info("串口设置成功 ---- "
                      "串口:{0}, "
