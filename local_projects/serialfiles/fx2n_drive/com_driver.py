@@ -4,6 +4,7 @@
 import serial
 import time
 import logging as log
+from crccheck.checksum import Checksum8
 
 from PyQt5.QtWidgets import QWidget
 

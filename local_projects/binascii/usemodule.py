@@ -3,19 +3,15 @@
 
 
 from struct import unpack, pack
-
-
 datas = [48, 70, 54, 50]
 data = ''
-data_chr_list = [chr(i) for i in datas]
-data_int_list=[]
-for s in range(len(data_chr_list)):
+data_chrs = [chr(i) for i in datas]    # 转为字符列表
+data_bytes=[]
+for s in range(len(data_chrs)):
     if s % 2 == 0:
-        a = int((data_chr_list[s] + data_chr_list[s + 1]), 16)
-        data_int_list.append(chr(a).encode('ascii'))
+        a = int((data_chrs[s] + data_chrs[s + 1]), 16)    # 从下标0元素开始，将相邻两个字符合并成16进制表示并转为int型
+        data_bytes.append(chr(a).encode('ascii'))              # 将上述元素进一步转为字节码，并组装为一半长度的字节列表
     else:
         pass
-
-data_int = unpack('<h', bytes(b''.join(data_int_list)))
-
-print(data_int)
+data_shorts = unpack('<h', bytes(b''.join(data_bytes)))
+print(data_shorts)
