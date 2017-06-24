@@ -30,7 +30,22 @@ class CALIBRATION(object):
         监控数字板数据
         :return: 数字板数据字典（根据数字板地址功能）
         """
-        pass
+
+        return {'adc_8_data_dword': (0, 0, 0, 0, 0, 0, 0, 0),
+                'test_point_value_int': (0, 0, 0, 0, 0, 0, 0, 0),
+                # 'ch1_v24_int': 0,
+                # 'ch1_i24_int': 0,
+                # 'ch2_v15_int': 0,
+                # 'ch2_i15_int': 0,
+                # 'ch3_v-15_int': 0,
+                # 'ch3_i-15_int': 0,
+                # 'ch4_v5/7_int': 0,
+                # 'ch4_i5/7_int': 0,
+                'cali_param_int': (0, 0, 0, 0),
+                'board_type_word': (0, 0),
+                'power_up_flag_word': 0,
+                'frame_ready_flag_word': 0
+                }
 
     def readall_anologue(self):
         """
