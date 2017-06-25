@@ -38,68 +38,84 @@ class MYUSBHID(object):
         if self.device:
             self.device.set_raw_data_handler(self.read)
 
-    def read(self, data):
+    def read(self, rd_report_data):
 
         # print('received={}'.format([hex(item) for item in data[1:]]))
         # data_ = [hex(item) for item in data[1:]]
         #
-        self.readbuffer.append(data)
+        self.readbuffer.append(rd_report_data)
         log.info('received:lengh={}, data={}'.format(len(self.readbuffer), self.readbuffer))
         return self.readbuffer
 
-    def write(self, data):
+    def write(self, wt_report_data):
         result = None
         if self.device:
-            result = self.device.send_output_report(data)
+            result = self.device.send_output_report(wt_report_data)
         return result
 
-    def pack_write_data(self, _relative=6000, _word_len=1, _data=None, _func='read'):
+    def pack_write_data(self, start_address=6000, operal_word_lengh=1,
+                        wt_data=None, operal_type='read'):
         """
-        将数据组装为usb传输用数据
-        :param _relative: D0偏移字（内部计算转换成字节数），字
-        :param _word_len: read/write数据长度，字
-        :param _data: 读取或写入数据，字节 写入用
-        :param _func: 操作类型：read/write
+        将数据组装为串口数据形式
+        :param start_address: D0偏移字（内部计算转换成字节数），字
+        :param operal_word_lengh: read/write数据长度，字
+        :param wt_data: 读取或写入数据，字节 写入用
+        :param operal_type: 操作类型：read/write
         :return: 待传输字节串
         """
-        head = [0x0d, 0x00]
         stx = [0x02]
         etx = [0x03]
         # 起始标识，结束标识
 
-        func_code = {'read': [0x45, 0x30, 0x30], 'write': [0x45, 0x31, 0x30]}[_func]
+        func_code = {'read': [0x45, 0x30, 0x30], 'write': [0x45, 0x31, 0x30]}[operal_type]
         # 读写功能码，3 bytes
 
-        d0_int = 0x4000
-        d8000_int = 0x0E00
-        # 读写起始地址，4_bytes list
-        strt_addrs_str = ''
-        if _relative in range(6000, 6032) or range(0, 14):
-            strt_addrs_str = '{:#06X}'.format(_relative * 2 + d0_int)
-        elif _relative in range(8000, 8255):
-            strt_addrs_str = '{:#06X}'.format((_relative - 8000) * 2 + d8000_int)
-        start_address = [ord(letter) for letter in strt_addrs_str][2:]
+        def pack_strt_addr(strt_addr_):
+            # 读写起始地址，4_bytes list
+            d0_fmt = 0x4000
+            d8000_fmt = 0x0E00
 
-        lengh = []
-        # 读写长度 2_bytes list
-        if _word_len in range(1, 33):
-            len_str = '{:#04X}'.format(_word_len * 2)
-            lengh = [ord(letter) for letter in len_str][2:]
+            strt_addr_str = ''
+            if strt_addr_ in range(6000, 6032) or range(0, 14):
+                strt_addr_str = '{:#06X}'.format(strt_addr_ * 2 + d0_fmt)
+            elif strt_addr_ in range(8000, 8255):
+                strt_addr_str = '{:#06X}'.format((strt_addr_ - 8000) * 2 + d8000_fmt)
+            strt_addr_fmt = [ord(letter) for letter in strt_addr_str][2:]
+            return strt_addr_fmt
+        start_address_code = pack_strt_addr(start_address)
 
-        checksum = []
-        # 校验和，1 bytes。功能码、起始地址、数据和结束标识参与校验，起始标识不校验
-        check = Checksum8()
-        if lengh:
-            checksum_int = check.calc(func_code + start_address + lengh + etx)
-            checksum_str = '{:#04X}'.format(checksum_int)
-            checksum = [ord(letter) for letter in checksum_str][2:]
+
+        def pack_lengh(len_):
+            lengh = []
+            # 读写长度 2_bytes list
+            if operal_word_lengh in range(1, 33):
+                len_str = '{:#04X}'.format(operal_word_lengh * 2)
+                lengh = [ord(letter) for letter in len_str][2:]
+            return lengh
+        lengh_code = pack_lengh(operal_word_lengh)
 
         # 写入数据长度
-        data = []
+        wt_data_code = []
         if func_code == 'write':
-            data = []  # 格式化数据
+            wt_data_code = []  # 格式化数据
         else:
-            data = []
+            wt_data_code = []
+
+        def pack_check_sum(func_code_, strt_addr_code_, len_code_, wt_data_code_, etx_):
+            checksum = []
+            # 校验和，1 bytes。功能码、起始地址、数据和结束标识参与校验，起始标识不校验
+            check = Checksum8()
+            if lengh_code:
+                if func_code_ == 'read':
+                    checksum_int = check.calc(func_code_ + strt_addr_code_ + len_code_ + etx_)
+                    checksum_str = '{:#04X}'.format(checksum_int)
+                    checksum = [ord(letter) for letter in checksum_str][2:]
+                elif func_code_ == 'write' and wt_data_code_:
+                    checksum_int = check.calc(func_code_ + strt_addr_code_ + len_code_ + wt_data_code_ + etx_)
+                    checksum_str = '{:#04X}'.format(checksum_int)
+                    checksum = [ord(letter) for letter in checksum_str][2:]
+            return checksum
+        checksum_code = pack_check_sum(func_code, start_address_code, lengh_code,  wt_data_code, etx)
 
         log.info("the follow parameter packed:"
                  "stx: {0}: "
@@ -108,14 +124,14 @@ class MYUSBHID(object):
                  "data lengh: {3};"
                  "write data: {4}; "
                  "etx: {5}; "
-                 "check sum: {6}".format(stx, func_code, start_address, lengh, _data, etx, checksum))
-
+                 "check sum: {6}".format(stx, func_code, start_address, lengh_code, wt_data_code, etx,
+                                         checksum_code))
         # 待发送数据list
         _data_list = []
-        if _func == 'read':
-            _data_list = stx + func_code + start_address + lengh + etx + checksum
-        elif _func == 'write':
-            _data_list = stx + func_code + start_address + lengh + data + etx + checksum
+        if operal_type == 'read':
+            _data_list = stx + func_code + start_address_code + lengh_code + etx + checksum_code
+        elif operal_type == 'write':
+            _data_list = stx + func_code + start_address_code + lengh_code + wt_data_code + etx + checksum_code
         return _data_list
 
     def unpack_data_list(self, data_buffer):
@@ -138,6 +154,7 @@ class MYUSBHID(object):
         log.info('new hid data: lengh={}, data={}'.format(newlen, newdata))
         # return newdata   # 获取hid数据
         digit_current_data = {}
+
         def get_digit_current_data(new_hid_data):
             if len(new_hid_data) == 135:
                 used_data = new_hid_data[4:-3]
@@ -179,7 +196,7 @@ if __name__ == '__main__':
     hid_name = 'DIGITAL MODULE VER1'
     # hid_name = 'ANALOG MODULE VER1'
     myhid = MYUSBHID(hid_name)
-    hid_send_data = myhid.pack_write_data(_relative=6000, _word_len=32)
+    hid_send_data = myhid.pack_write_data(start_address=6000, operal_word_lengh=32)
 
     log.info('usb hid start at {}'.format(ctime()))
     myhid.start()
