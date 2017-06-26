@@ -9,6 +9,7 @@ from crccheck.checksum import Checksum8
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
+
 class MYUSBHID(object):
     def __init__(self, name):
         self.alive = False
