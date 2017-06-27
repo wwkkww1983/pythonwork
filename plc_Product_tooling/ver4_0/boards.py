@@ -8,9 +8,9 @@ TESTTYPECODE = dict(
     ADI=0x1, DAI=0x2, ADV=0x3, DAV=0x4, PT=0x4, TCV=0x5, TCR=0x6, NTC=0x7)
 config = configparser.ConfigParser()
 try:
-    config.read('config.ini', encoding='utf-8')
+    config.read('boardconfig.ini', encoding='utf-8')
 except:
-    print('config.ini file is not found')
+    print('boardconfig.ini file is not found')
 
 
 class TESTEDBOARD(object):

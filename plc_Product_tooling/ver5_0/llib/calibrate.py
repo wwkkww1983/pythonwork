@@ -1,10 +1,8 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import math
-import time
 import logging as log
-from boardtypes import board
+from board import get_board
 
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
@@ -17,7 +15,7 @@ class CALIBRATION(object):
         :param tested_board: instance of board
         :return:
         """
-        self.board = board(slctboard)  # 选择被测板类型后即决定该class下所有函数是否被执行、参数是什么
+        self.board = get_board(slctboard)  # 选择被测板类型后即决定该class下所有函数是否被执行、参数是什么
         self.busyflag = None
         self.ispassed = None
         self.steptime = 0.1

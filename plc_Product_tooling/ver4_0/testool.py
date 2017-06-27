@@ -11,7 +11,7 @@ from ui import ui_window_process, ui_widget_setting, ui_widget_calibration_backs
 
 # 获取模块列表用于显示UI文本
 config = configparser.ConfigParser()
-config.read('config.ini', encoding='utf-8')
+config.read('boardconfig.ini', encoding='utf-8')
 MODULELIST = config['TOTAL']['BOARDLIST'].split(',')
 
 

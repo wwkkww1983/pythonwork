@@ -3,16 +3,20 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtCore import Qt
-import configparser
-import ctypes
+from ctypes import windll
+import logging as log
 
+from llib import board, calibrate, hid
 from ui import ui_window_process, ui_widget_setting, ui_widget_calibration_backstage,\
     ui_widget_result, ui_widget_calibration, ui_widget_download
 
+log.basicConfig(level=log.INFO,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
+
 # 获取模块列表用于显示UI文本
-config = configparser.ConfigParser()
-config.read('config.ini', encoding='utf-8')
-MODULELIST = config['TOTAL']['BOARDLIST'].split(',')
+board.read_config_file(r'llib\boardconfig.ini')
+MODULELIST = board.get_board_list('boards')
+log.info('MODULIST = {}'.format(MODULELIST))
 
 
 class Setting(QWidget, ui_widget_setting.Ui_widget_Setting):
@@ -20,9 +24,6 @@ class Setting(QWidget, ui_widget_setting.Ui_widget_Setting):
     def __init__(self):
         super(Setting, self).__init__()
         self.setupUi(self)
-
-
-
         # 初始化各下拉列表默认值 后期改为记忆上一次程序退出时设置的值
         self.ports_setting = ()
 
@@ -131,7 +132,7 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.setWindowIcon(icon)
 
         # 设置任务栏图标
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
+        windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 
         # 设置背景
         palette = QtGui.QPalette()

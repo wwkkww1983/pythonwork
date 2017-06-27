@@ -16,7 +16,7 @@ default = 'DEFAULT'
 # print(is_student)
 
 config = configparser.ConfigParser()
-config.read('config.ini', encoding='utf-8')
+config.read('boardconfig.ini', encoding='utf-8')
 all_sections = config.sections()
 
 module = '8pt'

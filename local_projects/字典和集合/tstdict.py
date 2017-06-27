@@ -8,9 +8,9 @@ log.basicConfig(level=log.INFO,
 
 config = configparser.ConfigParser()
 try:
-    config.read('config.ini', encoding='utf-8')
+    config.read('boardconfig.ini', encoding='utf-8')
 except None:
-    log.info('config.ini file is not found')
+    log.info('boardconfig.ini file is not found')
 
 
 def read_inifile_as_dict(sectionname):

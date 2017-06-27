@@ -176,7 +176,7 @@ class MYUSBHID(object):
                 for s in range(unpack_lengh):
                     if -1 < s < 64:
                         if s % 4 == 0:
-                            a = data_chr_list[s + 2] + data_chr_list[s + 3] + data_chr_list[s] + data_chr_list[s + 1]
+                            a = data_chr_list[s+2] + data_chr_list[s+3] + data_chr_list[s] + data_chr_list[s+1]
                             data_int_list.append(int(a, 16))
                         else:
                             pass
@@ -188,10 +188,10 @@ class MYUSBHID(object):
                 current_data['adc_8_data_dword'] = data_int_list[:16]
                 current_data['test_point_value_int'] = data_int_list[16:24]
                 current_data['cali_param_int'] = data_int_list[24:28]
-                current_data['module_type_word'] = data_int_list[28]
-                current_data['bd_type_word'] = data_int_list[29]
-                current_data['power_up_flag_word'] = data_int_list[30]
-                current_data['frame_ready_flag_word'] = data_int_list[31]
+                current_data['module_type_word'] = data_int_list[-4]
+                current_data['bd_type_word'] = data_int_list[-3]
+                current_data['power_up_flag_word'] = data_int_list[-2]
+                current_data['frame_ready_flag_word'] = data_int_list[-1]
 
                 print(current_data)
                 return current_data
