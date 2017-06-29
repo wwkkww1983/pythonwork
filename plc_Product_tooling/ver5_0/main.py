@@ -1,50 +1,32 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
-from PyQt5.QtCore import Qt
-from ctypes import windll
 import logging as log
+from time import sleep
+from ctypes import windll
 
-from llib import board, calibrate, hid
-from ui import ui_window_process, ui_widget_setting, ui_widget_calibration_backstage,\
-    ui_widget_result, ui_widget_calibration, ui_widget_download
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
+import board, calibrate
+from usb_hid import MYUSBHID as hid
+from ui import ui_window_process, ui_widget_calibration_backstage_debug,\
+    ui_widget_result, ui_widget_calibration, ui_widget_download, ui_widget_setting_usb
 
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
-# 获取模块列表用于显示UI文本
-board.read_config_file(r'llib\boardconfig.ini')
-MODULELIST = board.get_board_list('boards')
+# 获取模块列表 - > UI模块列表
+MODULELIST = board.get_board_list()
 log.info('MODULIST = {}'.format(MODULELIST))
 
 
-class Setting(QWidget, ui_widget_setting.Ui_widget_Setting):
+class Setting(QWidget, ui_widget_setting_usb.Ui_widget_Setting):
     # 定义和构造左侧窗口- 模块选择和串口设置
     def __init__(self):
         super(Setting, self).__init__()
         self.setupUi(self)
         # 初始化各下拉列表默认值 后期改为记忆上一次程序退出时设置的值
         self.ports_setting = ()
-
-        self.comboBox_PortA_Id.setCurrentIndex(0)
-        self.comboBox_PortA_Paudrate.setCurrentIndex(4)
-        self.comboBox_PortB_Id.setCurrentIndex(1)
-        self.comboBox_PortB_Paudrate.setCurrentIndex(4)
-        self.comboBox_PortC_Id.setCurrentIndex(2)
-        self.comboBox_PortC_Paudrate.setCurrentIndex(4)
-
-    def open_port(self):
-        porta_id = self.comboBox_PortA_Id.currentText()
-        porta_paudrate = self.comboBox_PortA_Paudrate.currentText()
-        portb_id = self.comboBox_PortB_Id.currentText()
-        portb_paudrate = self.comboBox_PortB_Paudrate.currentText()
-        portc_id = self.comboBox_PortC_Id.currentText()
-        portc_paudrate = self.comboBox_PortC_Paudrate.currentText()
-
-        self.ports_setting = ((porta_id, porta_paudrate), (portb_id, portb_paudrate),
-                              (portc_id, portc_paudrate))
-
 
 class Calibration(QWidget, ui_widget_calibration.Ui_widget_Calibration):
     """定义和构造校准主窗口类对象 - 根据选择模块配置相关的显示内容，提供缺省值"""
@@ -53,7 +35,7 @@ class Calibration(QWidget, ui_widget_calibration.Ui_widget_Calibration):
         self.setupUi(self)
 
 
-class CalibrationBackstage(QWidget, ui_widget_calibration_backstage.Ui_widget_Calibration_Backstage):
+class CalibrationBackstage(QWidget, ui_widget_calibration_backstage_debug.Ui_widget_Calibration_Backstage):
     """定义和构造校准后台后台窗口类对象 - 根据选择模块配置相关的显示内容，提供缺省值"""
     def __init__(self):
         super(CalibrationBackstage, self).__init__()
@@ -87,7 +69,14 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
 
     def __init__(self):
         super(ProcessWindow, self).__init__()
+
+        # 构造主窗口
         self.setupUi(self)
+
+        # 初始化hid
+        self.digit_hid = None
+        self.anolog_hid = None
+        self.board = None
 
         # 窗口导入
         self.setting = Setting()
@@ -106,8 +95,8 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.stackedWidget_2.addWidget(self.downloadpage)   # page index 2
         self.stackedWidget_2.addWidget(self.calibrationpage)  # page index 3
         self.stackedWidget_2.addWidget(self.calibrationbackstagepage)  # page index 4
-        self.stackedWidget_2.setCurrentIndex(2)
-        self.comboBox_Select_page.currentIndexChanged.connect(self.changepage)
+        self.stackedWidget_2.setCurrentIndex(4)
+        self.comboBox_Select_page.currentIndexChanged.connect(self.change_page)
 
         # 移除窗口标题栏
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -140,19 +129,58 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         palette.setBrush(self.backgroundRole(), QtGui.QBrush(picture))
         self.setPalette(palette)
 
-        # 设置默认模块
-        self.module_selected = ''
-        self.comboBox_Select_Module.setCurrentIndex(0)
+        # 初始化模块列表，提供默认模块
+        self.board = ''
+        for types in ['']+MODULELIST:
+            self.comboBox_Select_Board.addItem(types)
+        self.comboBox_Select_Board.setCurrentIndex(0)
+
+    def find_hids(self):
+        try:
+            digithid = hid('DIGITAL MODULE VER1')
+            anologhid = hid('ANALOG MODULE VER1')
+        except Exception as e1:
+            log.info(e1)
+        else:
+            if digithid and anologhid:
+                self.digit_hid = digithid
+                self.anolog_hid = anologhid
+
+    def hid_monitor(self):
+
+        if self.digit_hid is None:
+            log.info('工装数字板USB连接不正确，请检查')
+        else:
+            self.digit_hid_alive = True
+        if self.digit_hid_alive:
+            hid = self.digit_hid
+            hid.start()
+
+            def read_hid():
+                while hid.alive:
+                    hid.setcallback()
+
+            def get_hid_data(*write_data):
+                write_buffer = [0, 0xd, 0] + list(write_data) + [0x00 for i in range(49)]
+                hid.readbuffer = []
+                try:
+                    hid.write(write_buffer)
+                    sleep(.2)  # 等待线程获取hid设备返回数据
+                    digit_current_data = hid.unpack_data_list(hid.readbuffer)
+                    for value in digit_current_data.values():
 
 
-    def changepage(self):
+                except Exception as e:
+                    log.error(e)
+
+    def change_page(self):
         self.stackedWidget_2.setCurrentIndex(self.comboBox_Select_page.currentIndex()+2)
 
     def select_module(self):
-        self.module_selected = self.comboBox_Select_Module.currentText()
+        self.board = self.comboBox_Select_Board.currentText()
 
     def show_setting(self):
-        self.label.setText(str(self.module_selected) +
+        self.label.setText(str(self.board) +
                            str(self.child_left.ports_setting))
 
     def module_confirm(self):

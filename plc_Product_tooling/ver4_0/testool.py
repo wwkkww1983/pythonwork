@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 import configparser
 import ctypes
 
-from ui import ui_window_process, ui_widget_setting, ui_widget_calibration_backstage,\
+from ui import ui_window_process, ui_widget_setting_usb, ui_widget_calibration_backstage_debug,\
     ui_widget_result, ui_widget_calibration, ui_widget_download
 
 # 获取模块列表用于显示UI文本
@@ -15,7 +15,7 @@ config.read('boardconfig.ini', encoding='utf-8')
 MODULELIST = config['TOTAL']['BOARDLIST'].split(',')
 
 
-class Setting(QWidget, ui_widget_setting.Ui_widget_Setting):
+class Setting(QWidget, ui_widget_setting_usb.Ui_widget_Setting):
     # 定义和构造左侧窗口- 模块选择和串口设置
     def __init__(self):
         super(Setting, self).__init__()
@@ -52,7 +52,7 @@ class Calibration(QWidget, ui_widget_calibration.Ui_widget_Calibration):
         self.setupUi(self)
 
 
-class CalibrationBackstage(QWidget, ui_widget_calibration_backstage.Ui_widget_Calibration_Backstage):
+class CalibrationBackstage(QWidget, ui_widget_calibration_backstage_debug.Ui_widget_Calibration_Backstage):
     """定义和构造校准后台后台窗口类对象 - 根据选择模块配置相关的显示内容，提供缺省值"""
     def __init__(self):
         super(CalibrationBackstage, self).__init__()

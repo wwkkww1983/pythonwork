@@ -74,7 +74,7 @@
       <string>打开串口</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_Reset_Module">
+    <widget class="QPushButton" name="pushButton_Reset_Board">
      <property name="geometry">
       <rect>
        <x>152</x>
@@ -100,7 +100,7 @@
     <property name="title">
      <string>选择模块</string>
     </property>
-    <widget class="QComboBox" name="comboBox_Select_Module">
+    <widget class="QComboBox" name="comboBox_Select_Board">
      <property name="geometry">
       <rect>
        <x>8</x>
@@ -109,16 +109,6 @@
        <height>25</height>
       </rect>
      </property>
-     <item>
-      <property name="text">
-       <string>LX 8PT</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>LX 8TC</string>
-      </property>
-     </item>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">

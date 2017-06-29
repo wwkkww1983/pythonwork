@@ -13,8 +13,8 @@ from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtCore import Qt
 from ui_window_process import Ui_MainWindow
-from ui_widget_setting import Ui_widget_Setting
-from ui_widget_calibration_backstage import Ui_widget_Calibration_Backstage
+from ui_widget_setting_usb import Ui_widget_Setting
+from ui_widget_calibration_backstage_debug import Ui_widget_Calibration_Backstage
 from ui_widget_result import Ui_widget_Result_Show
 from ui_widget_calibration import Ui_widget_Calibration
 from ui_widget_download import Ui_widget_Download

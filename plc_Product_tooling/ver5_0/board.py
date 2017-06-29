@@ -7,14 +7,11 @@ import logging as log
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
-
-def read_config_file(filename):
-    config = configparser.ConfigParser()
-    try:
-        config.read(filename, encoding='utf-8')
-    except None:
-        log.info('boardconfig.ini file is not found')
-    return config
+config = configparser.ConfigParser()
+try:
+    config.read('boardconfig.ini', encoding='utf-8')
+except None:
+    log.info('boardconfig.ini file is not found')
 
 
 def read_section_as_dict(sectionname):
@@ -23,7 +20,6 @@ def read_section_as_dict(sectionname):
     :param sectionname:
     :return:
     """
-    config = read_config_file()
     board_dict = {}
     sec = config.sections()
     if sectionname not in sec:
@@ -77,9 +73,8 @@ def get_board_list(sec='boards'):
     """
     boards = read_section_as_dict(sec)
     board_list = boards.get('name list')
-    return board_list
+    return board_list.split(',')
 
 if __name__ == '__main__':
-    read_config_file('boardconfig.ini')
     log.info(get_board('8TC'))
-    log.info(get_board_list('boards'))
+    log.info(get_board_list())
