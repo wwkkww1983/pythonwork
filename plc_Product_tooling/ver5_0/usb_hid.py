@@ -19,14 +19,22 @@ class MYUSBHID(object):
         self.readbuffer = None
 
     def start(self):
-        _filter = hid.HidDeviceFilter(product_name=self.name)
-        hid_device = _filter.get_devices()
-        if len(hid_device) > 0:
-            self.device = hid_device[0]
-            self.device.open()
-            log.info('hid device opened:{}'.format(self.device.product_name))
-            self.report = self.device.find_output_reports()
-            self.alive = True
+        # if self.alive is not True:
+        #     print(self.alive)
+        #     return
+        # else:
+        #     pass
+        try:
+            _filter = hid.HidDeviceFilter(product_name=self.name)
+            hid_device = _filter.get_devices()
+            if len(hid_device) > 0:
+                self.device = hid_device[0]
+                self.device.open()
+                log.info('hid device opened:{}'.format(self.device.product_name))
+                self.report = self.device.find_output_reports()
+                self.alive = True
+        except Exception as e:
+            log.error(e, 'can not open hid device {}'.format(self.name))
 
     def stop(self):
         self.alive = False
@@ -144,7 +152,6 @@ class MYUSBHID(object):
         :param data_from: 数字板：64，模拟板：32
         :return:
         """
-
         buffer = data_buffer
         newdata = [0 for i in range(3)]
         newlen = 0
@@ -193,7 +200,7 @@ class MYUSBHID(object):
                 current_data['power_up_flag_word'] = data_int_list[-2]
                 current_data['frame_ready_flag_word'] = data_int_list[-1]
 
-                print(current_data)
+                log.info('current word data'.format(current_data))
                 return current_data
         return get_digit_current_data(newdata)
 
@@ -236,9 +243,9 @@ if __name__ == '__main__':
     for t in threads:
         t.setDaemon(True)
         t.start()
-    sleep(2)
+    sleep(20)
     myhid.stop()
     t.join()
-    # data = myhid.unpack_data_list(_data_list=myhid.readbuffer)
-    # log.info('unpack data={}'.format(data))
+    data = myhid.unpack_data_list(data_buffer=myhid.readbuffer)
+    log.info('unpack data={}'.format(data))
     log.info('usb hid end at {}'.format(ctime()))

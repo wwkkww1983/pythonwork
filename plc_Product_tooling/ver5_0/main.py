@@ -3,12 +3,11 @@
 import logging as log
 from time import sleep
 from ctypes import windll
-
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 import board, calibrate
-from usb_hid import MYUSBHID as hid
+from usb_hid import MYUSBHID as myhid
 from ui import ui_window_process, ui_widget_calibration_backstage_debug,\
     ui_widget_result, ui_widget_calibration, ui_widget_download, ui_widget_setting_usb
 
@@ -27,6 +26,7 @@ class Setting(QWidget, ui_widget_setting_usb.Ui_widget_Setting):
         self.setupUi(self)
         # 初始化各下拉列表默认值 后期改为记忆上一次程序退出时设置的值
         self.ports_setting = ()
+
 
 class Calibration(QWidget, ui_widget_calibration.Ui_widget_Calibration):
     """定义和构造校准主窗口类对象 - 根据选择模块配置相关的显示内容，提供缺省值"""
@@ -65,8 +65,7 @@ class Result(QWidget, ui_widget_result.Ui_widget_Result_Show):
 
 
 class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
-    """程序主窗口 - 包含5个子窗口，其中右侧中间窗口切换为校准、后台、下载三种界面"""
-
+    """程序主窗口"""
     def __init__(self):
         super(ProcessWindow, self).__init__()
 
@@ -74,8 +73,8 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.setupUi(self)
 
         # 初始化hid
-        self.digit_hid = None
-        self.anolog_hid = None
+        self.digit_hid = myhid('DIGITAL MODULE VER1')
+        self.anolog_hid = myhid('ANALOG MODULE VER1')
         self.board = None
 
         # 窗口导入
@@ -136,42 +135,45 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.comboBox_Select_Board.setCurrentIndex(0)
 
     def find_hids(self):
-        try:
-            digithid = hid('DIGITAL MODULE VER1')
-            anologhid = hid('ANALOG MODULE VER1')
-        except Exception as e1:
-            log.info(e1)
-        else:
-            if digithid and anologhid:
-                self.digit_hid = digithid
-                self.anolog_hid = anologhid
+        """
+        获取系统当前usb hid设备中符合条件的对象
+        :return:
+        """
+        self.digit_hid.start()
+        self.anolog_hid.start()
+
 
     def hid_monitor(self):
-
-        if self.digit_hid is None:
-            log.info('工装数字板USB连接不正确，请检查')
+        """
+        监视hid 数据，放到线程中全程进行hid通讯，直到结束本次工装使用或手动断开
+        :return:
+        """
+        if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
+            log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
         else:
-            self.digit_hid_alive = True
-        if self.digit_hid_alive:
-            hid = self.digit_hid
-            hid.start()
-
-            def read_hid():
-                while hid.alive:
+            for hid in [self.digit_hid, self.anolog_hid]:
+                if hid.device:
                     hid.setcallback()
+                    if hid == self.digit_hid:
+                        stt_adrs = 6000
+                        w_lengh = 32
+                    else:
+                        stt_adrs = 0
+                        w_lengh = 16
+                    write_data = hid.pack_write_data(stt_adrs, w_lengh, None, 'read')
+                    write_buffer = [0, 0xd, 0] + list(write_data) + [0x00]*49
+                    hid.readbuffer = []
+                    try:
+                        hid.write(write_buffer)
+                        sleep(.2)  # 等待线程获取hid设备返回数据
+                        log.info('{} read buffer: {}'.format(hid.name,hid.readbuffer))
+                        digit_current_data = hid.unpack_data_list(hid.readbuffer)
+                        for value in digit_current_data.values():
+                            pass
+                        log.info()
 
-            def get_hid_data(*write_data):
-                write_buffer = [0, 0xd, 0] + list(write_data) + [0x00 for i in range(49)]
-                hid.readbuffer = []
-                try:
-                    hid.write(write_buffer)
-                    sleep(.2)  # 等待线程获取hid设备返回数据
-                    digit_current_data = hid.unpack_data_list(hid.readbuffer)
-                    for value in digit_current_data.values():
-
-
-                except Exception as e:
-                    log.error(e)
+                    except Exception as e:
+                        log.error(e)
 
     def change_page(self):
         self.stackedWidget_2.setCurrentIndex(self.comboBox_Select_page.currentIndex()+2)
@@ -180,8 +182,7 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.board = self.comboBox_Select_Board.currentText()
 
     def show_setting(self):
-        self.label.setText(str(self.board) +
-                           str(self.child_left.ports_setting))
+        self.label.setText(str(self.board) + str(self.child_left.ports_setting))
 
     def module_confirm(self):
         pass
@@ -191,10 +192,19 @@ def cali_8tc():
     pass
 
 
-
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     win = ProcessWindow()
     win.show()
+    win.find_hids()
+    sleep(0.5)
+    win.hid_monitor()
+
+
+
+    if win.digit_hid.alive:
+        win.digit_hid.stop()
+    if win.anolog_hid.alive:
+        win.anolog_hid.stop()
     sys.exit(app.exec_())
