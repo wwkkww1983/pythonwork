@@ -5,7 +5,7 @@ from time import sleep
 from ctypes import windll
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QLineEdit
 import board, calibrate
 from usb_hid import MYUSBHID as myhid
 from ui import ui_window_process, ui_widget_calibration_backstage_debug,\
@@ -148,13 +148,12 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         监视hid 数据，放到线程中全程进行hid通讯，直到结束本次工装使用或手动断开
         :return:
         """
-        if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
-            log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
-        else:
-            for hid in [self.digit_hid, self.anolog_hid]:
+        def get_data(hid1, hid2):
+            current_data = []
+            for hid in [hid1, hid2]:
                 if hid.device:
                     hid.setcallback()
-                    if hid == self.digit_hid:
+                    if hid == hid1:
                         stt_adrs = 6000
                         w_lengh = 32
                     else:
@@ -166,14 +165,36 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
                     try:
                         hid.write(write_buffer)
                         sleep(.2)  # 等待线程获取hid设备返回数据
-                        log.info('{} read buffer: {}'.format(hid.name,hid.readbuffer))
-                        digit_current_data = hid.unpack_data_list(hid.readbuffer)
-                        for value in digit_current_data.values():
-                            pass
-                        log.info()
+                        log.info('{} read buffer: {}'.format(hid.name, hid.readbuffer))
+                        current_data = hid.unpack_read_data(hid.readbuffer)
+                        # for word in current_data:
+                        #     if current_data.index(word) == 0:
+                        #         self.calibrationbackstagepage.lineEdit.setText(str(word))
+                        #         self.calibrationbackstagepage.name
 
                     except Exception as e:
                         log.error(e)
+            log.info(current_data)
+            return current_data
+
+        def showdata(crtdata):
+            grid = QGridLayout()
+            pos = []
+            if len(crtdata) == 32:
+                for i in range(4):
+                    for j in range(8):
+                        pos.append((i, j))
+                print(len(pos),len(crtdata))
+                for k in crtdata:
+                    linedit = QLineEdit('linedit_'+str(k))
+                    grid.addWidget(linedit, *pos[k])
+            log.info(grid)
+            return grid
+        if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
+            log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
+        else:
+            self.calibrationbackstagepage.setLayout(showdata(get_data(self.digit_hid, self.anolog_hid)))
+        return
 
     def change_page(self):
         self.stackedWidget_2.setCurrentIndex(self.comboBox_Select_page.currentIndex()+2)
@@ -200,8 +221,6 @@ if __name__ == '__main__':
     win.find_hids()
     sleep(0.5)
     win.hid_monitor()
-
-
 
     if win.digit_hid.alive:
         win.digit_hid.stop()

@@ -145,12 +145,11 @@ class MYUSBHID(object):
             _data_list = stx + func_code + start_address_code + lengh_code + wt_data_code + etx + checksum_code
         return _data_list
 
-    def unpack_data_list(self, data_buffer):
+    def unpack_read_data(self, data_buffer):
         """
-        从hid回调数据中获取有效数据并解析。后续读固定长度数据，
-        :param _data_list: 无符号整型列表
-        :param data_from: 数字板：64，模拟板：32
-        :return:
+        从hid回调数据中获取有效数据并解析。
+        :param data_buffer: 数字板：64，模拟板：32
+        :return: 解析后的数字板或模拟板寄存器数据
         """
         buffer = data_buffer
         newdata = [0 for i in range(3)]
@@ -161,48 +160,48 @@ class MYUSBHID(object):
             newlen += buffer[n][1]
             newdata += buffer[n][3:buffer[n][1] + 3]
         newdata[:3] = [0, newlen, 2]
-        log.info('new hid data: lengh={}, data={}'.format(newlen, newdata))
+        log.info('new hid data: total lengh={}, data={}'.format(len(newdata), newdata))
         # return newdata   # 获取hid数据
         digit_current_data = {}
 
-        def get_digit_current_data(new_hid_data):
+        def get_current_data(new_hid_data):
             if new_hid_data:
                 used_data = new_hid_data[4:-3]
                 data_chr_list = [chr(i) for i in used_data]
-                log.info('data_chr_list'.format(new_hid_data))
-                current_data = {'adc_8_data_dword': [],
-                                'test_point_value_int': [],
-                                'cali_param_int': [],
-                                'module_type_word': None,
-                                'bd_type_word': None,
-                                'power_up_flag_word': None,
-                                'frame_ready_flag_word': None
-                                }
+                log.info('data_chr_list={}'.format(new_hid_data))
+                # current_data = {'adc_8_data_dword': [],
+                #                 'test_point_value_int': [],
+                #                 'cali_param_int': [],
+                #                 'module_type_word': None,
+                #                 'bd_type_word': None,
+                #                 'power_up_flag_word': None,
+                #                 'frame_ready_flag_word': None
+                #                 }
                 data_int_list = []
-                unpack_lengh = 128
+                unpack_lengh = len(data_chr_list)
                 for s in range(unpack_lengh):
-                    if -1 < s < 64:
+                    if -1 < s < 128:
                         if s % 4 == 0:
                             a = data_chr_list[s+2] + data_chr_list[s+3] + data_chr_list[s] + data_chr_list[s+1]
                             data_int_list.append(int(a, 16))
                         else:
                             pass
-                    elif 63 < s < 128:
-                        if s % 4 == 0:
-                            a = data_chr_list[s + 2] + data_chr_list[s + 3] + data_chr_list[s] + data_chr_list[s + 1]
-                            data_int_list.append(int(a, 16))
+                    # elif 63 < s < 128:
+                    #     if s % 4 == 0:
+                    #         a = data_chr_list[s + 2] + data_chr_list[s + 3] + data_chr_list[s] + data_chr_list[s + 1]
+                    #         data_int_list.append(int(a, 16))
 
-                current_data['adc_8_data_dword'] = data_int_list[:16]
-                current_data['test_point_value_int'] = data_int_list[16:24]
-                current_data['cali_param_int'] = data_int_list[24:28]
-                current_data['module_type_word'] = data_int_list[-4]
-                current_data['bd_type_word'] = data_int_list[-3]
-                current_data['power_up_flag_word'] = data_int_list[-2]
-                current_data['frame_ready_flag_word'] = data_int_list[-1]
+                # current_data['adc_8_data_dword'] = data_int_list[:16]
+                # current_data['test_point_value_int'] = data_int_list[16:24]
+                # current_data['cali_param_int'] = data_int_list[24:28]
+                # current_data['module_type_word'] = data_int_list[-4]
+                # current_data['bd_type_word'] = data_int_list[-3]
+                # current_data['power_up_flag_word'] = data_int_list[-2]
+                # current_data['frame_ready_flag_word'] = data_int_list[-1]
 
-                log.info('current word data'.format(current_data))
-                return current_data
-        return get_digit_current_data(newdata)
+                log.info('data int list={}'.format(data_int_list))
+                return data_int_list
+        return get_current_data(newdata)
 
 if __name__ == '__main__':
     # hid_name = 'PLC USB HID VER1'
@@ -227,7 +226,7 @@ if __name__ == '__main__':
         result = myhid.write(write_buffer)
         log.info('send result={}'.format(result))
         sleep(.1)  # 这里必须等待 使hid数据充分被读到
-        digit_current_data = myhid.unpack_data_list(myhid.readbuffer)
+        digit_current_data = myhid.unpack_read_data(myhid.readbuffer)
         log.info('digit current data(dict)={}'.format(digit_current_data))
         v24 = 3300 * digit_current_data['adc_8_data_dword'][1] / 4096 * 23 / 3
         i24 = 3300 * (digit_current_data['adc_8_data_dword'][0] / 4096 * 23 / 3
@@ -246,6 +245,6 @@ if __name__ == '__main__':
     sleep(20)
     myhid.stop()
     t.join()
-    data = myhid.unpack_data_list(data_buffer=myhid.readbuffer)
+    data = myhid.unpack_read_data(data_buffer=myhid.readbuffer)
     log.info('unpack data={}'.format(data))
     log.info('usb hid end at {}'.format(ctime()))
