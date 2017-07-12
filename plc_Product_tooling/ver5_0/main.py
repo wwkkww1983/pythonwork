@@ -96,7 +96,6 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.stackedWidget_2.addWidget(self.downloadpage)   # page index 2
         self.stackedWidget_2.addWidget(self.calibrationpage)  # page index 3
         self.stackedWidget_2.addWidget(self.calibrationbackstagepage)  # page index 4
-        self.stackedWidget_2.setCurrentIndex(4)
         self.comboBox_Select_page.currentIndexChanged.connect(self.change_page)
 
         # 移除窗口标题栏
@@ -135,7 +134,7 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         for types in ['']+MODULELIST:
             self.comboBox_Select_Board.addItem(types)
         self.comboBox_Select_Board.setCurrentIndex(0)
-
+        self.comboBox_Select_page.setCurrentIndex(3)
     def find_hids(self):
         """
         获取系统当前usb hid设备中符合条件的对象
@@ -198,12 +197,6 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
                 grid.addWidget(linedit, *pos[i])
         self.calibrationbackstagepage.setLayout(grid)
 
-    # def showsomething(self):
-    #     label = QLabel('show something')
-    #     grid = QGridLayout(self)
-    #     grid.addWidget(label, 0, 0)
-    #     self.calibrationbackstagepage.setLayout(grid)
-
     def change_page(self):
         self.stackedWidget_2.setCurrentIndex(self.comboBox_Select_page.currentIndex()+2)
 
@@ -228,21 +221,21 @@ if __name__ == '__main__':
     win.find_hids()
     sleep(0.5)
 
+
+    def read_hid_data(thiswin):
+        thiswin.get_hid_buffer()
+        thiswin.show_current_data()
+        return
+
     threads = []
-    t1 = threading.Thread(target=win.get_hid_buffer, args=())
-    threads.append(t1)
-    t2 = threading.Thread(target=win.show_current_data, args=())
-    threads.append(t2)
+    t = threading.Thread(target=read_hid_data, args=(win,))
+    threads.append(t)
+
     for t in threads:
         t.setDaemon(True)
         t.start()
     t.join()
-
-    # win.get_hid_buffer()
-
-    # win.show_current_data()
-    # win.showsomething()
-
+    sleep(5)
     if win.digit_hid.alive:
         win.digit_hid.stop()
     if win.anolog_hid.alive:
