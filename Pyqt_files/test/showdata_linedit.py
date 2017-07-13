@@ -34,11 +34,11 @@ class Example(QWidget):
         self.setLayout(maingrid)
         self.move(300, 150)
         self.setWindowTitle('Calculator')
-        self.show()
 
 def main():
     app = QApplication(sys.argv)
     ex = Example()
+    ex.show()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
