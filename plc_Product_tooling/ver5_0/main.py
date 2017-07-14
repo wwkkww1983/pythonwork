@@ -5,8 +5,9 @@ import threading
 from time import sleep
 from ctypes import windll
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QLineEdit, QLabel
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtWidgets import (QMessageBox, QApplication, QWidget, QMainWindow, \
+    QGridLayout, QLineEdit, QLabel)
 import board, calibrate
 from usb_hid import MYUSBHID as myhid
 from ui import ui_window_process, ui_widget_calibration_backstage_debug,\
@@ -16,8 +17,44 @@ log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
 # 获取模块列表 - > UI模块列表
+
 MODULELIST = board.get_board_list()
 log.info('MODULIST = {}'.format(MODULELIST))
+
+
+class MyThreads(QThread):
+    heartBeartSignal = pyqtSignal(list)
+
+    def __init__(self, hid1, hid2, parent=None):
+        super(MyThreads, self).__init__(parent)
+        self.hid1 = hid1
+        self.hid2 = hid2
+
+    def run(self):
+        while True:
+            for hid in (self.hid1, self.hid2):
+                write_data = []
+                hiddata = []
+                if hid.device:
+                    hid.readbuffer = []
+                    hid.setcallback()
+                    if hid == self.hid1:
+                        write_data = hid.pack_write_data(6000, 32, None, 'read')
+                    elif hid == self.hid2:
+                        write_data = hid.pack_write_data(0, 16, None, 'read')
+                    else:
+                        pass
+                    write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
+                    try:
+                        hid.write(write_buffer)
+                        sleep(.2)  # 等待线程获取hid设备返回数据
+                        log.info('{} read buffer: {}'.format(hid.name, hid.readbuffer))
+                        hiddata.append(hid.unpack_read_data(hid.readbuffer))
+                        print(hiddata)
+                        self.heartBeartSignal.emit(hiddata)
+                        sleep(1)
+                    except Exception as e:
+                        log.error(e)
 
 
 class Setting(QWidget, ui_widget_setting_usb.Ui_widget_Setting):
@@ -69,6 +106,7 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
     """程序主窗口"""
     def __init__(self):
         super(ProcessWindow, self).__init__()
+
         self.digit_data = [0] * 32
         self.anolog_data = [0] * 16
         # 构造主窗口
@@ -77,6 +115,7 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         # 初始化hid
         self.digit_hid = myhid('DIGITAL MODULE VER1')
         self.anolog_hid = myhid('ANALOG MODULE VER1')
+        self.thread = MyThreads(self.digit_hid, self.anolog_hid)
         self.board = None
 
         # 窗口导入
@@ -153,33 +192,37 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
             log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
         else:
-            write_data = []
-            for hid in [self.digit_hid, self.anolog_hid]:
-                if hid.device:
-                    hid.readbuffer = []
-                    hid.setcallback()
-                    if hid == self.digit_hid:
-                        write_data = hid.pack_write_data(6000, 32, None, 'read')
-                    elif hid == self.anolog_hid:
-                        write_data = hid.pack_write_data(0, 16, None, 'read')
-                    else:
-                        pass
-                    write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
-
-                    try:
-                        hid.write(write_buffer)
-                        sleep(.2)  # 等待线程获取hid设备返回数据
-                        log.info('{} read buffer: {}'.format(hid.name, hid.readbuffer))
-                        current_buffer.append(hid.unpack_read_data(hid.readbuffer))
-                        # for word in current_data:
-                        #     if current_data.index(word) == 0:
-                        #         self.calibrationbackstagepage.lineEdit.setText(str(word))
-                        #         self.calibrationbackstagepage.name
-                    except Exception as e:
-                        log.error(e)
-            log.info(current_buffer)
-            self.digit_data = current_buffer[0]
+            self.thread.heartBeartSignal.connect(self.getdata)
+            # write_data = []
+            # for hid in [self.digit_hid, self.anolog_hid]:
+            #     if hid.device:
+            #         hid.readbuffer = []
+            #         hid.setcallback()
+            #         if hid == self.digit_hid:
+            #             write_data = hid.pack_write_data(6000, 32, None, 'read')
+            #         elif hid == self.anolog_hid:
+            #             write_data = hid.pack_write_data(0, 16, None, 'read')
+            #         else:
+            #             pass
+            #         write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
+            #
+            #         try:
+            #             hid.write(write_buffer)
+            #             sleep(.2)  # 等待线程获取hid设备返回数据
+            #             log.info('{} read buffer: {}'.format(hid.name, hid.readbuffer))
+            #             current_buffer.append(hid.unpack_read_data(hid.readbuffer))
+            #             # for word in current_data:
+            #             #     if current_data.index(word) == 0:
+            #             #         self.calibrationbackstagepage.lineEdit.setText(str(word))
+            #             #         self.calibrationbackstagepage.name
+            #         except Exception as e:
+            #             log.error(e)
+            # log.info(current_buffer)
+            # self.digit_data = current_buffer[0]
             # self.anolog_data = current_buffer[1]
+
+    def getdata(self, data):
+        self.digit_data = data
 
     def show_current_data(self):
         data = self.digit_data
@@ -219,25 +262,5 @@ if __name__ == '__main__':
     win = ProcessWindow()
     win.show()
     win.find_hids()
-    sleep(0.5)
-
-
-    def read_hid_data(thiswin):
-        thiswin.get_hid_buffer()
-        thiswin.show_current_data()
-        return
-
-    threads = []
-    t = threading.Thread(target=read_hid_data, args=(win,))
-    threads.append(t)
-
-    for t in threads:
-        t.setDaemon(True)
-        t.start()
-    t.join()
-    sleep(5)
-    if win.digit_hid.alive:
-        win.digit_hid.stop()
-    if win.anolog_hid.alive:
-        win.anolog_hid.stop()
+    win.get_hid_buffer()
     sys.exit(app.exec_())

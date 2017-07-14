@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="412644fd-b653-44f9-91dd-7b8ab1b7e4e4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pyqt_files/test/showdata_linedit.py" afterPath="$PROJECT_DIR$/Pyqt_files/test/showdata_linedit.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py" afterPath="$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py" afterPath="$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,33 +21,42 @@
     <favorites_list name="pythonwork" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.60215056">
+    <splitter split-orientation="horizontal" split-proportion="0.508502">
       <split-first>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-1978">
-                  <caret line="78" column="29" lean-forward="true" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+                <state relative-caret-position="1612">
+                  <caret line="62" column="39" lean-forward="true" selection-start-line="62" selection-start-column="39" selection-end-line="62" selection-end-column="39" />
                   <folding>
-                    <element signature="e#1050#1188#0" expanded="false" />
-                    <element signature="e#1303#1453#0" expanded="false" />
-                    <element signature="e#1524#1628#0" expanded="false" />
-                    <element signature="e#1698#2019#0" expanded="false" />
-                    <element signature="e#3462#3838#0" expanded="false" />
+                    <element signature="e#25#46#0" expanded="true" />
+                    <element signature="e#2447#2585#0" expanded="false" />
+                    <element signature="e#2700#2850#0" expanded="false" />
+                    <element signature="e#2921#3025#0" expanded="false" />
+                    <element signature="e#3095#3416#0" expanded="false" />
+                    <element signature="e#4925#5301#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="example.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/local_projects/多线程/example.py">
+          <file leaf-file-name="board.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="234">
-                  <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#16#42#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="125">
+                  <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="boardconfig.ini" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/boardconfig.ini">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="130">
+                  <caret line="11" column="39" lean-forward="false" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -55,14 +64,14 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="mythreads.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="260">
-                  <caret line="20" column="24" lean-forward="true" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="24" />
+                  <caret line="36" column="23" lean-forward="false" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
                   <folding>
-                    <element signature="e#24#153#0" expanded="true" />
+                    <element signature="e#24#164#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -117,18 +126,19 @@
         <option value="$PROJECT_DIR$/plc_Product_tooling/ver5_0/usb_hid.py" />
         <option value="$PROJECT_DIR$/plc_Product_tooling/QT最简程序.py" />
         <option value="$PROJECT_DIR$/Pyqt_files/test/showdata.py" />
-        <option value="$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py" />
         <option value="$PROJECT_DIR$/local_projects/多线程/example.py" />
         <option value="$PROJECT_DIR$/Pyqt_files/test/QT最简程序.py" />
         <option value="$PROJECT_DIR$/Pyqt_files/test/showdata_linedit.py" />
         <option value="$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py" />
+        <option value="$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="16" />
-    <option name="width" value="1424" />
-    <option name="height" value="816" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1456" />
+    <option name="height" value="834" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -146,6 +156,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -296,7 +307,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -332,7 +342,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.waitconditions">
+  <component name="RunManager" selected="Python.main">
     <configuration default="false" name="mythreads" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -346,23 +356,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pythonwork" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="showdata_linedit" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Pyqt_files/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pythonwork" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Pyqt_files/test/showdata_linedit.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -414,6 +407,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="pythonwork" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Pyqt_files/examples/threads/waitconditions.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/plc_Product_tooling/ver5_0" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pythonwork" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -554,18 +564,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.mythreads" />
-      <item index="1" class="java.lang.String" itemvalue="Python.showdata_linedit" />
-      <item index="2" class="java.lang.String" itemvalue="Python.test_readfile" />
-      <item index="3" class="java.lang.String" itemvalue="Python.semaphores" />
-      <item index="4" class="java.lang.String" itemvalue="Python.waitconditions" />
+      <item index="1" class="java.lang.String" itemvalue="Python.test_readfile" />
+      <item index="2" class="java.lang.String" itemvalue="Python.semaphores" />
+      <item index="3" class="java.lang.String" itemvalue="Python.waitconditions" />
+      <item index="4" class="java.lang.String" itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.waitconditions" />
-        <item index="1" class="java.lang.String" itemvalue="Python.semaphores" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test_readfile" />
-        <item index="3" class="java.lang.String" itemvalue="Python.mythreads" />
-        <item index="4" class="java.lang.String" itemvalue="Python.showdata_linedit" />
+        <item index="0" class="java.lang.String" itemvalue="Python.main" />
+        <item index="1" class="java.lang.String" itemvalue="Python.mythreads" />
+        <item index="2" class="java.lang.String" itemvalue="Python.waitconditions" />
+        <item index="3" class="java.lang.String" itemvalue="Python.semaphores" />
+        <item index="4" class="java.lang.String" itemvalue="Python.test_readfile" />
       </list>
     </recent_temporary>
   </component>
@@ -632,10 +642,17 @@
       <option name="project" value="LOCAL" />
       <updated>1499852723947</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="hid 数据读取和显示用多线程处理">
+      <created>1499941406410</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1499941406410</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
-  <component name="TodoView">
+  <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
     </todo-panel>
@@ -645,26 +662,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="16" y="0" width="1424" height="816" extended-state="0" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1456" height="834" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17777778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12966879" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1519174" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1988218" sideWeight="0.20295984" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34277198" sideWeight="0.49435824" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5198822" sideWeight="0.48343903" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34277198" sideWeight="0.49435824" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.421365" sideWeight="0.49153736" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2548435" sideWeight="0.79704016" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.04719764" sideWeight="0.79704016" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5180897" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937685" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42473918" sideWeight="0.8561354" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5693215" sideWeight="0.8561354" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5198822" sideWeight="0.48343903" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24040511" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -768,11 +785,104 @@
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py</url>
+          <line>102</line>
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py</url>
+          <line>103</line>
+          <option name="timeStamp" value="139" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py</url>
+          <line>75</line>
+          <option name="timeStamp" value="140" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="141" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py</url>
+          <line>74</line>
+          <option name="timeStamp" value="144" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py</url>
+          <line>75</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="146" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py</url>
+          <line>65</line>
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
-          <line>181</line>
-          <option name="timeStamp" value="113" />
+          <line>190</line>
+          <option name="timeStamp" value="148" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>192</line>
+          <option name="timeStamp" value="149" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>193</line>
+          <option name="timeStamp" value="150" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>194</line>
+          <option name="timeStamp" value="151" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>229</line>
+          <option name="timeStamp" value="152" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>230</line>
+          <option name="timeStamp" value="153" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>231</line>
+          <option name="timeStamp" value="154" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>232</line>
+          <option name="timeStamp" value="155" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>233</line>
+          <option name="timeStamp" value="156" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>224</line>
+          <option name="timeStamp" value="160" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py</url>
+          <line>264</line>
+          <option name="timeStamp" value="161" />
         </line-breakpoint>
       </breakpoints>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -780,7 +890,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="126" />
+      <option name="time" value="162" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -899,13 +1009,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/boardconfig.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="11" column="25" lean-forward="false" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/local_projects/usesql/usesqlmodule.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="268">
@@ -978,13 +1081,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
           <caret line="11" column="34" lean-forward="true" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1924">
-          <caret line="75" column="30" lean-forward="false" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -1087,26 +1183,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/local_projects/多线程/example.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="e#16#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="20" column="24" lean-forward="true" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="24" />
-          <folding>
-            <element signature="e#24#153#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pyqt_files/examples/threads/mandelbrot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1423">
@@ -1119,9 +1195,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-104">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#76#86#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1129,9 +1202,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
           <caret line="66" column="24" lean-forward="true" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
-          <folding>
-            <element signature="e#2058#2068#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1139,20 +1209,56 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1387">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/local_projects/多线程/example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-442">
+          <caret line="19" column="45" lean-forward="false" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+          <folding>
+            <element signature="e#16#42#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/mythreads.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="36" column="23" lean-forward="false" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
+          <folding>
+            <element signature="e#24#164#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/boardconfig.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="11" column="39" lean-forward="false" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/board.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plc_Product_tooling/ver5_0/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1978">
-          <caret line="78" column="29" lean-forward="true" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+        <state relative-caret-position="1612">
+          <caret line="62" column="39" lean-forward="true" selection-start-line="62" selection-start-column="39" selection-end-line="62" selection-end-column="39" />
           <folding>
-            <element signature="e#1050#1188#0" expanded="false" />
-            <element signature="e#1303#1453#0" expanded="false" />
-            <element signature="e#1524#1628#0" expanded="false" />
-            <element signature="e#1698#2019#0" expanded="false" />
-            <element signature="e#3462#3838#0" expanded="false" />
+            <element signature="e#25#46#0" expanded="true" />
+            <element signature="e#2447#2585#0" expanded="false" />
+            <element signature="e#2700#2850#0" expanded="false" />
+            <element signature="e#2921#3025#0" expanded="false" />
+            <element signature="e#3095#3416#0" expanded="false" />
+            <element signature="e#4925#5301#0" expanded="false" />
           </folding>
         </state>
       </provider>
