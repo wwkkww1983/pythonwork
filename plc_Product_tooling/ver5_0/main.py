@@ -192,20 +192,20 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
             log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
         else:
-            self.thread.heartBeartSignal.connect(self.getdata)
-            # write_data = []
-            # for hid in [self.digit_hid, self.anolog_hid]:
-            #     if hid.device:
-            #         hid.readbuffer = []
-            #         hid.setcallback()
-            #         if hid == self.digit_hid:
-            #             write_data = hid.pack_write_data(6000, 32, None, 'read')
-            #         elif hid == self.anolog_hid:
-            #             write_data = hid.pack_write_data(0, 16, None, 'read')
-            #         else:
-            #             pass
-            #         write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
-            #
+            # self.thread.heartBeartSignal.connect(self.getdata)
+            write_data = []
+            for hid in [self.digit_hid, self.anolog_hid]:
+                if hid.device:
+                    hid.readbuffer = []
+                    hid.setcallback()
+                    if hid == self.digit_hid:
+                        write_data = hid.pack_write_data(6000, 32, None, 'read')
+                    elif hid == self.anolog_hid:
+                        write_data = hid.pack_write_data(0, 16, None, 'read')
+                    else:
+                        pass
+                    write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
+
             #         try:
             #             hid.write(write_buffer)
             #             sleep(.2)  # 等待线程获取hid设备返回数据
