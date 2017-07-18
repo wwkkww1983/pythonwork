@@ -17,44 +17,37 @@ log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
 # 获取模块列表 - > UI模块列表
-
 MODULELIST = board.get_board_list()
 log.info('MODULIST = {}'.format(MODULELIST))
 
 
 class MyThreads(QThread):
-    heartBeartSignal = pyqtSignal(list)
+    hidreadSignal = pyqtSignal(list)
 
-    def __init__(self, hid1, hid2, parent=None):
+    def __init__(self, parent=None):
         super(MyThreads, self).__init__(parent)
-        self.hid1 = hid1
-        self.hid2 = hid2
+        self.hid1 = myhid('DIGITAL MODULE VER1')
+        self.hid1.start()
+        self.hid1.setcallback()
 
     def run(self):
         while True:
-            for hid in (self.hid1, self.hid2):
-                write_data = []
-                hiddata = []
-                if hid.device:
-                    hid.readbuffer = []
-                    hid.setcallback()
-                    if hid == self.hid1:
-                        write_data = hid.pack_write_data(6000, 32, None, 'read')
-                    elif hid == self.hid2:
-                        write_data = hid.pack_write_data(0, 16, None, 'read')
-                    else:
-                        pass
-                    write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
-                    try:
-                        hid.write(write_buffer)
-                        sleep(.2)  # 等待线程获取hid设备返回数据
-                        log.info('{} read buffer: {}'.format(hid.name, hid.readbuffer))
-                        hiddata.append(hid.unpack_read_data(hid.readbuffer))
-                        print(hiddata)
-                        self.heartBeartSignal.emit(hiddata)
-                        sleep(1)
-                    except Exception as e:
-                        log.error(e)
+            digit_current_data = []
+            hid = self.hid1
+            write_buffer = hid.writebuffer
+            log.info('write buffer: lenth={},data={}'.format(len(write_buffer), write_buffer))
+            try:
+                result = hid.write(write_buffer)
+                log.info('send result={}'.format(result))
+                sleep(.1)  # 这里必须等待 使hid数据充分被读到
+                if not result:
+                    log.info('hid write error')
+                else:
+                    digit_current_data = hid.unpack_read_data(hid.readbuffer)
+                    log.info('digit current data ={}'.format(digit_current_data))
+            except Exception as e:
+                log.error('USB hid Error:', e)
+            self.hidreadSignal.emit(digit_current_data)
 
 
 class Setting(QWidget, ui_widget_setting_usb.Ui_widget_Setting):
@@ -106,16 +99,11 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
     """程序主窗口"""
     def __init__(self):
         super(ProcessWindow, self).__init__()
-
-        self.digit_data = [0] * 32
-        self.anolog_data = [0] * 16
         # 构造主窗口
         self.setupUi(self)
 
-        # 初始化hid
-        self.digit_hid = myhid('DIGITAL MODULE VER1')
-        self.anolog_hid = myhid('ANALOG MODULE VER1')
-        self.thread = MyThreads(self.digit_hid, self.anolog_hid)
+        self.thread = MyThreads()
+
         self.board = None
 
         # 窗口导入
@@ -174,61 +162,45 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
             self.comboBox_Select_Board.addItem(types)
         self.comboBox_Select_Board.setCurrentIndex(0)
         self.comboBox_Select_page.setCurrentIndex(3)
+
+        self.digit_data = [0] * 32
+        self.thread.hidreadSignal.connect(self.backstage_renew)
+        self.thread.start()
+        self.backstage_config()
+
+
+
     def find_hids(self):
         """
         获取系统当前usb hid设备中符合条件的对象
         :return:
         """
-        self.digit_hid.start()
-        self.anolog_hid.start()
 
+        try:
+            self.digit_hid.start()
+            self.anolog_hid.start()
+        except Exception as e:
+            log.error(e)
 
-    def get_hid_buffer(self):
+    def get_hid_buffer(self, _hid):
         """
         监视hid 数据，放到线程中全程进行hid通讯，直到结束本次工装使用或手动断开
         :return:
         """
-        current_buffer= []
         if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
             log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
         else:
-            # self.thread.heartBeartSignal.connect(self.getdata)
-            write_data = []
-            for hid in [self.digit_hid, self.anolog_hid]:
-                if hid.device:
-                    hid.readbuffer = []
-                    hid.setcallback()
-                    if hid == self.digit_hid:
-                        write_data = hid.pack_write_data(6000, 32, None, 'read')
-                    elif hid == self.anolog_hid:
-                        write_data = hid.pack_write_data(0, 16, None, 'read')
-                    else:
-                        pass
-                    write_buffer = [0, 0xd, 0] + list(write_data) + [0x00] * 49
-
-            #         try:
-            #             hid.write(write_buffer)
-            #             sleep(.2)  # 等待线程获取hid设备返回数据
-            #             log.info('{} read buffer: {}'.format(hid.name, hid.readbuffer))
-            #             current_buffer.append(hid.unpack_read_data(hid.readbuffer))
-            #             # for word in current_data:
-            #             #     if current_data.index(word) == 0:
-            #             #         self.calibrationbackstagepage.lineEdit.setText(str(word))
-            #             #         self.calibrationbackstagepage.name
-            #         except Exception as e:
-            #             log.error(e)
-            # log.info(current_buffer)
-            # self.digit_data = current_buffer[0]
-            # self.anolog_data = current_buffer[1]
+            pass
 
     def getdata(self, data):
-        self.digit_data = data
+        pass
 
-    def show_current_data(self):
-        data = self.digit_data
+    def backstage_config(self):
         sleep(.1)
         grid = QGridLayout()
         pos = []
+        data = self.digit_data
+        self.linedit_group = []
         if len(data) == 32:
             for i in range(4):
                 for j in range(8):
@@ -238,7 +210,12 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
                 linedit = QLineEdit('linedit_'+str(k))
                 linedit.setText(str(k))
                 grid.addWidget(linedit, *pos[i])
+                self.linedit_group.append(linedit)
         self.calibrationbackstagepage.setLayout(grid)
+
+    def backstage_renew(self, data):
+        for i, j in zip(data, self.linedit_group):
+            j.setText(str(i))
 
     def change_page(self):
         self.stackedWidget_2.setCurrentIndex(self.comboBox_Select_page.currentIndex()+2)
@@ -261,6 +238,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = ProcessWindow()
     win.show()
-    win.find_hids()
-    win.get_hid_buffer()
     sys.exit(app.exec_())

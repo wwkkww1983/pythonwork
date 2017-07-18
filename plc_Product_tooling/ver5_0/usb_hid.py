@@ -4,6 +4,7 @@
 import pywinusb.hid as hid
 from time import ctime, sleep
 import logging as log
+import threading
 from crccheck.checksum import Checksum8
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
@@ -16,7 +17,14 @@ class MYUSBHID(object):
         self.device = None
         self.report = None
         self.writebuffer = None
-        self.readbuffer = None
+        self.readbuffer = []
+
+
+        if self.name == 'DIGITAL MODULE VER1':
+            self.readbuffermaxlen = 3
+        if self.name == 'ANALOG MODULE VER1':
+            self.readbuffermaxlen = 2
+
 
         write_data = ''
         if self.name == 'DIGITAL MODULE VER1':
@@ -24,7 +32,6 @@ class MYUSBHID(object):
         if self.name == 'ANALOG MODULE VER1':
             write_data = self.pack_write_data(start_address=0, operal_word_lengh=16)
         self.writebuffer = [0, 0xd, 0] + list(write_data) + [0x00 for i in range(49)]
-
 
     def start(self):
         if self.alive is True:
@@ -54,6 +61,9 @@ class MYUSBHID(object):
             self.device.set_raw_data_handler(self.read)
 
     def read(self, rd_report_data):
+        if len(self.readbuffer) >= self.readbuffermaxlen:
+            self.readbuffer = []
+
         self.readbuffer.append(rd_report_data)
         log.info('received:lengh={}, data={}'.format(len(self.readbuffer), self.readbuffer))
         return self.readbuffer
@@ -85,7 +95,6 @@ class MYUSBHID(object):
             # 读写起始地址，4_bytes list
             d0_fmt = 0x4000
             d8000_fmt = 0x0E00
-
             strt_addr_str = ''
             if strt_addr_ in range(6000, 6032) or range(0, 14):
                 strt_addr_str = '{:#06X}'.format(strt_addr_ * 2 + d0_fmt)
@@ -94,7 +103,6 @@ class MYUSBHID(object):
             strt_addr_fmt = [ord(letter) for letter in strt_addr_str][2:]
             return strt_addr_fmt
         start_address_code = pack_strt_addr(start_address)
-
 
         def pack_lengh(len_):
             lengh = []
@@ -181,42 +189,45 @@ class MYUSBHID(object):
         unpacked_data = data_int_list
         return unpacked_data
 
+
 if __name__ == '__main__':
-    # hid_name = 'PLC USB HID VER1'
-    hid_name = 'DIGITAL MODULE VER1'
-    # hid_name = 'ANALOG MODULE VER1'
-    myhid = MYUSBHID(hid_name)
-    hid_send_data = myhid.writebuffer
-
-    log.info('usb hid start at {}'.format(ctime()))
-
-    myhid.start()
-    sleep(1)
-    log.info('hid device opened:{}'.format(myhid.name))
-
-    if myhid.alive:
+    def hidtranslation(_hid):
+        myhid = _hid
         myhid.setcallback()
-
         write_buffer = myhid.writebuffer
         log.info('write buffer: lenth={},data={}'.format(len(write_buffer), write_buffer))
-        myhid.readbuffer = []
-        try:
-            result = myhid.write(write_buffer)
-            log.info('send result={}'.format(result))
-            sleep(.1)  # 这里必须等待 使hid数据充分被读到
-            if result:
-                digit_current_data = myhid.unpack_read_data(myhid.readbuffer)
-                log.info('digit current data ={}'.format(digit_current_data))
+        for i in range(100):
+            try:
+                result = myhid.write(write_buffer)
+                log.info('send result={}'.format(result))
+                sleep(.05)  # 这里必须等待 使hid数据充分被读到
+                if not result:
+                    log.info('hid write error')
+                else:
+                    digit_current_data = myhid.unpack_read_data(myhid.readbuffer)
+                    log.info('digit current data ={}'.format(digit_current_data))
+            except Exception as e:
+                log.error('USB hid Error:', e)
 
-        except Exception as e:
-            log.error('USB hid Error:', e)
+    hid_name = 'DIGITAL MODULE VER1'
+    # hid_name = 'ANALOG MODULE VER1'
+    # hid_name = 'PLC USB HID VER1'
+    thishid = MYUSBHID(hid_name)
+    log.info('usb hid start at {}'.format(ctime()))
+    thishid.start()
+    sleep(.1)
+    log.info('hid device opened:{}'.format(thishid.name))
+    t1 = threading.Thread(target=hidtranslation, args=(thishid,))  # 线程1指定函数、参数
+    if thishid.alive:
+        t1.setDaemon(True)
+        t1.start()
+        t1.join()
 
-    if myhid.alive:
-        myhid.stop()
+    sleep(10)
+    thishid.stop()
     log.info('usb hid end at {}'.format(ctime()))
 
-
-
+# 用于解析数字板、模拟板的具体参数
     # current_data['adc_8_data_dword'] = data_int_list[:16]
     # current_data['test_point_value_int'] = data_int_list[16:24]
     # current_data['cali_param_int'] = data_int_list[24:28]
@@ -224,7 +235,6 @@ if __name__ == '__main__':
     # current_data['bd_type_word'] = data_int_list[-3]
     # current_data['power_up_flag_word'] = data_int_list[-2]
     # current_data['frame_ready_flag_word'] = data_int_list[-1]
-
 
     # current_data = {'adc_8_data_dword': [],
     #                 'test_point_value_int': [],
