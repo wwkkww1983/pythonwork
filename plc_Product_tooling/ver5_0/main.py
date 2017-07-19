@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import logging as log
-import threading
 from time import sleep
 from ctypes import windll
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtWidgets import (QMessageBox, QApplication, QWidget, QMainWindow, \
-    QGridLayout, QLineEdit, QLabel)
-import board, calibrate
+from PyQt5.QtWidgets import (QMessageBox, QApplication, QWidget, QMainWindow, QGridLayout, QLineEdit, QLabel)
+import board
+import calibrate
 from usb_hid import MYUSBHID as myhid
 from ui import ui_window_process, ui_widget_calibration_backstage_debug,\
     ui_widget_result, ui_widget_calibration, ui_widget_download, ui_widget_setting_usb
@@ -21,21 +20,20 @@ MODULELIST = board.get_board_list()
 log.info('MODULIST = {}'.format(MODULELIST))
 
 
-class MyThreads(QThread):
+class HidThreads(QThread):
     hidreadSignal = pyqtSignal(list)
 
-    def __init__(self, parent=None):
-        super(MyThreads, self).__init__(parent)
-        self.hid1 = myhid('DIGITAL MODULE VER1')
-        self.hid1.start()
-        self.hid1.setcallback()
+    def __init__(self, _hid, parent=None):
+        super(HidThreads, self).__init__(parent)
+        self.hid1 = _hid
+        self.flag = False
 
     def run(self):
+        self.hid1.setcallback()
+        hid = self.hid1
+        write_buffer = hid.writebuffer
+        log.info('write buffer: lenth={},data={}'.format(len(write_buffer), write_buffer))
         while True:
-            digit_current_data = []
-            hid = self.hid1
-            write_buffer = hid.writebuffer
-            log.info('write buffer: lenth={},data={}'.format(len(write_buffer), write_buffer))
             try:
                 result = hid.write(write_buffer)
                 log.info('send result={}'.format(result))
@@ -44,10 +42,10 @@ class MyThreads(QThread):
                     log.info('hid write error')
                 else:
                     digit_current_data = hid.unpack_read_data(hid.readbuffer)
+                    self.hidreadSignal.emit(digit_current_data)
                     log.info('digit current data ={}'.format(digit_current_data))
             except Exception as e:
                 log.error('USB hid Error:', e)
-            self.hidreadSignal.emit(digit_current_data)
 
 
 class Setting(QWidget, ui_widget_setting_usb.Ui_widget_Setting):
@@ -101,8 +99,9 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         super(ProcessWindow, self).__init__()
         # 构造主窗口
         self.setupUi(self)
-
-        self.thread = MyThreads()
+        self.digit_hid = myhid('DIGITAL MODULE VER1')
+        self.digit_hid.start()
+        self.thread = HidThreads(self.digit_hid)
 
         self.board = None
 
@@ -164,36 +163,41 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         self.comboBox_Select_page.setCurrentIndex(3)
 
         self.digit_data = [0] * 32
-        self.thread.hidreadSignal.connect(self.backstage_renew)
-        self.thread.start()
+
+
         self.backstage_config()
+        self.setting.pushButton_Link_Digit_Board.clicked.connect(self.hid_link)
 
-
-
-    def find_hids(self):
+    def hid_link(self):
         """
         获取系统当前usb hid设备中符合条件的对象
         :return:
         """
-
-        try:
-            self.digit_hid.start()
-            self.anolog_hid.start()
-        except Exception as e:
-            log.error(e)
-
-    def get_hid_buffer(self, _hid):
-        """
-        监视hid 数据，放到线程中全程进行hid通讯，直到结束本次工装使用或手动断开
-        :return:
-        """
-        if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
-            log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
+        button = self.setting.pushButton_Link_Digit_Board
+        if button.text() == '连接数字板':
+            self.thread.hidreadSignal.connect(self.backstage_renew)
+            self.thread.start()
+            button.setText('取消连接数字板')
+        elif button.text() == '取消连接数字板':
+            self.thread.disconnect()
+            button.setText('连接数字板')
         else:
             pass
 
-    def getdata(self, data):
-        pass
+
+
+    # def get_hid_buffer(self, _hid):
+    #     """
+    #     监视hid 数据，放到线程中全程进行hid通讯，直到结束本次工装使用或手动断开
+    #     :return:
+    #     """
+    #     if (self.digit_hid.alive or self.anolog_hid.alive) is not True:
+    #         log.info('工装板 {} USB连接不正确，请检查'.format(self.digit_hid.name+'\\'+self.anolog_hid.name))
+    #     else:
+    #         pass
+    #
+    # def getdata(self, data):
+    #     pass
 
     def backstage_config(self):
         sleep(.1)
@@ -205,7 +209,6 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
             for i in range(4):
                 for j in range(8):
                     pos.append((i, j))
-            print(len(pos), len(data))
             for k,i in zip(data,range(32)):
                 linedit = QLineEdit('linedit_'+str(k))
                 linedit.setText(str(k))

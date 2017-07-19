@@ -7,16 +7,16 @@ from sys import argv,exit
 from time import sleep
 
 
-class MyThreads(QThread):
-    heartBeartSignal = pyqtSignal()
-
-    def __init__(self, parent=None):
-        super(MyThreads, self).__init__(parent)
-
-    def run(self):
-        while True:
-            sleep(0.001)
-            self.heartBeartSignal.emit()
+# class MyThreads(QThread):
+#     heartBeartSignal = pyqtSignal()
+#
+#     def __init__(self, parent=None):
+#         super(MyThreads, self).__init__(parent)
+#
+#     def run(self):
+#         while True:
+#             sleep(0.001)
+#             self.heartBeartSignal.emit()
 
 
 class MyThreads2(QThread):
@@ -25,20 +25,24 @@ class MyThreads2(QThread):
     def __init__(self, parent=None):
         super(MyThreads2, self).__init__(parent)
         self.number = 0
+        self.flag = 1
 
     def run(self):
-        while True:
-            num = self.number
-            if num < 0 or num >= 9999:
-                num = 0
-            else:
-                num += 1
-            self.number = num
-            sleep(0.005)
-            self.heartBeartSignal.emit(self.number)
+        num = self.number
+        if self.flag == 1:
+            while True:
+                if num < 0 or num >= 9999:
+                    num = 0
+                else:
+                    num += 1
+                    sleep(1)
+                    print(num)
+                    self.number = num
+                    self.heartBeartSignal.emit(self.number)
 
 
 class MyWindow(QWidget):
+
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
         self.thread = MyThreads2()
@@ -53,16 +57,24 @@ class MyWindow(QWidget):
 
     def initUI(self):
         button = QPushButton()
-        button.setText('Start')
+        button.setText('START')
+        button1 = QPushButton()
+        button1.setText('关闭线程')
         label = QLabel()
         label.setText('Stopped')
-
+        label1 = QLabel()
+        label1.setText('状态：线程已开启')
         lcdnum = QLCDNumber()
         lcdnum.display(0)
+
         grid = QGridLayout()
-        grid.addWidget(button, 2, 0)
-        grid.addWidget(label, 1, 0)
         grid.addWidget(lcdnum, 0, 0)
+        grid1 = QGridLayout()
+        grid1.addWidget(label, 0, 0)
+        grid1.addWidget(label1, 0, 1)
+        grid1.addWidget(button, 1, 0)
+        grid1.addWidget(button1, 1, 1)
+        grid.addLayout(grid1, 1, 0)
 
         self.setLayout(grid)
         self.setGeometry(300, 300, 400, 200)
@@ -71,44 +83,36 @@ class MyWindow(QWidget):
         self.label = label
         self.lcdnum = lcdnum
 
-    def showdata(self, num):
-        # self.numadd()
-        self.number = num
-        self.display()
-
     def control(self):
         text = self.button.text()
-        if text == 'Stop':
+        if text == 'STOP':
             self.stop()
-        if text == 'Start':
+        if text == 'START':
             self.start()
-
-    def numadd(self):
-        num = self.number
-        if num < 0 or num >= 9999:
-            num = 0
-        else:
-            num += 1
-        self.number = num
-
-    def display(self):
-        self.lcdnum.display(self.number)
 
     def start(self):
         if self.running is not False:
             self.messagebox.information(self, '提示', 'Process has been running')
         else:
-            self.button.setText('Stop')
+            self.button.setText('STOP')
             self.label.setText('Running')
             self.thread.heartBeartSignal.connect(self.showdata)
             self.thread.start()
             self.running = True
 
+    def showdata(self, num):
+        # self.numadd()
+        self.number = num
+        self.display()
+
+    def display(self):
+        self.lcdnum.display(self.number)
+
     def stop(self):
         if self.running is False:
             self.messagebox.information(self, '提示', 'Process has been stopped')
         else:
-            self.button.setText('Start')
+            self.button.setText('START')
             self.label.setText('Stopped')
             self.thread.disconnect()
             self.running = False
