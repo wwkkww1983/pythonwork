@@ -6,6 +6,7 @@ import sys
 import os
 import time
 import _thread as thread
+from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTextBrowser, QLabel, QApplication
 ip_addresses = []
 
@@ -40,6 +41,27 @@ def ping_ip(ip_str):
     ip_addresses.append(ip_str)
 
 
+def test_ip(ip_addr, tms=10, lenth=1024):
+    """
+    对单个IP地址进行检测
+    :param ip_addr: ip地址字符串
+    :param tms: 发送次数
+    :param lenth: 包长度
+    :return:
+    """
+    cmd = ['ping', '-{op}'.format(op=get_os()), tms, '-l', lenth, ip_addr]
+    output = os.popen(''.join(cmd)).readlines()
+
+    flag = False
+    for line in list(output):
+        if not line:
+            continue
+        elif str(line).upper().find("TTL") >= 0:
+            continue
+        else:
+            pass
+
+
 def find_ips(ip_prefix):
     """
     给出当前的127.0.0，然后扫描整个段所有地址
@@ -48,6 +70,8 @@ def find_ips(ip_prefix):
         ip = '%s.%s' % (ip_prefix, i)
         thread.start_new_thread(ping_ip, (ip,))
         time.sleep(0.1)
+
+
 
 
 class Ui(QWidget):
@@ -78,9 +102,24 @@ class Ui(QWidget):
         self.setWindowTitle('Review')
         self.show()
 
+
+class MyThreads(QThread):
+    ipSignal = pyqtSignal(list)
+
+    def __init__(self, ip, parent=None):
+        super(MyThreads, self).__init__(parent)
+        self.ip = ip
+
+    def run(self):
+        ip = self.ip
+        find_ips(ip)
+
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = Ui()
+
 
     print("start time %s" % time.ctime())
     ip_prefix = '192.168.22'
