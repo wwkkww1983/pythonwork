@@ -179,7 +179,8 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
             self.thread.start()
             button.setText('取消连接数字板')
         elif button.text() == '取消连接数字板':
-            self.thread.disconnect()
+            self.thread.terminate()
+            self.thread.wait()
             button.setText('连接数字板')
         else:
             pass

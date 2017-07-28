@@ -19,33 +19,30 @@ from time import sleep
 #             self.heartBeartSignal.emit()
 
 
-class MyThreads2(QThread):
+class MyThreads(QThread):
     heartBeartSignal = pyqtSignal(int)
 
     def __init__(self, parent=None):
-        super(MyThreads2, self).__init__(parent)
+        super(MyThreads, self).__init__(parent)
         self.number = 0
-        self.flag = 1
 
     def run(self):
         num = self.number
-        if self.flag == 1:
-            while True:
-                if num < 0 or num >= 9999:
-                    num = 0
-                else:
-                    num += 1
-                    sleep(1)
-                    print(num)
-                    self.number = num
-                    self.heartBeartSignal.emit(self.number)
+        while True:
+            if num < 0 or num >= 999:
+                num = 0
+            else:
+                num += 1
+                sleep(.01)
+                print(num)
+                self.number = num
+                self.heartBeartSignal.emit(self.number)
 
 
 class MyWindow(QWidget):
-
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
-        self.thread = MyThreads2()
+        self.thread = MyThreads()
         self.number = 0
         self.button = None
         self.lcdnum = None
@@ -56,14 +53,11 @@ class MyWindow(QWidget):
         self.button.clicked.connect(self.control)
 
     def initUI(self):
-        button = QPushButton()
-        button.setText('START')
-        button1 = QPushButton()
-        button1.setText('关闭线程')
-        label = QLabel()
-        label.setText('Stopped')
-        label1 = QLabel()
-        label1.setText('状态：线程已开启')
+        button = QPushButton('START')
+        button1 = QPushButton('关闭线程')
+        label = QLabel('Stopped')
+        label1 = QLabel('状态：线程已开启')
+
         lcdnum = QLCDNumber()
         lcdnum.display(0)
 
@@ -101,7 +95,6 @@ class MyWindow(QWidget):
             self.running = True
 
     def showdata(self, num):
-        # self.numadd()
         self.number = num
         self.display()
 
@@ -112,10 +105,11 @@ class MyWindow(QWidget):
         if self.running is False:
             self.messagebox.information(self, '提示', 'Process has been stopped')
         else:
+            self.thread.terminate()
+            self.thread.wait()
+            self.running = False
             self.button.setText('START')
             self.label.setText('Stopped')
-            self.thread.disconnect()
-            self.running = False
 
 
 def main():
