@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="412644fd-b653-44f9-91dd-7b8ab1b7e4e4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/local_projects/多线程/ping_devices.py" afterPath="$PROJECT_DIR$/local_projects/多线程/ping_devices.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -614,7 +613,14 @@
       <option name="project" value="LOCAL" />
       <updated>1501228735735</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="usb hid线程分离确认，进行完善">
+      <created>1501843627543</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1501843627543</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
