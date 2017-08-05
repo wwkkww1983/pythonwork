@@ -1,5 +1,5 @@
 # !user/bin/python3
-# -*- coding: GBK -*-
+# -*- coding: utf-8 -*-
 import platform
 import sys
 import os
@@ -14,7 +14,7 @@ ping_result_time = []
 
 def get_os():
     """
-    get os ÀàĞÍ
+    get os ç±»å‹
     """
     os = platform.system()
     if os == "Windows":
@@ -26,52 +26,54 @@ def get_os():
 def ping_ip(ip_str):
     cmd = ["ping", "-{op}".format(op=get_os()),
            "1", ip_str]
+
     output = os.popen(" ".join(cmd)).readlines()
-    flag = False
     global ip_addresses
     for line in list(output):
         if not line:
             continue
         if str(line).upper().find("TTL") >= 0:
-            flag = True
+            print(line[:-1])
+            print("ip: %s is ok ***" % ip_str)
+            ip_addresses.append(ip_str)
             break
-    if flag:
-        print("ip: %s is ok ***" % ip_str)
-        ip_addresses.append(ip_str)
 
 
 def test_ip(ip_addr, tms=10, lenth=1024):
     """
-    ¶Ôµ¥¸öIPµØÖ·½øĞĞ¼ì²â
-    :param ip_addr: ipµØÖ·×Ö·û´®
-    :param tms: ·¢ËÍ´ÎÊı
-    :param lenth: °ü³¤¶È
+    å¯¹å•ä¸ªIPåœ°å€è¿›è¡Œæ£€æµ‹
+    :param ip_addr: ipåœ°å€å­—ç¬¦ä¸²
+    :param tms: å‘é€æ¬¡æ•°
+    :param lenth: åŒ…é•¿åº¦
     :return:
     """
-    tms = str(tms)
-    lenth = str(lenth)
-    cmd = ['ping', '-{op}'.format(op=get_os()), tms, '-l', lenth, ip_addr]
-    output = os.popen(''.join(cmd)).readlines()
     global ping_result_time
     global ping_result_data
-    for line in list(output):
-        if not line:
-            continue
-        elif str(line).upper().find('Êı¾İ°ü') >= 0:
-            print(line)
-            ping_result_data.append(line)
-        elif str(line).upper().find('Æ½¾ù') >= 0:
-            print(line)
-            ping_result_time.append(line)
-        else:
-            continue
+    cmd = ['ping', '-{op}'.format(op=get_os()), str(tms), '-l', str(lenth), ip_addr]
+    output = os.popen(' '.join(cmd)).readlines()
+    # output = os.popen('ping -n 180 -l 1024 192.168.22.200').readlines()
+    time.sleep(2)
+    print(output[-4:])
+    # for line in output:
+    #     if not line:
+    #         continue
+    #     elif str(line).upper().find('æ•°æ®åŒ…') >= 0:
+    #         print(line)
+    #         ping_result_data.append(line)
+    #     elif str(line).upper().find('å¹³å‡') >= 0:
+    #         print(line)
+    #         ping_result_time.append(line)
+    #         break
+    #     else:
+    #         continue
+
 
 
 def find_ips(ip_prefix):
     """
-    ¸ø³öµ±Ç°µÄ127.0.0£¬È»ºóÉ¨ÃèÕû¸ö¶ÎËùÓĞµØÖ·
+    ç»™å‡ºå½“å‰çš„127.0.0ï¼Œç„¶åæ‰«ææ•´ä¸ªæ®µæ‰€æœ‰åœ°å€
     """
-    for i in range(200, 255):
+    for i in range(1, 255):
         ip = '%s.%s' % (ip_prefix, i)
         thread.start_new_thread(ping_ip, (ip,))
         time.sleep(0.1)
@@ -79,8 +81,8 @@ def find_ips(ip_prefix):
 
 def check_ips(ips):
     for ip in ips:
-        thread.start_new_thread(test_ip, (ip, 10, 1024))
-        time.sleep(.5)
+        thread.start_new_thread(test_ip, (ip, 180, 1024))
+        time.sleep(0.2)
 
 
 class Ui(QWidget):
@@ -95,8 +97,8 @@ class Ui(QWidget):
         title = QLabel('Title')
         author = QLabel('Author')
         review = QLabel('Review')
-        titleLabel = QLabel('ÒÔÌ«ÍøBD°å³ö³§Ó²¼ş¼ì²â¹¤¾ß')
-        authorLabel = QLabel('°æ±¾1.0£¬²âÊÔ²¿fanch')
+        titleLabel = QLabel('ä»¥å¤ªç½‘BDæ¿å‡ºå‚ç¡¬ä»¶æ£€æµ‹å·¥å…·')
+        authorLabel = QLabel('ç‰ˆæœ¬1.0ï¼Œæµ‹è¯•éƒ¨fanch')
         reviwLabel = QTextBrowser()
         grid = QGridLayout()
         grid.setSpacing(10)
@@ -131,10 +133,10 @@ if __name__ == "__main__":
     ip_prefix = '192.168.22'
     find_ips(ip_prefix)
     # print('end time {}'.format(time.ctime()))
-    time.sleep(10)
-    ip_pool = ip_addresses
-    print(len(ip_pool), ip_pool)
+    time.sleep(20)
+    print('æ£€æµ‹åˆ°æœ‰æ•ˆipæ•°ï¼š{0}, ips = {1}'.format(len(ip_addresses), ip_addresses))
     check_ips(ip_addresses)
-    print(ping_result_data, ping_result_time)
+    time.sleep(200)
+    # print(ping_result_data, ping_result_time)
     # sys.exit(app.exec_())
 
