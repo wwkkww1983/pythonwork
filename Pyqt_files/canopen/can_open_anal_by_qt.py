@@ -49,7 +49,7 @@ class WindowTest(QWidget):
         self.setLayout(layout)
 
     def readFile(self):
-        filePath = r'C:\Users\fan\OneDrive\pythonwork\Pyqt_files\canopen\canOpenAnal.txt'
+        filePath = r'canOpenAnal.txt'
         file = open(filePath, 'r', -1, 'gbk')
         f = file.readlines()
         for lineId in range(len(f)):
