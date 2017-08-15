@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from PyQt5.QtCore import Qt
 from ui_window_process import Ui_MainWindow
 from ui_untitled import Ui_Form
-from ui_widget_setting import Ui_widget_Setting
+from ui_widget_setting_usb import Ui_widget_Setting
 
 
 class Setting(QWidget, Ui_widget_Setting):

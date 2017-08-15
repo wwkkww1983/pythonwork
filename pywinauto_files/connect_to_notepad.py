@@ -12,7 +12,7 @@ time.sleep(.5)
 #这里有两种方法可以进行定位“关于记事本”的对话框
 #top_dlg = app.top_window_() 不推荐这种方式，因为可能得到的并不是你想要的
 about_dlg = app.window_(title_re = u"关于")#这里可以进行正则匹配title
-#about_dlg.print_control_identifiers()
+about_dlg.print_control_identifiers()
 app.window_(title_re = u'关于“记事本”').window_(title_re = u'确定').Click()
 app.Notepad.MenuSelect(u'帮助->关于记事本')
 time.sleep(.5) #停0.5s 否则你都看不出来它是否弹出来了！

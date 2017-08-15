@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'window_process.ui'
 #
-# Created: Tue May  9 00:53:20 2017
+# Created: Fri Jul  7 18:50:33 2017
 #      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -36,17 +36,15 @@ class Ui_MainWindow(object):
         self.pushButton_Open_Ports = QtWidgets.QPushButton(self.groupBox)
         self.pushButton_Open_Ports.setGeometry(QtCore.QRect(16, 16, 113, 25))
         self.pushButton_Open_Ports.setObjectName("pushButton_Open_Ports")
-        self.pushButton_Reset_Module = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton_Reset_Module.setGeometry(QtCore.QRect(152, 16, 113, 25))
-        self.pushButton_Reset_Module.setObjectName("pushButton_Reset_Module")
+        self.pushButton_Reset_Board = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_Reset_Board.setGeometry(QtCore.QRect(152, 16, 113, 25))
+        self.pushButton_Reset_Board.setObjectName("pushButton_Reset_Board")
         self.groupBox_1 = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_1.setGeometry(QtCore.QRect(16, 8, 137, 73))
         self.groupBox_1.setObjectName("groupBox_1")
-        self.comboBox_Select_Module = QtWidgets.QComboBox(self.groupBox_1)
-        self.comboBox_Select_Module.setGeometry(QtCore.QRect(8, 24, 119, 25))
-        self.comboBox_Select_Module.setObjectName("comboBox_Select_Module")
-        self.comboBox_Select_Module.addItem("")
-        self.comboBox_Select_Module.addItem("")
+        self.comboBox_Select_Board = QtWidgets.QComboBox(self.groupBox_1)
+        self.comboBox_Select_Board.setGeometry(QtCore.QRect(8, 24, 119, 25))
+        self.comboBox_Select_Board.setObjectName("comboBox_Select_Board")
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_2.setGeometry(QtCore.QRect(16, 96, 137, 425))
         self.groupBox_2.setTitle("")
@@ -99,10 +97,8 @@ class Ui_MainWindow(object):
         self.comboBox_Select_page.setItemText(1, _translate("MainWindow", "校准画面"))
         self.comboBox_Select_page.setItemText(2, _translate("MainWindow", "工装后台"))
         self.pushButton_Open_Ports.setText(_translate("MainWindow", "打开串口"))
-        self.pushButton_Reset_Module.setText(_translate("MainWindow", "复位被测板"))
+        self.pushButton_Reset_Board.setText(_translate("MainWindow", "复位被测板"))
         self.groupBox_1.setTitle(_translate("MainWindow", "选择模块"))
-        self.comboBox_Select_Module.setItemText(0, _translate("MainWindow", "LX 8PT"))
-        self.comboBox_Select_Module.setItemText(1, _translate("MainWindow", "LX 8TC"))
 
 
 if __name__ == "__main__":

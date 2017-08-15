@@ -10,6 +10,8 @@ from PyQt5 import  QtWidgets
 def change():
     time_str = time.strftime("%Y.%m.%d %H:%M:%S", time.gmtime())
     return time_str
+
+
 def main():
     window	= QMainWindow()
     window.setGeometry(100, 100, 800, 600)
