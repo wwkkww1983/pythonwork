@@ -24,7 +24,7 @@ def get_file_dirs(given_dir):
         else:
             pass
     print(list_of_file_names)
-test_path = r'C:\Users\fan\Desktop\test'
+test_path = r'C:\Users\fan\Desktop'
 get_file_dirs(test_path)
 
 
