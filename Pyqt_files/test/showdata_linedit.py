@@ -14,6 +14,7 @@ class Example(QWidget):
         grid = QGridLayout()
         gridtitle = QGridLayout()
         maingrid = QGridLayout()
+        maingrid.setSpacing(5)
         j = 0
         pos = []
         names = [i for i in range(32)]
@@ -21,19 +22,21 @@ class Example(QWidget):
             for i in range(4):
                 for j in range(8):
                     pos.append((i, j))
-            print(pos)
+            # print(pos)
         for i in names:
             linedit = QLineEdit(str(i))
             grid.addWidget(linedit, *pos[i])
             j += 1
-        label = QLabel('数据显示')
-        gridtitle.addWidget(label, 0, 0)
+        title_label = QLabel('数据显示')
+        gridtitle.addWidget(title_label, 0, 0)
         maingrid.addLayout(gridtitle, 0, 0)
-        maingrid.addLayout(grid, 0, 1)
+        maingrid.addLayout(grid, 1, 0)
 
         self.setLayout(maingrid)
-        self.move(300, 150)
-        self.setWindowTitle('Calculator')
+
+        self.setGeometry(300, 100, 500, 600)
+        self.setWindowTitle('数据查看')
+
 
 def main():
     app = QApplication(sys.argv)

@@ -185,8 +185,6 @@ class ProcessWindow(QMainWindow, ui_window_process.Ui_MainWindow):
         else:
             pass
 
-
-
     # def get_hid_buffer(self, _hid):
     #     """
     #     监视hid 数据，放到线程中全程进行hid通讯，直到结束本次工装使用或手动断开
