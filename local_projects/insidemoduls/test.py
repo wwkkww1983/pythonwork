@@ -29,8 +29,8 @@ def get_file_dirs(given_dir):
 
     findfiles(given_dir)
     return list_of_file_names, list_of_empty_dirs
-test_path = r'C:\Users\fan\OneDrive\pythonwork\local_projects\insidemoduls\osmodulestest'
-#test_path = r'C:\Users\fan\Desktop'
+# test_path = r'C:\Users\fan\OneDrive\pythonwork\local_projects\insidemoduls\osmodulestest'
+test_path = r'C:\Users\fan\Desktop'
 
 l = get_file_dirs(test_path)
 print('\n在目录：', test_path, '\n存在的全部文件为：')
