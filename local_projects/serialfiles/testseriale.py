@@ -36,5 +36,5 @@ def watch_com(read_size=4, write_data='ff', sleep_time=0.1):
 #           print(hex(l.decode('ascii')))
 watch_com()
 
-class rw_serial(t,Serial):
-    
+# class rw_serial(t,Serial):
+#
