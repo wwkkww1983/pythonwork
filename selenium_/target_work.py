@@ -13,10 +13,13 @@ if __name__ == "__main__":
     error_msg = ''
 
     ie_webdriver_server_path = \
-        r'C:\Users\fan\OneDrive\pythonwork\selenium_\selenium_drivers\IEDriverServer.exe'
+        r'C:\Python\Python34\IEDriverServer.exe'
     driver = webdriver.Ie(ie_webdriver_server_path)
-    driver.get("http://www.baidu.com")
+    # ff_webdriver_server_path = \
+    #     r'C:\Python\Python34\geckodriver.exe'
+    # driver = webdriver.Firefox(ff_webdriver_server_path)
 
+    driver.get("http://www.baidu.com")
     search_input_element = driver.find_element_by_id('kw')
     search_input_element.send_keys("WebDriver")
     search_input_element.send_keys(Keys.ENTER)
@@ -26,6 +29,7 @@ if __name__ == "__main__":
     )
 
     second_page_element = driver.find_element_by_css_selector("#page a")
+    second_page_element = driver.find_element_by_class_name("n")
     second_page_element.click()
 
     search_content_element = WebDriverWait(driver, 10).until(
@@ -35,7 +39,7 @@ if __name__ == "__main__":
 
     for i in range(11, 21):
         content_div = driver.find_element_by_id(str(i))
-        title = str(content_div.find_element_by_css_selector(".t a").text.encode('utf-8'))
+        title = str(content_div.find_element_by_css_selector(".t a").text)
         print (title)
 
         if ('webdriver' not in title.lower()) and ('selenium' not in title.lower()):

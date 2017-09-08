@@ -4,24 +4,46 @@
 
 from selenium import webdriver
 import time
+import base64
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions
 
 
 def open_project(httppath):
     """打开工程网页"""
-    http_path = httppath
-    browser = webdriver.Firefox()
-    browser.get(http_path)
+    ie_webdriver_server_path = r'C:\Python\Python34\IEDriverServer.exe'
+    browser = webdriver.Ie(ie_webdriver_server_path)
+    browser.get(httppath)
     return browser
 
 
-def button_click(hmi):
-    elem = hmi.find_element_by_id("NODE_0BS_109")
-    for i in range(100):
-        elem.click()
-        time.sleep(.5)
+def make_filelist(proj):
+    elem = WebDriverWait(proj, 10).until(
+        expected_conditions.presence_of_element_located((By.ID, "NODE_0DSPL_20")))
 
+    # print(elem)
+    svg = elem.get_attribute('src')
+    #print('svg\n', svg)
+    head = len('data:image/svg+xml;base64,')
+    #print('attitude head len:\n', head)
+    svgfile = svg[head:]
+    #print('svgfile:\n', svgfile)
+    svgg = base64.b64decode(svgfile)
+    #print('svggg:\n', svgg)
+    string = svgg.decode()
+    #print('string\n', string)
+    soup = BeautifulSoup(svgg, "html.parser")
+    #print('soup\n', soup)
+    gs = soup.find_all('text')
+    print(gs)
 
 if __name__ == "__main__":
-    hmi_ = open_project(r"http://192.168.10.228/")
+    project = open_project(r"http://192.168.22.61/")
     time.sleep(3)
-    button_click(hmi_)
+    make_filelist(project)
