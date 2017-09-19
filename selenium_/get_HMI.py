@@ -20,6 +20,7 @@ def open_project(httppath):
 
 
 def make_filelist(proj):
+    filelist = []
     elem = WebDriverWait(proj, 10).until(
         expected_conditions.presence_of_element_located((By.ID, "NODE_0DSPL_19")))
 
@@ -35,12 +36,14 @@ def make_filelist(proj):
     string = svgg.decode()
     # print('string\n', string)
     soup = BeautifulSoup(svgg, "html.parser")
-    # print('soup\n', soup)
+    print('soup\n', soup)
     gs = soup.find_all('text')
     print(gs)
     for i in gs:
-        print(i)
+        filelist.append(i.get_text())
+    print(filelist)
 if __name__ == "__main__":
-    project = open_project(r"http://192.168.22.61/")
+    # project = open_project(r"http://192.168.22.61/")
+    project = open_project(r"http://ba701baf276e1a69cfbf078e3c84e6f9.hmi.we-con.com.cn:9999/")
     time.sleep(3)
     make_filelist(project)
