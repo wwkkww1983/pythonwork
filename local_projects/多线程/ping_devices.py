@@ -39,21 +39,21 @@ def ping_ip(ip_str):
             break
 
 
-def test_ip(ip_addr, tms=10, lenth=1024):
+def test_ip(ip_addr, count=100, lenth=1024):
     """
     对单个IP地址进行检测
     :param ip_addr: ip地址字符串
-    :param tms: 发送次数
+    :param count: 发送次数
     :param lenth: 包长度
     :return:
     """
     global ping_result_time
     global ping_result_data
-    cmd = ['ping', '-{op}'.format(op=get_os()), str(tms), '-l', str(lenth), ip_addr]
+    cmd = ['ping', '-{op}'.format(op=get_os()), str(count), '-l', str(lenth), ip_addr]
     output = os.popen(' '.join(cmd)).readlines()
     # output = os.popen('ping -n 180 -l 1024 192.168.22.200').readlines()
     time.sleep(2)
-    print(output[-4:])
+    print('cmd: ', output[-4:])
     # for line in output:
     #     if not line:
     #         continue
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     # app = QApplication(sys.argv)
     # ex = Ui('Ping IP')
     # print('start time {}'.format(time.ctime()))
-    ip_prefix = '192.168.0'
+    ip_prefix = '192.168.22'
     find_ips(ip_prefix)
     # print('end time {}'.format(time.ctime()))
     time.sleep(20)

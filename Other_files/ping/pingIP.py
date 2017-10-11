@@ -17,15 +17,16 @@ import time
 import _thread as thread
  
 def get_os():
-    '''
+    """
     get os 类型
-    '''
+    """
     os = platform.system()
     if os == "Windows":
         return "n"
     else:
         return "c"
-     
+
+
 def ping_ip(ip_str):
     cmd = ["ping", "-{op}".format(op=get_os()),
            "1", ip_str]
@@ -40,7 +41,8 @@ def ping_ip(ip_str):
             break
     if flag:
         print ("ip: %s is ok ***"%ip_str)
- 
+
+
 def find_ip(ip_prefix):
     '''
     给出当前的127.0.0 ，然后扫描整个段所有地址
