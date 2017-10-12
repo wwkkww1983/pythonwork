@@ -1,18 +1,15 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # -----------------------------------------------------------
-# File Name：     ethbdping_subporcess.py
+# File Name：     ethbdping_subporcess_single.py
 # Description :
 #   Author:      fan
 #   date:        2017/10/11
 #   IDE:         PyCharm Community Edition
 # -----------------------------------------------------------
 
-import platform
 import subprocess
-import os
 import time
-import _thread as thread
 
 
 def ping_ip(ipstr):
