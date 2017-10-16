@@ -6,7 +6,7 @@ import time
 
 
 if __name__ == '__main__':
-    app_path = r'C:\Program Files\LeviStudio\Download.exe'
+    app_path = r'D:\Program Files\weconsoft\LeviStudio\20170120 发布\Download.exe'
     app = application.Application()
     app.start(app_path)
     time.sleep(1)
@@ -33,11 +33,23 @@ if __name__ == '__main__':
     button_download.click()
     time.sleep(1)
 
-    load_file = download.window_(title_re='打开',class_name='#32770')
-    load_file.window_(title='', class_name='Combobox').windwo_(class_name='Edit').TypeKeys(
-        r'C:\Users\fan\OneDrive\pythonwork\pywinauto_files\NewProject.hmt'
-    )
-    # download.window_(title=u'关闭(&C)').click()
+    # load_file = download['打开Dialog']
+    load_file = app.top_window_()
+
+    filepath_edit = load_file['文件名(&N):Edit']
+    filepath_edit = load_file.
+    filepathopen_button = load_file['打开(&O)']
+
+    filepath_edit.TypeKeys(r'E:\桌面临时文件\20170916临时\NewProject\NewProject.hmt')
+    filepathopen_button.click()
+    time.sleep(5)
+    try:
+        warn = app['Warning']
+        print(warn['Static2'])
+        time.sleep(5)
+        warn['否(&N)'].click()
+    except Exception as e:
+        print(e)
 
 
 
