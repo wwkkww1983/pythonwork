@@ -13,14 +13,16 @@ if __name__ == "__main__":
     error_msg = ''
 
     ie_webdriver_server_path = \
-        r'C:\Python\Python34\IEDriverServer.exe'
+        r'C:\Python34\IEDriverServer.exe'
     driver = webdriver.Ie(ie_webdriver_server_path)
     # ff_webdriver_server_path = \
     #     r'C:\Python\Python34\geckodriver.exe'
     # driver = webdriver.Firefox(ff_webdriver_server_path)
 
     driver.get("http://www.baidu.com")
-    search_input_element = driver.find_element_by_id('kw')
+
+    search_input_element = WebDriverWait(driver, 10).until(
+        expected_conditions.presence_of_element_located((By.ID, "kw")))
     search_input_element.send_keys("WebDriver")
     search_input_element.send_keys(Keys.ENTER)
 
