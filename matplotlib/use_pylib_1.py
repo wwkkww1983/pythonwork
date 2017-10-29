@@ -14,17 +14,20 @@ from numpy.random import randn
 
 # x = randn(100)
 # y = randn(100)
-x = list(range(0, 100, 5))
-y = list(range(20))
+x = [i for i in range(0, 100, 5)]
+y = [n for n in range(20)]
 
 fig = figure(figsize=(12, 6), dpi=80)  # 设置画布大小、分辨率
-ax = fig.add_subplot(1, 1, 1)
+ax = fig.add_subplot(2, 3, 1)
+ax2 = fig.add_subplot(2, 3, 2)
+ax3 = fig.add_subplot(2, 3, 3)
 
 ax.plot(x, y, 'o--')
-# ax.scatter(x, y)
+ax2.bar(x, y)
+ax3.pie(x, y)
 # ax.set_xticks([0, 100])
-# ax.set_xticks([0, 25, 50, 75, 100])  # 横轴刻度记号
-# ax.set_xticklabels(['0', '25', '50', '75', '100'])
+ax.set_xticks([0, 25, 50, 75, 100])  # 横轴刻度记号
+ax.set_xticklabels(['0', '25', '50', '75', '100'])
 ax.set_title('Time')
 
 if __name__ == '__main__':
