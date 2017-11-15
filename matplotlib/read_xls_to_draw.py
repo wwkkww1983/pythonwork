@@ -60,11 +60,9 @@ def draw(xls, col):
     ax.grid()  # 网格
 
 
-
-
 if __name__ == '__main__':
-    xls_path = u'2wt 零点 默认.xlsx'
-    col_name = u'前当平均重量'
-    col_name = '前当重量原始值'
+    xls_path = r"E:\流程17\WE_测试流程-余发荣-2017-09-08 称重模块功能修改测试\测试\ModbusPoll 数据采集\2wt 零点 默认.xlsx"
+    col_name = u'当前平均重量'
+    # col_name = '当前重量原始值'
     draw(xls_path, col_name)
     show()

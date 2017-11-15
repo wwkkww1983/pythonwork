@@ -36,9 +36,9 @@ if __name__ == '__main__':
 
     # load_file = download['打开Dialog']
     load_file = app.top_window_()
-"""
-问题：代码运行到这个步骤会出现错误提示有两个匹配的控件
-"""
+
+    # 问题：代码运行到这个步骤会出现错误提示有两个匹配的控件
+
     filepath_edit = load_file['文件名(&N):Edit']
     filepathopen_button = load_file['打开(&O)']
 
