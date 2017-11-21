@@ -11,74 +11,91 @@ log.basicConfig(level=log.INFO,
 
 
 class MYUSBHID(object):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+        self.name = ''
         self.alive = False
         self.device = None
         self.report = None
-        self.writebuffer = None
+        self.writebuffer = []
+        self.writeresult = False
         self.readbuffer = []
         self.readbuffermaxlen = 0
 
+    def nosuchdevicerror(self, errorinfo):
+        log.error(errorinfo, ' -- no such device error: hid{0}, device{1}'.format(self.name, self.device))
 
-        # if self.name == 'PLC USB HID VER1':
-        #     self.readbuffermaxlen = 3
-        # if self.name == 'DIGITAL MODULE VER1':
-        #     self.readbuffermaxlen = 3
-        # if self.name == 'ANALOG MODULE VER1':
-        #     self.readbuffermaxlen = 2
+    def notaliverror(self, errorinfo):
+        log.error(errorinfo, ' -- device not alive error: hid{0}, device{1}, alive{2}'.format(
+            self.name, self.device, self.alive))
 
+    def findhiddevice(self, name):
+        self.name = name
+        try:
+            _filter = hid.HidDeviceFilter(product_name=self.name)
+            hid_device = _filter.get_devices()
+            if len(hid_device) > 0:
+                self.device = hid_device[0]
+                log.info('find hid device: {0}(pid={1}, vid={2})'.format(self.name, self.device.product_id,
+                                                                         self.device.vendor_id))
+        except Exception as e:
+            log.error(e, 'find hid device fail: {}'.format(self.name))
+
+    def updatewritebuffer(self, startadd, lengh):
         write_data = ''
-        if self.name == 'PLC USB HID VER1':
-            write_data = self.pack_write_data()
         if self.name == 'DIGITAL MODULE VER1':
-            write_data = self.pack_write_data()
-        if self.name == 'ANALOG MODULE VER1':
-            write_data = self.pack_write_data(start_address=0, operal_word_lengh=16)
+            write_data = self.pack_write_data(6000, 32, None, 'read')
+        elif self.name == 'ANALOG MODULE VER1':
+            write_data = self.pack_write_data(0, 16, None, 'read')
+        elif self.name == 'PLC USB HID VER1':
+            write_data = self.pack_write_data(startaddr, lengh, None, 'read')
         self.writebuffer = [0, 0xd, 0] + list(write_data) + [0x00 for i in range(49)]
+        log.info('send list: {}'.format(self.writebuffer))
 
     def start(self):
-        if self.alive is True:
-            pass
-        else:
-            try:
-                _filter = hid.HidDeviceFilter(product_name=self.name)
-                hid_device = _filter.get_devices()
-                if len(hid_device) > 0:
-                    self.device = hid_device[0]
+        if self.device:
+            if not self.alive:
+                try:
                     self.device.open()
-                    self.report = self.device.find_output_reports()
                     self.alive = True
-            except Exception as e:
-                log.error(e, 'can not open hid device {}'.format(self.name))
+                except Exception as e:
+                    self.notaliverror('start,open')
+            else:
+                log.info('hid device has been started: {}'.format(self.name))
+        else:
+            self.nosuchdevicerror('start')
 
     def stop(self):
-        if not self.device:
-            pass
+        if self.device:
+            if self.alive:
+                self.device.close()
+                self.alive = False
+            else:
+                log.info('hid device has been stopped: {}'.format(self.name))
         else:
-            self.device.close()
-            self.alive = False
-            log.info('hid device closed:{}'.format(self.device.product_name))
+            self.nosuchdevicerror('stop')
 
     def setcallback(self):
         if self.device:
             self.device.set_raw_data_handler(self.read)
+        else:
+            self.nosuchdevicerror('setcallback')
 
     def read(self, rd_report_data):
-        if len(self.readbuffer) >= self.readbuffermaxlen:
-            self.readbuffer = []
-
-        self.readbuffer.append(rd_report_data)
+        self.readbuffer = []
+        for i in range(self.readbuffermaxlen):
+            self.readbuffer.append(rd_report_data)
         log.info('received:lengh={}, data={}'.format(len(self.readbuffer), self.readbuffer))
         return self.readbuffer
 
     def write(self, wt_report_data):
-        result = None
+        self.writeresult = False
         if self.device:
-            result = self.device.send_output_report(wt_report_data)
-        return result
+            self.writeresult = self.device.send_output_report(wt_report_data)
+        else:
+            self.nosuchdevicerror('write')
+        return self.writeresult
 
-    def pack_write_data(self, start_address=0, operal_word_lengh=31,
+    def pack_write_data(self, start_address=0, operal_word_lengh=1,
                         wt_data=None, operal_type='read'):
         """
         将数据组装为串口数据形式
@@ -90,7 +107,7 @@ class MYUSBHID(object):
         """
         if operal_type == 'read':
             # 根据读长度要对usb_hid读缓存readbuffer进行区分1~14word, 1条帧；15~30word,2条帧；31、32word,3条帧
-            self.readbuffermaxlen = ((operal_word_lengh+1)*4-1)//62 +1
+            self.readbuffermaxlen = ((operal_word_lengh + 1) * 4 - 1) // 62 + 1
 
         stx = [0x02]
         etx = [0x03]
@@ -104,12 +121,13 @@ class MYUSBHID(object):
             d0_fmt = 0x4000
             d8000_fmt = 0x0E00
             strt_addr_str = ''
-            if strt_addr_ in range(6000, 6032) or range(0, 14):
+            if strt_addr_ in range(0, 8000):
                 strt_addr_str = '{:#06X}'.format(strt_addr_ * 2 + d0_fmt)
             elif strt_addr_ in range(8000, 8255):
                 strt_addr_str = '{:#06X}'.format((strt_addr_ - 8000) * 2 + d8000_fmt)
             strt_addr_fmt = [ord(letter) for letter in strt_addr_str][2:]
             return strt_addr_fmt
+
         start_address_code = pack_strt_addr(start_address)
 
         def pack_lengh(len_):
@@ -118,8 +136,6 @@ class MYUSBHID(object):
             if operal_word_lengh in range(1, 33):
                 len_str = '{:#04X}'.format(operal_word_lengh * 2)
                 lengh = [ord(letter) for letter in len_str][2:]
-            else:
-                log.error("类型{} 写长度{}超过32".format(operal_type, operal_word_lengh))
             return lengh
         lengh_code = pack_lengh(operal_word_lengh)
 
@@ -149,14 +165,15 @@ class MYUSBHID(object):
                 return checksum
         checksum_code = pack_check_sum(func_code, start_address_code, lengh_code,  wt_data_code, etx)
 
-        log.info("the follow parameter packed:"
-                 "stx: {0}: "
-                 "function code: {1}; "
-                 "start address: {2}; "
-                 "data lengh: {3};"
-                 "write data: {4}; "
-                 "etx: {5}; "
-                 "check sum: {6}".format(stx, func_code, start_address, lengh_code, wt_data_code, etx,
+        log.info("""
+        "the follow parameter packed:"
+            "stx: {0}: "
+            "function code: {1}; "
+            "start address: {2}; "
+            "data lengh: {3};"
+            "write data: {4}; "
+            "etx: {5}; "
+            "check sum: {6}""".format(stx, func_code, start_address_code, lengh_code, wt_data_code, etx,
                                          checksum_code))
         # 待发送数据list
         _data_list = []
@@ -185,12 +202,12 @@ class MYUSBHID(object):
 
         used_data = newdata[4:-3]
         data_chr_list = [chr(i) for i in used_data]
-        # log.info('data_chr_list={}'.format(data_chr_list))
+        log.info('lengh={0}, data_chr_list={1}'.format(len(data_chr_list), data_chr_list))
         data_int_list = []
         unpack_lengh = len(data_chr_list)
         for s in range(unpack_lengh):
-            if -1 < s < 128:
-                if s % 4 == 0:
+            if -1 < s < 20:
+                if s%4==0:
                     a = data_chr_list[s+2] + data_chr_list[s+3] + data_chr_list[s] + data_chr_list[s+1]
                     data_int_list.append(int(a, 16))
                 else:
@@ -204,35 +221,41 @@ if __name__ == '__main__':
     def hidtranslation(_hid):
         myhid = _hid
         myhid.setcallback()
-        write_buffer = myhid.writebuffer
-        log.info('write buffer: lenth={},data={}'.format(len(write_buffer), write_buffer))
-        for i in range(100):
+        i = 0
+        while i <= 1:
             try:
-                result = myhid.write(write_buffer)
+                result = myhid.write(myhid.writebuffer)
                 log.info('send result={}'.format(result))
-                sleep(.05)  # 这里必须等待 使hid数据充分被读到
+                sleep(0.02)  # 这里必须等待 使hid数据充分被读到
                 if not result:
                     log.info('hid write error')
                 else:
                     digit_current_data = myhid.unpack_read_data(myhid.readbuffer)
                     log.info('digit current data ={}'.format(digit_current_data))
+                i += 1
             except Exception as e:
                 log.error('USB hid Error:', e)
 
     # hid_name = 'DIGITAL MODULE VER1'
-    # # hid_name = 'ANALOG MODULE VER1'
+    # hid_name = 'ANALOG MODULE VER1'
     hid_name = 'PLC USB HID VER1'
-    thishid = MYUSBHID(hid_name)
-    log.info('usb hid start at {}'.format(ctime()))
+    startaddr = 0
+    datalengh = 12
+    thishid = MYUSBHID()
+    thishid.findhiddevice(hid_name)
     thishid.start()
-    sleep(.1)
-    log.info('hid device opened:{}'.format(thishid.name))
+    log.info('usb hid start')
+    # thishid.setcallback()
+    # sleep(0.5)
+    thishid.updatewritebuffer(startaddr, datalengh)
+    # thishid.write(thishid.writebuffer)
     t1 = threading.Thread(target=hidtranslation, args=(thishid,))  # 线程1指定函数、参数
     if thishid.alive:
         t1.setDaemon(True)
         t1.start()
         t1.join()
 
-    sleep(1)
+    sleep(3)
     thishid.stop()
-    log.info('usb hid end at {}'.format(ctime()))
+    log.info('usb hid end')
+

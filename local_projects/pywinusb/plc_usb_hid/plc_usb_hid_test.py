@@ -56,7 +56,7 @@ if __name__ == '__main__':
             # report[0].set_raw_data(data)
             # report[0].send()
             write_result = hid_device.send_output_report(data)
-            log.info('write result={0} lengh={1} data={2}'.format(write_result,len(data),))
+            log.info('write result={0} lengh={1} data={2}'.format(write_result,len(data),data))
             print(' Write OK = ', write_result, '\n', 'write data: ', data, '\n', 'length: ', len(data))
             time.sleep(.05)
             hid_device.close()
