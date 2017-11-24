@@ -47,7 +47,7 @@ class MYUSBHID(object):
         elif self.name == 'ANALOG MODULE VER1':
             write_data = self.pack_write_data(0, 16, None, 'read')
         elif self.name == 'PLC USB HID VER1':
-            write_data = self.pack_write_data(startaddr, lengh, None, 'read')
+            write_data = self.pack_write_data(startadd, lengh, None, 'read')
         self.writebuffer = [0, 0xd, 0] + list(write_data) + [0x00 for i in range(49)]
         log.info('send list: {}'.format(self.writebuffer))
 
@@ -81,11 +81,10 @@ class MYUSBHID(object):
             self.nosuchdevicerror('setcallback')
 
     def read(self, rd_report_data):
-        self.readbuffer = []
-        for i in range(self.readbuffermaxlen):
-            self.readbuffer.append(rd_report_data)
-        log.info('received:lengh={}, data={}'.format(len(self.readbuffer), self.readbuffer))
-        return self.readbuffer
+        self.readbuffer.append(rd_report_data)
+        if len(self.readbuffer) == self.readbuffermaxlen:
+            log.info('received:lengh={}, data={}'.format(len(self.readbuffer), self.readbuffer))
+            return self.readbuffer
 
     def write(self, wt_report_data):
         self.writeresult = False
@@ -205,13 +204,12 @@ class MYUSBHID(object):
         log.info('lengh={0}, data_chr_list={1}'.format(len(data_chr_list), data_chr_list))
         data_int_list = []
         unpack_lengh = len(data_chr_list)
-        for s in range(unpack_lengh):
-            if -1 < s < 20:
-                if s%4==0:
-                    a = data_chr_list[s+2] + data_chr_list[s+3] + data_chr_list[s] + data_chr_list[s+1]
-                    data_int_list.append(int(a, 16))
-                else:
-                    pass
+        for s in range(0, unpack_lengh, 4):
+            if 0 <= s <= unpack_lengh-4:
+                a = data_chr_list[s+2] + data_chr_list[s+3] + data_chr_list[s] + data_chr_list[s+1]
+                data_int_list.append(int(a, 16))
+            else:
+                pass
         log.info('data int list={}'.format(data_int_list))
         unpacked_data = data_int_list
         return unpacked_data
@@ -220,10 +218,10 @@ class MYUSBHID(object):
 if __name__ == '__main__':
     def hidtranslation(_hid):
         myhid = _hid
-        myhid.setcallback()
         i = 0
-        while i <= 1:
+        while i <= 100:
             try:
+                myhid.readbuffer = []
                 result = myhid.write(myhid.writebuffer)
                 log.info('send result={}'.format(result))
                 sleep(0.02)  # 这里必须等待 使hid数据充分被读到
@@ -240,7 +238,7 @@ if __name__ == '__main__':
     # hid_name = 'ANALOG MODULE VER1'
     hid_name = 'PLC USB HID VER1'
     startaddr = 0
-    datalengh = 12
+    datalengh = 2
     thishid = MYUSBHID()
     thishid.findhiddevice(hid_name)
     thishid.start()
@@ -248,6 +246,7 @@ if __name__ == '__main__':
     # thishid.setcallback()
     # sleep(0.5)
     thishid.updatewritebuffer(startaddr, datalengh)
+    thishid.setcallback()
     # thishid.write(thishid.writebuffer)
     t1 = threading.Thread(target=hidtranslation, args=(thishid,))  # 线程1指定函数、参数
     if thishid.alive:
