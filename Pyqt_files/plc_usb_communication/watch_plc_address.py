@@ -11,7 +11,7 @@
 
 
 import sys, time
-import usbhid2 as usbhid
+import usbhidrd as usbhid
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QPushButton, QDialog, QApplication, QLabel, QLineEdit, \
     QGridLayout, QHBoxLayout
@@ -37,7 +37,7 @@ class HidThread(QThread):
         if True:
             self.startadd = startadd
             self.lengh = lengh
-            self.hid.updatewritebuffer(self.startadd, self.lengh)
+            self.hid.updatewritebuffer('read', self.startadd, self.lengh, None)
 
     def run(self):
         # 执行HID读写任务
@@ -47,7 +47,7 @@ class HidThread(QThread):
                     self.hid.readbuffer = []
                     result = self.hid.write(self.hid.writebuffer)
                     # print('send result={}'.format(result))
-                    time.sleep(0.05)  # 这里必须等待 使hid数据充分被读到
+                    time.sleep(0.08)  # 这里必须等待 使hid数据充分被读到
                     if not result:
                         print('hid write error')
                     else:
@@ -67,16 +67,16 @@ class DataDialog(QDialog):
         self.hidthread = None
         self.hid_name = ''
         self.start_addr = 0
-        self.data_lengh = 1
+        self.data_lengh = 10
         self.valuelineditarray = []
 
         self.resize(400, 200)
         self.did_linedit = QLineEdit(self)
-        self.did_linedit.setText('D0')
+        # self.did_linedit.setText('D0')
         # self.did_linedit.setGeometry(10, 10, 80, 20)
 
         self.lengh_lineedit = QLineEdit(self)
-        self.lengh_lineedit.setText('1')
+        # self.lengh_lineedit.setText('1')
         # self.lengh_lineedit.setGeometry()
 
         self.confirm_button = QPushButton(self)
@@ -86,12 +86,20 @@ class DataDialog(QDialog):
         self.value0_lindedit = QLineEdit(self)
         self.value0_lindedit.setText('')
 
-        hbox = QHBoxLayout()
-        for i in range(8):
-            self.value_lindedit = QLineEdit(self)
-            self.value_lindedit.setObjectName('v'+str(i))
-            self.valuelineditarray.append('v'+str(i))
-            hbox.addWidget(self.value_lindedit)
+        # hbox = QHBoxLayout()
+        # for i in range(10):
+        #     self.value_lindedit = QLineEdit(self)
+        #     self.value_lindedit.setObjectName('v'+str(i))
+        #     self.valuelineditarray.append('v'+str(i))
+        #     hbox.addWidget(self.value_lindedit)
+
+        gbox = QGridLayout()
+        for i in range(5):
+            for j in range(10):
+                self.value_lindedit = QLineEdit(self)
+                self.value_lindedit.setObjectName('v' + str(i) + str(j))
+                self.valuelineditarray.append('v' + str(i) + str(j))
+                gbox.addWidget(self.value_lindedit, i, j)
 
         grid = QGridLayout()
         grid.addWidget(self.did_linedit, 0, 0)
@@ -100,11 +108,16 @@ class DataDialog(QDialog):
         grid.addWidget(self.value0_lindedit, 1, 1)
 
         maingrid = QGridLayout(self)
-        maingrid.addLayout(hbox, 0, 0)
+        # maingrid.addLayout(hbox, 0, 0)
+        maingrid.addLayout(gbox, 0, 0)
         maingrid.addLayout(grid, 1, 0)
-
         self.setLayout(maingrid)
+
     def createhid(self, hidname, startaddr, datalengh):
+        self.hid_name = hidname
+        self.start_addr = startaddr
+        self.data_lengh = datalengh
+        self.refreshui()
         self.hidthread = HidThread(hidname)
         self.hidthread.renewset(startaddr, datalengh)
         self.hidthread.finished_signal.connect(self._renew)
@@ -112,9 +125,13 @@ class DataDialog(QDialog):
 
     def _renew(self, message):
         self.value0_lindedit.setText(str(message[0]))
-        for i in range(8):
+        for i in range(10):
             linedit = self.findChild(QLineEdit, self.valuelineditarray[i])
             linedit.setText(str(message[i]))
+
+    def refreshui(self):
+        self.did_linedit.setText('D'+str(self.start_addr))
+        self.lengh_lineedit.setText(str(self.data_lengh))
 
     def _click_to_do_something(self):
         stt = int(self.did_linedit.text()[1:])
@@ -126,8 +143,8 @@ if __name__ == '__main__':
     dialog = DataDialog()
     dialog.show()
     hid_name = 'PLC USB HID VER1'
-    start_addr = 0
-    data_lengh = 10
+    start_addr = 8120
+    data_lengh = 32
     dialog.createhid(hid_name, start_addr, data_lengh)
     dialog.confirm_button.clicked.connect(dialog._click_to_do_something)
     sys.exit(app.exec())
