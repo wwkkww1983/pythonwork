@@ -13,6 +13,7 @@ import random
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
+# 申明（起始）地址类型
 COM_ADDRESS = {'Y0': 0x0180,
                'X0': 0x0240,
                'M0': 0x0000,
@@ -26,6 +27,7 @@ COM_ADDRESS = {'Y0': 0x0180,
                'C200_W': 0x0C00,
                'T0_W': 0x1000}
 
+# 申明功能码类型
 FUNC_CODE = {'read_words': 0xE00,
              'write_words': 0xE10,
              'read_bit': 0xE8,
@@ -34,7 +36,7 @@ FUNC_CODE = {'read_words': 0xE00,
 
 class LxPlcCom(object):
     """
-    将数据组装为串口数据形式
+    协议对象，包括少数参数和绝大部分协议操作函数
     """
     def __init__(self):
         self.name = None
@@ -47,10 +49,19 @@ class LxPlcCom(object):
         self.etx_bytes = [0x03]
 
     def func_code_to_ascii(self, _func):
+        """
+        功能码转ascii码
+        :param _func:
+        :return:
+        """
         return [ord(letter) for letter in hex(FUNC_CODE[_func]).upper()[2:]]
 
-
     def strt_addr_to_ascii(self, _strt_add):
+        """
+        读或写的起始地址转ascii码
+        :param _strt_add:
+        :return:
+        """
         _type = _strt_add[0]
         _id = int(_strt_add[1:])
         strt_strt_add = None
@@ -66,6 +77,11 @@ class LxPlcCom(object):
         return strt_addr_fmt
 
     def lengh_to_ascii(self, _len):
+        """
+        读或写的长度转ascii码
+        :param _len:
+        :return:
+        """
         lengh_format = []
         # 读写长度 2_bytes list,注意A~F必须是大写的，否则会出错
         if _len in range(1, 33):
@@ -76,6 +92,11 @@ class LxPlcCom(object):
         return lengh_format
 
     def data_value_to_ascii(self, _data):
+        """
+        写数据转ascii码
+        :param _data: 字类型
+        :return: 每一个字转为4个ascii字符
+        """
         data_format = []
         for x in _data:
             if 0 <= x <= 32767:
@@ -118,17 +139,35 @@ class LxPlcCom(object):
         return self.stx_bytes + func_bytes + startadd_bytes + lengh_bytes + data_bytes + self.etx_bytes + check_bytes
 
     def unpack_read_return_bytes(self, bytes):
-        data = None
-        if bytes[0] == 0x02:
-            databytes = bytes[1:-2]
-            if self.checksum_to_ascii(databytes) != bytes[-2:]:
-                data = None
+        datavalues = []
+        databytes = []
+        if 0x02 and 0x03 in bytes:
+            databytes = bytes[1:-3]
+            if self.checksum_to_ascii(databytes+[0x03]) != bytes[-2:]:
+                datavalues = []
             else:
+                if len(databytes) % 4 == 0:
+                    for i in range(0, len(databytes), 4):
+                        tempchr = chr(databytes[i+2]) + chr(databytes[i+3]) + chr(databytes[i]) + chr(databytes[i+1])
+                        datavalues.append(int('0x'+tempchr, 16))
+                else:
+                    datavalues = []
+        return datavalues
 
-
-
-    def unpack_write_bytes(self, bytes):
-        pass
+    def unpack_write_return_bytes(self, bytes):
+        """
+        判断返回值并处理
+        :param bytes:
+        :return:
+        """
+        write_result = False
+        if bytes[0] == 0x06:
+            write_result = True
+        elif bytes[0] == 0x15:
+            write_result = False
+        else:
+            write_result = False
+        return write_result
 # def pack_write_data(self, operal_type='read', start_address=0, operal_word_lengh=1, wt_data=None):
 #     """
 #     将数据组装为串口数据形式
@@ -211,7 +250,7 @@ class LxPlcCom(object):
 #         _data_list = stx + func_code + start_address_code + lengh_code + etx + checksum_code
 #     elif operal_type == 'write':
 #         _data_list = stx + func_code + start_address_code + lengh_code + wt_data_code + etx + checksum_code
-#     return _data_list
+#     return _data_list        w
 
 if __name__ == '__main__':
 
@@ -222,18 +261,10 @@ if __name__ == '__main__':
     # print(s.data_value_to_ascii([0x1234, 0x5678, 0xffff]))
     # l = s.pack_read_words('d8000', 32)
     # print('read words: ', l, '\n', ' '.join([hex(i)[2:] for i in l]))
-    # randoml = []
-    # for i in range(32):
-    #     randoml.append(random.randint(-32768, 32767))
-    # l = s.pack_write_words('d0', 32, randoml)
-    # print(randoml, '\n', l, '\n', ' '.join([hex(i)[2:] for i in l]))
-    l = [2, 69, 49, 48, 52, 48, 48, 48, 52, 48, 48, 69, 66, 54, 49, 54, 66, 66, 69,
-         67, 67, 66, 65, 55, 49, 55, 70, 68, 53, 50, 66, 69, 51, 56, 51, 51, 56, 55,
-         52, 56, 67, 68, 65, 51, 69, 49, 54, 53, 65, 52, 68, 52, 67, 65, 69, 65, 55,
-         57, 69, 54, 49, 69, 52, 55, 55, 49, 68, 67, 57, 57, 68, 49, 65, 66, 57, 54,
-         51, 52, 54, 70, 53, 48, 69, 49, 52, 51, 50, 52, 51, 51, 49, 70, 49, 70, 68,
-         49, 48, 69, 52, 70, 50, 57, 70, 54, 52, 66, 70, 49, 49, 68, 57, 55, 65, 67,
-         56, 56, 57, 65, 67, 68, 70, 53, 52, 48, 49, 49, 53, 53, 55, 55, 67, 53, 52,
-         70, 68, 49, 49, 48, 3, 70, 51]
-    s.unpack_read_return_bytes(l)
+    randoml = []
+    for i in range(32):
+        randoml.append(random.randint(-32768, 32767))
+    l = s.pack_write_words('d0', 32, randoml)
+    print(randoml, '\n', l, '\n', ' '.join([hex(i)[2:] for i in l]))
+    print(s.unpack_read_return_bytes([0x2] + l[6:-3] + [0x3] + s.checksum_to_ascii(l[6:-3]+[0x3])))
 
