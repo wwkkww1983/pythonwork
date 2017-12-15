@@ -34,6 +34,7 @@ FUNC_CODE = {'read_words': 0xE00,
              'write_bit': 0xE7,
              'test': 0x05}
 
+
 class LxPlcCom(object):
     """
     协议对象，包括少数参数和绝大部分协议操作函数
