@@ -18,22 +18,43 @@ log.basicConfig(level=log.INFO,
 
 class FxCommSerial(object):
     def __init__(self, comid):
+        self.name = comid
         self.com = None
+        self.alive = False
         try:
             self.com = ser(comid)
         except:
-            log.error('serial port {0} can\'t be used'.format(self.com.name))
+            self.com_not_alive_err(self.name)
+        finally:
+            if self.com:
+                self.alive = True
+            else:
+                self.alive = False
+
+    def com_not_alive_err(self, info):
+        log.error('error: serial port can\'t be used: {}'.format(info))
+
+    def com_not_opened_err(self, info):
+        log.error('error: serial port not opened: {}'.format(info))
 
     def reconfig(self, baud=9600, bytes=8, stops=1, parity='1', timeout=None):
+        if self.alive:
+            if self.com.is_open:
+                try:
+                    self.com.baudrate = baud
+                    self.com.bytesize = bytes
+                    self.com.stopbits = stops
+                    self.com.parity = parity
+                    self.com.timeout = timeout
+                except:
+                    log.error('config serial {} fail'.format(self.com.name))
+
+    def close(self):
         if self.com.is_open:
             try:
-                self.com.baudrate = baud
-                self.com.bytesize = bytes
-                self.com.stopbits = stops
-                self.com.parity = parity
-                self.com.timeout = timeout
+                self.com.close()
             except:
-                log.error('config serial {} fail'.format(self.com.name))
+                log.error('close serial {} fail'.format(self.com.name))
 
     def write(self, data):
         if self.com.is_open:
@@ -43,8 +64,8 @@ class FxCommSerial(object):
         if self.com.is_open:
             self.com.read(self, size=datalengh)
 
-
 if __name__ == '__main__':
     com = FxCommSerial('com1')
     com.reconfig(baud=115200, bytes=8, stops=1, parity='N', timeout=1)
-    print(com.com)
+    print(com.com, com.com.is_open)
+    com.close()
