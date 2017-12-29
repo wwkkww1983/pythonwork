@@ -10,7 +10,7 @@ import time
 import _thread as thread
 
 
-def open_port(portnm, paud=9600):
+def open_port(portnm, paud=115200):
     """
     set a port and open it
     :param portnm: com1,com2, ...
@@ -41,12 +41,32 @@ def read_port(pt):
     :param pt:
     :return:
     """
+    start = 0
+    end = 0
+    usetime = None
     if not pt.is_open:
         return
     else:
         while pt.is_open:
-            data = pt.readline()
-            print(data)
+            data = None
+            datab = pt.readline()
+            try:
+                data = datab.decode('gb2312')
+            except:
+                data = '无法gb2312解码'.encode('gb2312') + datab
+            if data[0] == '\r':
+                if data[-2:] == '\r\n':
+                    print(data[1:-2])
+                    if 'byPCN= 0x1,' in data:
+                        start = time.clock()
+                    if 'Use time' in data:
+                        usetime = data
+                    if 'Read Mac' in data:
+                        end = time.clock()
+                        break
+            else:
+                print(data)
+        print('start at {0}\nend at {1}\n时间差 = {2}\nuse time: {3}'.format(start, end, end-start, usetime))
 
 
 def write_port(pt, data='hello world'):
@@ -61,9 +81,9 @@ def write_port(pt, data='hello world'):
 
 
 if __name__ == '__main__':
-    p = open_port('com5')
-    write_port(p, 'abcdef')
-    thread.start_new_thread(read_port, (p,))
+    p = open_port('com3')
+    # write_port(p, 'abcdef')
+    # thread.start_new_thread(read_port, (p,))
     # 使用子线程通讯，主线程用于处理其他事务
-    time.sleep(5)
+    read_port(p)
     print('aa')
