@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # -----------------------------------------------------------
@@ -184,3 +185,5 @@ if __name__ == '__main__':
     print(randoml, '\n', l, '\n', ' '.join([hex(i)[2:] for i in l]))
     print(s.unpack_read_return_bytes([0x2] + l[6:-3] + [0x3] + s.checksum_to_ascii(l[6:-3]+[0x3])))
 
+=======
+>>>>>>> 184d0a29663d2ad08e595ea5ed57b92eee639abb
