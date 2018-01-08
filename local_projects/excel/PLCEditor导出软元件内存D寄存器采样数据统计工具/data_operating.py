@@ -40,7 +40,7 @@ def read_and_write(dirpath):
 
         sheet = tarketbook.add_sheet(xlsfile[:31])
         # 新建sheet来保存每一个xls文件整理的数据
-        sheet.write(0, 0, xlsfile[:-4])
+        sheet.wridte(0, 0, xlsfile[:-4])
         sheet.write(1, 0, '时间/0.1s')
         sheet.write(1, 1, '温度/0.1℃')
         # 第一行横轴时间，竖轴温度
