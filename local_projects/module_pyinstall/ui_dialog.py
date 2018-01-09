@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'start.ui'
+# Form implementation generated from reading ui file 'dialog.ui'
 #
 # Created: Mon Jan  8 20:35:56 2018
 #      by: PyQt5 UI code generator 5.3
@@ -77,7 +77,7 @@ class Ui_Dialog(object):
         self.label_2.setText(_translate("Dialog", "注意：将.db（.sjf）文件放在此工具目录中再点击开始"))
         self.pushButton_2.setText(_translate("Dialog", "退出"))
         self.label_3.setText(_translate("Dialog", "数据库文件名："))
-        self.lineEdit_3.setText(_translate("Dialog", "示教文件demo.db"))
+        self.lineEdit_3.setText(_translate("Dialog", "示教文件demo.sjf"))
         self.label_4.setText(_translate("Dialog", "数据表名："))
         self.label_5.setText(_translate("Dialog", "查询字段（以半角逗号分隔）："))
         self.label_6.setText(_translate("Dialog", "欲保存的xls文件名："))
@@ -89,6 +89,7 @@ class Ui_Dialog(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+    app.addLibraryPath('./plugins')
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog)

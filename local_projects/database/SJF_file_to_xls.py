@@ -9,7 +9,7 @@
 # -----------------------------------------------------------
 
 import sqlite3
-import xlrd, xlwt
+import xlwt
 
 
 def func_get_sqlite_data(db_path, table_name, table_fields):
@@ -19,7 +19,8 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
     :param table_fields: 需查询的字段
     :return: 表名_str，字段_tuple，数据_tuple(tuple)
     """
-
+    # if db_path.endswith('.sjf'):
+    #     db_path = db_path.split('.')[0] + '.db'
     fields_str = ', '.join(table_fields)
     conn = sqlite3.connect(db_path)
     print('db文件对象已连接：', conn, db_path)
@@ -60,8 +61,9 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
             return table_name, table_fields, table_data
 
 
-def func_get_glueio_positon(common_pos, point_arr):
+def func_get_glueio_positon(glues, point_arr):
     """
+    胶头列表中有多少胶头、点列表中就有几组点列表对应
     点类型：
         0：孤立点
         1,2,3: 折线起点、中间点、终点
@@ -70,35 +72,42 @@ def func_get_glueio_positon(common_pos, point_arr):
     """
     table_name = '示教文件开关胶动作位置列表'
     # 获取基准点位置
-    common_pos_x = common_pos[0][2]
-    common_pos_y = common_pos[0][3]
-    common_pos_z = common_pos[0][4]
+    glue_ids = []
+    for glue in glues:
+        glue_ids.append(glue[0])
     # 获取点列表
     point_data = point_arr
-    table_fields = ('开关胶点ID', '点类型', 'X位置', 'Y位置',  'Z位置', '开关胶')
+    table_fields = ('胶头', '开关胶点ID', '点类型', 'X位置', 'Y位置',  'Z位置', '开关胶')
     POINTTYPE = {0:'孤立点', 1: '折线起点', 2: '折线中间点', 3:'折线终点', 4:'圆弧起点',
                  5:'圆弧中间点', 6:'圆弧终点', 7:'整圆起点', 8:'整圆中间点', 9:'整圆终点'}
-    common_pos = (0, '基准点', common_pos_x, common_pos_y, common_pos_z, '--')
-    glue_io_positions = [common_pos]
-    x_pos = common_pos_x
-    y_pos = common_pos_y
-    z_pos = common_pos_z
-    for point in point_data:
-        # 开关胶动作时机：孤立点、折线起点、圆弧起点、整圆起点 -- 触发开胶；孤立点、折线终点、圆弧终点、整圆终点 -- 触发关胶
-        point_id = point[0]
-        point_type = POINTTYPE[point[1]]
-        x_pos += point[2]
-        y_pos += point[3]
-        z_pos += point[4]
+    glue_io_positions = []
+    for glue_id, glue in zip(glue_ids, glues):
+        # 根据胶头列表将点列表分割处理
+        x_base_pos = glue[2]
+        y_base_pos = glue[3]
+        z_base_pos = glue[4]
+        # 基准点（起始点坐标）
+        basepoint = (glue_id, 0, '基准点', x_base_pos, y_base_pos, z_base_pos, '--')
+        glue_io_positions.append(basepoint)
+        for point in point_data:
+            # 开关胶动作时机：孤立点、折线起点、圆弧起点、整圆起点 -- 触发开胶；孤立点、折线终点、圆弧终点、整圆终点 -- 触发关胶
+            if point[0] == glue_id:
+                point_glueid = point[0]
+                point_id = point[1]
+                point_type = POINTTYPE[point[2]]
+                # 点坐标：与基准点同一坐标系的绝对位置
+                x_pos = x_base_pos + point[3]
+                y_pos = y_base_pos + point[4]
+                z_pos = z_base_pos + point[5]
 
-        if point_type in ['孤立点', '折线起点', '圆弧起点', '整圆起点']:
-            glue_act = '开胶'
-            glue_io_currentpos = (point_id, point_type, x_pos, y_pos, z_pos, glue_act)
-            glue_io_positions.append(glue_io_currentpos)
-        if point_type in ['孤立点', '折线终点', '圆弧终点', '整圆终点']:
-            glue_act = '关胶'
-            glue_io_currentpos = (point_id, point_type, x_pos, y_pos, z_pos, glue_act)
-            glue_io_positions.append(glue_io_currentpos)
+                if point_type in ['孤立点', '折线起点', '圆弧起点', '整圆起点']:
+                    glue_act = '开胶'
+                    glue_io_currentpos = (point_glueid, point_id, str(point[2])+' '+point_type, x_pos, y_pos, z_pos, glue_act)
+                    glue_io_positions.append(glue_io_currentpos)
+                if point_type in ['孤立点', '折线终点', '圆弧终点', '整圆终点']:
+                    glue_act = '关胶'
+                    glue_io_currentpos = (point_glueid, point_id, str(point[2])+' '+point_type, x_pos, y_pos, z_pos, glue_act)
+                    glue_io_positions.append(glue_io_currentpos)
     return table_name, table_fields, glue_io_positions
 
 
@@ -123,15 +132,15 @@ if __name__ == '__main__':
     point_array = func_get_sqlite_data('示教文件demo.db', 'SJJT_GlueInfo',
                          ['SortID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
     common_position = func_get_sqlite_data('示教文件demo.db', 'SJJT_PointInfo',
-                         ['ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
+                         ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
     glue_io_position_data = func_get_glueio_positon(point_array[2], common_position[2])
-    print(glue_io_position_data[0])
-    for point in glue_io_position_data[1]:
+    # print(glue_io_position_data[0])
+    for point in glue_io_position_data[2]:
         print(point)
 
     xls = xlwt.Workbook()
     add_to_xls(xls, point_array)
     add_to_xls(xls, common_position)
     add_to_xls(xls, glue_io_position_data)
-    xls.save('示教胶头动作点列表1.xls')
+    xls.save('示教胶头动作点列表.xls')
 
