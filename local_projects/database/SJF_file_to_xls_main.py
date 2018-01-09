@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # -----------------------------------------------------------
 # File Name：     SJF_file_to_xls_main.py
@@ -9,7 +9,7 @@
 # -----------------------------------------------------------
 from PyQt5.QtWidgets import QApplication, QWidget
 import xlwt
-from ui_start import Ui_Dialog
+from ui_dialog import Ui_Dialog
 import SJF_file_to_xls as sjf
 
 
@@ -46,5 +46,4 @@ if __name__ == '__main__':
     win.show()
     # 点击保存按钮则在目录下生成.xls文件
     win.pushButton.clicked.connect(win.do_something)
-    input("waiting")
     sys.exit(app.exec_())
