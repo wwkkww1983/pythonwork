@@ -10,6 +10,9 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
 import xlwt, os
 from ui_dialog import Ui_Dialog
+from PyQt5.QtWidgets import QApplication, QWidget
+import xlwt
+from ui_dialog import Ui_Dialog
 import SJF_file_to_xls as sjf
 
 
