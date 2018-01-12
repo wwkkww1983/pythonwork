@@ -25,25 +25,37 @@ class Main(QWidget, Ui_Dialog):
         self.xls_file_name = ''
         self.workpath = os.getcwd()
 
-    def slect_file(self):
-        file_path = QFileDialog.getOpenFileName(self,
-                                                self.workpath,
-                                                "打开文件"
-                                                "All Files (*);;DB Files (*.db);;")
+    def set_read_dbfile(self):
+        """
+        选择要打开的文件：
+        参数说明：self参数、设置默认打开的窗口（当前工作目录）、设置文件对话框标题、设置文件类型筛选
+        :return:None
+        """
+        self.db_file_name = ''
+        db_file_dialog = QFileDialog()
+        read_db_name, name_ok = db_file_dialog.getOpenFileName(self, "打开文件", self.workpath,
+                                                               "DB Files (*.db);; All Files (*.*)")
+        self.lineEdit_3.setText(read_db_name)
+        self.db_file_name = self.lineEdit_3.text()
 
+    def set_save_xlsfile(self):
+        self.xls_file_name = ''
+        xls_file_dialog = QFileDialog()
+        save_xls_name, get_xls_ok = xls_file_dialog.getSaveFileName(self, '另存为', self.workpath, 'xls Files (*.xls)')
+        self.lineEdit_6.setText(save_xls_name)
+        self.xls_file_name = self.lineEdit_6.text()
+        self.do_something()
 
     def do_something(self):
         """
         从UI获取.db文件名和欲保存.xls名，经过处理后保存.xls文件
         :return: 无返回
         """
-        current_workpath = os.getcwd()
-        self.db_file_name = os.path.join(current_workpath, self.lineEdit_3.text())
-        self.xls_file_name = os.path.join(current_workpath, self.lineEdit_6.text())
         point_array = sjf.func_get_sqlite_data('示教文件demo.db', 'SJJT_GlueInfo',
-                                           ['SortID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
+                                               ['SortID', 'GlueName', 'XCompensation', 'YCompensation',
+                                                'ZCompensation'])
         common_position = sjf.func_get_sqlite_data('示教文件demo.db', 'SJJT_PointInfo',
-                                               ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
+                                                   ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
         glue_io_position_data = sjf.func_get_glueio_positon(point_array[2], common_position[2])
         xls = xlwt.Workbook()
         sjf.add_to_xls(xls, point_array)
@@ -51,11 +63,14 @@ class Main(QWidget, Ui_Dialog):
         sjf.add_to_xls(xls, glue_io_position_data)
         xls.save(self.xls_file_name)
 
+
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     win = Main()
     win.show()
     # 点击保存按钮则在目录下生成.xls文件
-    win.pushButton.clicked.connect(win.do_something)
+    win.pushButton_3.clicked.connect(win.set_read_dbfile)
+    win.pushButton_4.clicked.connect(win.set_save_xlsfile)
+
     sys.exit(app.exec_())
