@@ -24,6 +24,8 @@ class Main(QWidget, Ui_Dialog):
         self.db_file_name = ''
         self.xls_file_name = ''
         self.workpath = os.getcwd()
+        self.lineEdit_3.setText(os.path.join(self.workpath, '示教文件.sjf'))
+        self.lineEdit_6.setText(os.path.join(self.workpath, '示教文件 胶头绝对位置信息.xls'))
 
     def set_read_dbfile(self):
         """
