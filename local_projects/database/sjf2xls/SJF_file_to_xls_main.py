@@ -10,9 +10,6 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
 import xlwt, os
 from ui_dialog import Ui_Dialog
-from PyQt5.QtWidgets import QApplication, QWidget
-import xlwt
-from ui_dialog import Ui_Dialog
 import SJF_file_to_xls as sjf
 
 
@@ -25,7 +22,7 @@ class Main(QWidget, Ui_Dialog):
         self.xls_file_name = ''
         self.workpath = os.getcwd()
         self.lineEdit_3.setText(os.path.join(self.workpath, '示教文件.sjf'))
-        self.lineEdit_6.setText(os.path.join(self.workpath, '示教文件 胶头绝对位置信息.xls'))
+        self.lineEdit_6.setText(os.path.join(self.workpath, '示教文件胶头绝对位置.xls'))
 
     def set_read_dbfile(self):
         """
@@ -36,17 +33,23 @@ class Main(QWidget, Ui_Dialog):
         self.db_file_name = ''
         db_file_dialog = QFileDialog()
         read_db_name, name_ok = db_file_dialog.getOpenFileName(self, "打开文件", self.workpath,
-                                                               "DB Files (*.db);; All Files (*.*)")
-        self.lineEdit_3.setText(read_db_name)
-        self.db_file_name = self.lineEdit_3.text()
+                                                               "DB Files (*.db);; SJF Files (*.sjf);; All Files (*.*)")
+        if read_db_name:
+            self.lineEdit_3.setText(read_db_name)
+            self.db_file_name = self.lineEdit_3.text()
+        else:
+            print('fail to read sjf file.')
 
     def set_save_xlsfile(self):
         self.xls_file_name = ''
         xls_file_dialog = QFileDialog()
         save_xls_name, get_xls_ok = xls_file_dialog.getSaveFileName(self, '另存为', self.workpath, 'xls Files (*.xls)')
-        self.lineEdit_6.setText(save_xls_name)
-        self.xls_file_name = self.lineEdit_6.text()
-        self.do_something()
+        if save_xls_name:
+            self.lineEdit_6.setText(save_xls_name)
+            self.xls_file_name = self.lineEdit_6.text()
+            self.do_something()
+        else:
+            print('fail to save xls file.')
 
     def do_something(self):
         """
@@ -74,5 +77,4 @@ if __name__ == '__main__':
     # 点击保存按钮则在目录下生成.xls文件
     win.pushButton_3.clicked.connect(win.set_read_dbfile)
     win.pushButton_4.clicked.connect(win.set_save_xlsfile)
-
     sys.exit(app.exec_())

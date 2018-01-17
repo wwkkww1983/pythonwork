@@ -41,7 +41,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>注意：将.db（.sjf）文件放在此工具目录中再点击开始</string>
+    <string>注意：选择.sjf文件(SQLite数据库文件)</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
@@ -70,7 +70,7 @@
     <item row="0" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>数据库文件名：</string>
+       <string>数据库文件：</string>
       </property>
      </widget>
     </item>
@@ -119,7 +119,7 @@
     <item row="3" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>欲保存的xls文件名：</string>
+       <string>EXCEL文件另存为</string>
       </property>
      </widget>
     </item>
@@ -133,7 +133,7 @@
     <item row="3" column="2">
      <widget class="QPushButton" name="pushButton_4">
       <property name="text">
-       <string>保存</string>
+       <string>另存为...</string>
       </property>
      </widget>
     </item>

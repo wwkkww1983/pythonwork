@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'dialog1.ui'
+# Form implementation generated from reading ui file 'dialog.ui'
 #
-# Created: Fri Jan 12 17:57:01 2018
+# Created: Wed Jan 17 09:04:37 2018
 #      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,7 +29,7 @@ class Ui_Dialog(object):
         self.pushButton_2.setGeometry(QtCore.QRect(670, 380, 111, 23))
         self.pushButton_2.setObjectName("pushButton_2")
         self.layoutWidget = QtWidgets.QWidget(Dialog)
-        self.layoutWidget.setGeometry(QtCore.QRect(50, 110, 731, 221))
+        self.layoutWidget.setGeometry(QtCore.QRect(51, 120, 731, 191))
         self.layoutWidget.setObjectName("layoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -40,6 +40,9 @@ class Ui_Dialog(object):
         self.lineEdit_3 = QtWidgets.QLineEdit(self.layoutWidget)
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.gridLayout.addWidget(self.lineEdit_3, 0, 1, 1, 1)
+        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.gridLayout.addWidget(self.pushButton_3, 0, 2, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.layoutWidget)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 1, 0, 1, 1)
@@ -60,12 +63,9 @@ class Ui_Dialog(object):
         self.lineEdit_6 = QtWidgets.QLineEdit(self.layoutWidget)
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.gridLayout.addWidget(self.lineEdit_6, 3, 1, 1, 1)
-        self.label_7 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_7.setObjectName("label_7")
-        self.gridLayout.addWidget(self.label_7, 4, 0, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 4, 1, 1, 1)
+        self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.gridLayout.addWidget(self.pushButton_4, 3, 2, 1, 1)
 
         self.retranslateUi(Dialog)
         self.pushButton_2.clicked.connect(Dialog.close)
@@ -74,16 +74,16 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         self.label.setText(_translate("Dialog", "示教机胶头动作点绝对位置生成工具 V1.0"))
-        self.label_2.setText(_translate("Dialog", "注意：将.db（.sjf）文件放在此工具目录中再点击开始"))
+        self.label_2.setText(_translate("Dialog", "注意：选择.sjf文件(SQLite数据库文件)"))
         self.pushButton_2.setText(_translate("Dialog", "退出"))
-        self.label_3.setText(_translate("Dialog", "数据库文件名："))
+        self.label_3.setText(_translate("Dialog", "数据库文件："))
         self.lineEdit_3.setText(_translate("Dialog", "示教文件demo.sjf"))
+        self.pushButton_3.setText(_translate("Dialog", "选择..."))
         self.label_4.setText(_translate("Dialog", "数据表名："))
         self.label_5.setText(_translate("Dialog", "查询字段（以半角逗号分隔）："))
-        self.label_6.setText(_translate("Dialog", "欲保存的xls文件名："))
+        self.label_6.setText(_translate("Dialog", "EXCEL文件另存为"))
         self.lineEdit_6.setText(_translate("Dialog", "示教胶头动作点列表.xls"))
-        self.label_7.setText(_translate("Dialog", "点击右侧按钮执行转换"))
-        self.pushButton.setText(_translate("Dialog", "保存"))
+        self.pushButton_4.setText(_translate("Dialog", "另存为..."))
 
 
 if __name__ == "__main__":
