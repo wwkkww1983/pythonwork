@@ -38,8 +38,8 @@ class SJF(object):
                 tablesnames.append(table[0])
         else:
             print('cursor not existed while getting tablesnames.')
-        self.tablelist = tablesnames
-        return tablesnames
+        self.tablelist = tuple(tablesnames)
+        return self.tablelist
 
     def get_table_fields(self, tablename):
         table_fields = []
@@ -48,26 +48,31 @@ class SJF(object):
                 table_fields.append(info[1])
         else:
             print('cursor not existed while getting table fields.')
-        return table_fields
+        return tuple(table_fields)
 
-    def get_data(self, tablename, fields=''):
+    def get_table_data(self, tablename, fields=''):
         tabledata = ()
         if self.cursor:
             if tablename:
                 if not fields:
                     tabledata = self.cursor.execute('SELECT * FROM {0} ORDER BY ID'.format(tablename))
                 else:
-                    tabledata = self.cursor.execute('SELECT {0} FROM {1} ORDER BY ID'.format(','.join(fields), tablename))
+                    tabledata = self.cursor.execute('SELECT {0} FROM {1} ORDER BY ID'.format(fields, tablename))
             else:
                 print('table not found:', tablename)
         return tuple(tabledata)
 
     def execute(self, sqltext):
-        pass
+        data = []
+        if self.cursor:
+            try:
+                data = self.cursor.execute(sqltext)
+            except:
+                print('the sql order is not corrected: "{}"'.format(sqltext))
+        return tuple(data)
 
     def add_records(self, record_counts=1, ):
         pass
-
 
 
 if __name__ == '__main__':
@@ -76,7 +81,8 @@ if __name__ == '__main__':
     file.get_cursor('示教文件demo.db')
     file.get_tablesnames()
     fields = file.get_table_fields('SJJT_PointInfo')
-    data = file.get_data('SJJT_PointInfo')
+    data = file.get_table_data('SJJT_PointInfo', 'ID, X, Y, Z')
+    data2 = file.execute('SELECT name FROM sqlite_master WHERE type=\'table\'')
     print("""get .sjf file:
              path: {}
              name: {}
@@ -84,3 +90,4 @@ if __name__ == '__main__':
              table list: {}""".format(file.path, file.name, file.cursor, file.tablelist))
     print(fields)
     print(data)
+    print(data2)
