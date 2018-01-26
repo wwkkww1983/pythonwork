@@ -16,10 +16,14 @@ class TestTriangle(unittest.TestCase):
 
     def test_maketriangle(self):
         # 一个测试对象的方法，对应一个单元测试类的方法
+        # 测试用例
         sidecases = [(3, 4, 5), (100, 101, 102), (-1, 3, 5), (5, 0, 3)]
-        results = [True, True, False, False]
+        # 预期测试结果设置
+        results = [True, True, False, True]
         for sidecase, result in zip(sidecases, results):
+            # 执行测试对象方法
             self.triangle.maketriangle(*sidecase)
+            # 获取测试结果
             self.assertEqual(self.triangle.istriangle, result)
             self.assertEqual(self.triangle.sides, sidecase)
 
