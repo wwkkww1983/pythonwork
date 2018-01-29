@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # -----------------------------------------------------------
-# File Name：     SJF_file_to_xls_main.py
+# File Name：     SJF_file_to_xls_main.spec
 # Description :
 #   Author:      fan
 #   date:        2018/1/8
@@ -32,7 +32,8 @@ class Main(QWidget, Ui_Dialog):
         """
         self.db_file_name = ''
         db_file_dialog = QFileDialog()
-        read_db_name, name_ok = db_file_dialog.getOpenFileName(self, "打开文件", self.workpath,
+        read_db_name, name_ok = db_file_dialog.getOpenFileName(self, "打开文件",
+                                                               self.workpath,
                                                                "DB Files (*.db);; SJF Files (*.sjf);; All Files (*.*)")
         if read_db_name:
             self.lineEdit_3.setText(read_db_name)
@@ -43,7 +44,10 @@ class Main(QWidget, Ui_Dialog):
     def set_save_xlsfile(self):
         self.xls_file_name = ''
         xls_file_dialog = QFileDialog()
-        save_xls_name, get_xls_ok = xls_file_dialog.getSaveFileName(self, '另存为', self.workpath, 'xls Files (*.xls)')
+        save_xls_name, get_xls_ok = xls_file_dialog.getSaveFileName(self,
+                                                                    '另存为',
+                                                                    self.workpath,
+                                                                    'xls Files (*.xls)')
         if save_xls_name:
             self.lineEdit_6.setText(save_xls_name)
             self.xls_file_name = self.lineEdit_6.text()
@@ -56,10 +60,12 @@ class Main(QWidget, Ui_Dialog):
         从UI获取.db文件名和欲保存.xls名，经过处理后保存.xls文件
         :return: 无返回
         """
-        point_array = sjf.func_get_sqlite_data('示教文件demo.db', 'SJJT_GlueInfo',
+        point_array = sjf.func_get_sqlite_data('示教文件demo.db',
+                                               'SJJT_GlueInfo',
                                                ['SortID', 'GlueName', 'XCompensation', 'YCompensation',
                                                 'ZCompensation'])
-        common_position = sjf.func_get_sqlite_data('示教文件demo.db', 'SJJT_PointInfo',
+        common_position = sjf.func_get_sqlite_data('示教文件demo.db',
+                                                   'SJJT_PointInfo',
                                                    ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
         glue_io_position_data = sjf.func_get_glueio_positon(point_array[2], common_position[2])
         xls = xlwt.Workbook()

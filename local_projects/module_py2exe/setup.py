@@ -23,7 +23,7 @@ py2exe_options = {
 setup(
     name='SJF_file_to_xls_main',
     version='1.0',
-    windows=['SJF_file_to_xls_main.py','ui_dialog.py', 'SJF_file_to_xls.py'],  # 括号中更改为你要打包的代码文件名
+    windows=['SJF_file_to_xls_main.spec','ui_dialog.py', 'SJF_file_to_xls.py'],  # 括号中更改为你要打包的代码文件名
     zipfile=None,
     options={'py2exe': py2exe_options}
 )
