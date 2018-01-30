@@ -21,8 +21,8 @@ class Main(QWidget, Ui_Dialog):
         self.db_file_name = ''
         self.xls_file_name = ''
         self.workpath = os.getcwd()
-        self.lineEdit_3.setText(os.path.join(self.workpath, '示教文件.sjf'))
-        self.lineEdit_6.setText(os.path.join(self.workpath, '示教文件胶头绝对位置.xls'))
+        self.lineEdit_3.setText(os.path.join(self.workpath, '*.sjf'))
+        self.lineEdit_6.setText(os.path.join(self.workpath, '*.xls'))
 
     def set_read_dbfile(self):
         """
@@ -34,7 +34,7 @@ class Main(QWidget, Ui_Dialog):
         db_file_dialog = QFileDialog()
         read_db_name, name_ok = db_file_dialog.getOpenFileName(self, "打开文件",
                                                                self.workpath,
-                                                               "DB Files (*.db);; SJF Files (*.sjf);; All Files (*.*)")
+                                                               "示教文件 (*.db; *.sjf);;All Files (*.*)")
         if read_db_name:
             self.lineEdit_3.setText(read_db_name)
             self.db_file_name = self.lineEdit_3.text()
@@ -42,11 +42,12 @@ class Main(QWidget, Ui_Dialog):
             print('fail to read sjf file.')
 
     def set_save_xlsfile(self):
+        initial_save_name = os.path.splitext(self.db_file_name)[0] + '.xls'
         self.xls_file_name = ''
         xls_file_dialog = QFileDialog()
         save_xls_name, get_xls_ok = xls_file_dialog.getSaveFileName(self,
                                                                     '另存为',
-                                                                    self.workpath,
+                                                                    os.path.join(self.workpath, initial_save_name),
                                                                     'xls Files (*.xls)')
         if save_xls_name:
             self.lineEdit_6.setText(save_xls_name)

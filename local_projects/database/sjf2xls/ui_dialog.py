@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dialog.ui'
 #
-# Created: Wed Jan 17 09:04:37 2018
+# Created: Tue Jan 30 17:14:55 2018
 #      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -66,6 +66,9 @@ class Ui_Dialog(object):
         self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_4.setObjectName("pushButton_4")
         self.gridLayout.addWidget(self.pushButton_4, 3, 2, 1, 1)
+        self.label_7 = QtWidgets.QLabel(Dialog)
+        self.label_7.setGeometry(QtCore.QRect(490, 40, 301, 20))
+        self.label_7.setObjectName("label_7")
 
         self.retranslateUi(Dialog)
         self.pushButton_2.clicked.connect(Dialog.close)
@@ -73,7 +76,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        self.label.setText(_translate("Dialog", "示教机胶头动作点绝对位置生成工具 V1.0"))
+        self.label.setText(_translate("Dialog", "示教机胶头动作点绝对位置生成工具 "))
         self.label_2.setText(_translate("Dialog", "注意：选择.sjf文件(SQLite数据库文件)"))
         self.pushButton_2.setText(_translate("Dialog", "退出"))
         self.label_3.setText(_translate("Dialog", "数据库文件："))
@@ -84,6 +87,7 @@ class Ui_Dialog(object):
         self.label_6.setText(_translate("Dialog", "EXCEL文件另存为"))
         self.lineEdit_6.setText(_translate("Dialog", "示教胶头动作点列表.xls"))
         self.pushButton_4.setText(_translate("Dialog", "另存为..."))
+        self.label_7.setText(_translate("Dialog", "V1.0 2018.1.30"))
 
 
 if __name__ == "__main__":
