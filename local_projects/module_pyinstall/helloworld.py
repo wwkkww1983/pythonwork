@@ -12,7 +12,7 @@ print('hello world')
 input('Waiting')
 
 """
-例子：pyinstaller -F demo.py
+例子：pyinstaller -D -c -w SJF_file_to_xls_main.py
 参数	含义
 -F	指定打包后只生成一个exe格式的文件
 -D	–onedir 创建一个目录，包含exe文件，但会依赖很多文件（默认选项）
