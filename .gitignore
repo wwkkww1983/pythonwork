@@ -138,3 +138,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 .idea
+/local_projects/database/db2xls/demo.xls
+/local_projects/database/demo.db
+/local_projects/database/示教文件demo.db
