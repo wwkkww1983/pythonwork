@@ -11,7 +11,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QMessageBox
 import xlwt, os
 from ui_dialog import Ui_Dialog
 from dbfile import DB
-from tableintoxls import add_to_xls
+from xlsfile import XLS, add_to_xls    # 导入XLS类、add_to_xls函数
+
+# from tableintoxls import add_to_xls
 
 
 class Main(QWidget, Ui_Dialog):
@@ -19,46 +21,83 @@ class Main(QWidget, Ui_Dialog):
         super(Main, self).__init__()
         self.setupUi(self)
         self.setWindowTitle(self.label.text())
-        self.db_file_name = ''
-        self.xls_file_name = ''
+        self.select_db_name = ''
+        self.save_xls_name = ''
+        self.select_xls_name = ''
+        self.save_db_name = ''
         self.workpath = os.getcwd()
         self.messagebox = QMessageBox()
 
-    def set_read_dbfile(self):
+    def set_select_dbfile(self):
         """
         选择要打开的文件：
         参数说明：self参数、设置默认打开的窗口（当前工作目录）、设置文件对话框标题、设置文件类型筛选
         :return:None
         """
-        self.db_file_name = ''
+        self.select_db_name = ''
         db_file_dialog = QFileDialog()
-        read_db_name, name_ok = \
-            db_file_dialog.getOpenFileName(self, "打开文件",
+        select_path, select_type = \
+            db_file_dialog.getOpenFileName(self, "打开数据库文件",
                                            self.workpath,
                                            "示教文件 (*.db; *.sjf);;All Files (*.*)")
-        if read_db_name:
-            self.lineEdit_dbpath.setText(read_db_name)
-            self.db_file_name = self.lineEdit_dbpath.text()
+        if select_path:
+            self.lineEdit_dbpath.setText(select_path)
+            self.select_db_name = self.lineEdit_dbpath.text()
         else:
             print('fail to read sjf file.')
 
     def set_save_xlsfile(self):
-        initial_save_name = os.path.splitext(self.db_file_name)[0] + '.xls'
-        self.xls_file_name = ''
+        initial_save_name = os.path.splitext(self.select_db_name)[0] + '.xls'
+        self.save_xls_name = ''
         xls_file_dialog = QFileDialog()
-        save_xls_name, get_xls_ok = \
+        save_path, save_type = \
             xls_file_dialog.getSaveFileName(self,
                                             '导出',
                                             os.path.join(self.workpath, initial_save_name),
                                             'xls Files (*.xls)')
-        self.xls_file_name = save_xls_name
-        if save_xls_name:
+        self.save_xls_name = save_path
+        if save_path:
             self.save_xls()
         else:
             self.messagebox.information(self,
                                         '提示',
                                         'xls未保存',
                                         QMessageBox.Ok)
+
+    def set_select_xlsfile(self):
+        self.select_xls_name = ''
+        file_dialog = QFileDialog()
+        select_path, select_type = \
+            file_dialog.getOpenFileName(self, "打开Excel文件",
+                                        self.workpath,
+                                        "Excel文件 (*.xls);;All Files (*.*)")
+        if select_path:
+            self.lineEdit_xlspath.setText(select_path)
+            self.select_xls_name = self.lineEdit_xlspath.text()
+        else:
+            print('fail to select xls file.')
+
+    def set_save_dbfile(self):
+        initial_save_name = os.path.splitext(self.select_xls_name)[0] + '.sjf'
+        self.save_db_name = ''
+        file_dialog = QFileDialog()
+        save_path, save_type = \
+            file_dialog.getSaveFileName(self,
+                                        '导出',
+                                        os.path.join(self.workpath, initial_save_name),
+                                        '示教文件(*.sjf);; Sqlite3数据文件(*.db)')
+        self.save_db_name = save_path
+        if save_path:
+            self.save_db()
+        else:
+            self.messagebox.information(self,
+                                        '提示',
+                                        'xls未保存',
+                                        QMessageBox.Ok)
+
+    def save_db(self):
+        pass
+
 
     def save_xls(self):
         """
@@ -68,7 +107,7 @@ class Main(QWidget, Ui_Dialog):
         db = DB()
         xls = xlwt.Workbook()
 
-        db.get_cursor(self.db_file_name)
+        db.get(self.select_db_name)
         tablenames = db.get_tablesnames()
         try:
             for tablename in tablenames:
@@ -76,7 +115,7 @@ class Main(QWidget, Ui_Dialog):
                 tabledata = db.get_table_data(tablename, '')
                 add_to_xls(xls, (tablename, tablefields, tabledata))
 
-            xls.save(self.xls_file_name)
+            xls.save(self.save_xls_name)
             self.messagebox.information(self,
                                         '提示',
                                         '保存成功',
@@ -93,6 +132,9 @@ if __name__ == '__main__':
     win = Main()
     win.show()
     # 点击保存按钮则在目录下生成.xls文件
-    win.pushButton_selecdb.clicked.connect(win.set_read_dbfile)
+    win.pushButton_selecdb.clicked.connect(win.set_select_dbfile)
     win.pushButton_db2xls.clicked.connect(win.set_save_xlsfile)
+    win.pushButton_selecxls.clicked.connect(win.set_select_xlsfile)
+    win.pushButton_xls2db.clicked.connect(win.set_save_dbfile)
+
     sys.exit(app.exec_())
