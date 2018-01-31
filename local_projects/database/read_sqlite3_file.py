@@ -8,7 +8,7 @@
 #   IDE:         PyCharm Community Edition
 # -----------------------------------------------------------
 
-import sqlite3
+import sqlite3, os
 
 
 def read_db():
@@ -36,11 +36,38 @@ def read_db():
         print(row)
 
 
-def create_db():
-    conn = sqlite3.connect('demo.db')
-    c = conn.cursor()
-    c.execute("""CREATE TABLE stocks(id text, x integer, y integer, z integer)""")
+def create_db(dbpath, tablename, fieldstypes, rowdata):
+    """
+    创建db文件并创建数据表和增加记录
+    connect(): 	sqlite3.connect(database [,timeout ,other optional arguments])
+    如果给定db文件存在，则返回一个数据库连接对象conn。
+    如果给定db文件不存在，则该调用将创建一个数据库并返回新数据库的连接对象conn。
+    如果您不想在当前目录中创建数据库，那么您可以指定带有路径的文件名，这样您就能在任意地方创建数据库。
+    """
+    conn = sqlite3.connect(dbpath)
 
+    # cursor: 理解为用于Python调用sqlite3执行数据库命令的接口、指针
+    c = conn.cursor()
+    c.execute("""CREATE TABLE {} ({})""".format(tablename, fieldstypes))
+    fields = []
+    for info in c.execute("PRAGMA table_info('{}')".format(tablename)):
+        fields.append(info[1])
+    print(fields)
+    c.execute("INSERT INTO COMPANY ({}) VALUES ({})".format(','.join(fields), rowdata))
+    data = c.execute("SELECT * FROM COMPANY")
+    print(list(data))
+    conn.commit()
+    conn.close()
 
 if __name__ == '__main__':
-    read_db()
+    os.remove('demo.db')
+    dbpath = 'demo.db'
+    tbn = 'COMPANY'
+    tbfd = """ID INT PRIMARY KEY     NOT NULL,
+               NAME           TEXT    NOT NULL,
+               AGE            INT     NOT NULL,
+               ADDRESS        CHAR(50),
+               SALARY         REAL"""
+    rowdata = "1, 'Paul', 32, 'California', 20000.00"
+    create_db(dbpath, tbn, tbfd, rowdata)
+
