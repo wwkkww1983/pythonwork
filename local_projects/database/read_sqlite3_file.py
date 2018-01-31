@@ -36,7 +36,7 @@ def read_db():
         print(row)
 
 
-def create_db(dbpath, tablename, fieldstypes, rowdata):
+def create_db(dbpath, tablename, fieldstypes, rowdata, rowdatas):
     """
     创建db文件并创建数据表和增加记录
     connect(): 	sqlite3.connect(database [,timeout ,other optional arguments])
@@ -50,10 +50,14 @@ def create_db(dbpath, tablename, fieldstypes, rowdata):
     c = conn.cursor()
     c.execute("""CREATE TABLE {} ({})""".format(tablename, fieldstypes))
     fields = []
+    fieldinfos = []
     for info in c.execute("PRAGMA table_info('{}')".format(tablename)):
+        fieldinfos.append(info)
         fields.append(info[1])
     print(fields)
+    print(fieldinfos)
     c.execute("INSERT INTO COMPANY ({}) VALUES ({})".format(','.join(fields), rowdata))
+    c.executemany('INSERT INTO COMPANY VALUES (?,?,?,?,?)', rowdatas)
     data = c.execute("SELECT * FROM COMPANY")
     print(list(data))
     conn.commit()
@@ -63,11 +67,25 @@ if __name__ == '__main__':
     os.remove('demo.db')
     dbpath = 'demo.db'
     tbn = 'COMPANY'
-    tbfd = """ID INT PRIMARY KEY     NOT NULL,
-               NAME           TEXT    NOT NULL,
-               AGE            INT     NOT NULL,
-               ADDRESS        CHAR(50),
-               SALARY         REAL"""
+    # tbfd = """ID INT PRIMARY KEY     NOT NULL,
+    #            NAME           TEXT    NOT NULL,
+    #            AGE            INT     NOT NULL,
+    #            ADDRESS        CHAR(50),
+    #            SALARY         REAL"""
+    # infos = [(0, 'ID', 'INT', 1, None, 1),
+    #          (1, 'NAME', 'TEXT', 1, None, 0),
+    #          (2, 'AGE', 'INT', 1, None, 0),
+    #          (3, 'ADDRESS', 'CHAR(50)', 0, None, 0),
+    #          (4, 'SALARY', 'REAL', 0, None, 0)]
+    # tbfd = """((0, 'ID', 'INT', 1, None, 1),
+    #            (1, 'NAME', 'TEXT', 1, None, 0),
+    #            (2, 'AGE', 'INT', 1, None, 0),
+    #            (3, 'ADDRESS', 'CHAR(50)', 0, None, 0),
+    #            (4, 'SALARY', 'REAL', 0, None, 0))"""
+    tbfd = """ID, NAME, AGE, ADDRESS, SALARY"""
     rowdata = "1, 'Paul', 32, 'California', 20000.00"
-    create_db(dbpath, tbn, tbfd, rowdata)
+    rowdatas = [(2, 'Jack', 14, 'Beijing', 3002.44),
+                (3, 'Jack', 14, 'Beijing', 3002.44),
+                (4, 'Jack', 14, 'Beijing', 3002.44)]
+    create_db(dbpath, tbn, tbfd, rowdata, rowdatas)
 

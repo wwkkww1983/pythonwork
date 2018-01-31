@@ -72,6 +72,7 @@ class Main(QWidget, Ui_Dialog):
                                         self.workpath,
                                         "Excel文件 (*.xls);;All Files (*.*)")
         if select_path:
+            # print(select_path)
             self.lineEdit_xlspath.setText(select_path)
             self.select_xls_name = self.lineEdit_xlspath.text()
         else:
@@ -88,16 +89,13 @@ class Main(QWidget, Ui_Dialog):
                                         '示教文件(*.sjf);; Sqlite3数据文件(*.db)')
         self.save_db_name = save_path
         if save_path:
+            # print(save_path)
             self.save_db()
         else:
             self.messagebox.information(self,
                                         '提示',
                                         'xls未保存',
                                         QMessageBox.Ok)
-
-    def save_db(self):
-        pass
-
 
     def save_xls(self):
         """
@@ -114,8 +112,8 @@ class Main(QWidget, Ui_Dialog):
                 tablefields = db.get_table_fields(tablename)
                 tabledata = db.get_table_data(tablename, '')
                 add_to_xls(xls, (tablename, tablefields, tabledata))
-
             xls.save(self.save_xls_name)
+            db.conn.close()
             self.messagebox.information(self,
                                         '提示',
                                         '保存成功',
@@ -126,15 +124,39 @@ class Main(QWidget, Ui_Dialog):
                                         e,
                                         QMessageBox.Ok)
 
+    def save_db(self):
+        """
+        从UI获取.xls文件名和欲保存.db名，经过转换处理保存.db文件
+        :return:
+        """
+        xls = XLS()
+        xls.get_xls(self.select_xls_name)
+        xlsname = xls.name
+        workdir = xls.workdir
+        dbname = os.path.splitext(xlsname)[0]+ '.sjf'
+        # 创建空数据库文件
+        db = DB()
+        db.get(dbname)
+
+        sheetnames = xls.get_sheet_names()
+        print(sheetnames)
+        for sheetname in sheetnames:
+            xls.get_read_sheet(sheetname)
+            fields = xls.currentsheet_fields
+            print(fields)
+            if db.create_table(sheetname, fields):
+                print(fields)
+
+
+
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     win = Main()
     win.show()
-    # 点击保存按钮则在目录下生成.xls文件
+    # 按钮执行相关操作
     win.pushButton_selecdb.clicked.connect(win.set_select_dbfile)
     win.pushButton_db2xls.clicked.connect(win.set_save_xlsfile)
     win.pushButton_selecxls.clicked.connect(win.set_select_xlsfile)
     win.pushButton_xls2db.clicked.connect(win.set_save_dbfile)
-
     sys.exit(app.exec_())

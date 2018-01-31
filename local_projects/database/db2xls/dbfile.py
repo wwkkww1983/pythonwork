@@ -75,6 +75,8 @@ class DB(object):
 
     def create_table(self, tablename, tablefields):
         create_success = False
+        if type(tablefields) in(tuple, list):
+            tablefields = ','.join(tablefields)
         if self.cursor:
             c = self.cursor
             if tablename in self.get_tablesnames():
@@ -82,6 +84,7 @@ class DB(object):
                 print('There has been a table named {} in this db file'.format(tablename))
                 create_success = False
             else:
+                print('test:', tablename, tablefields)
                 c.execute("CREATE TABLE {0} ({1})".format(tablename, tablefields))
                 create_success = True
                 self.conn.commit()
@@ -96,12 +99,10 @@ class DB(object):
                 add_success = False
             else:
                 # 增加数据行，注意字段和数据的格式：括号，‘字符串形式’而不是‘列表或元组形式’
-                fieldsstr = ','.join(self.get_table_fields(tablename))
-                for rowdata in tabledata:
-                    rowdatastr = ','.join(rowdata)
-                    c.execute("INSERT INTO {tbn} ({fdstr}) VALUES ({rdtstr})".format(tbn=tablename,
-                                                                                     fdstr=fieldsstr,
-                                                                                     rdtstr=rowdatastr))
+                tempstr = ','.join('?' for i in tabledata[0])
+                # print(tempstr)
+                # 需要使用c.executemany()操作多个记录
+                c.executemany("INSERT INTO {} VALUES ({})".format(tablename, tempstr), tabledata)
                 add_success = True
                 self.conn.commit()
         return add_success
@@ -115,11 +116,9 @@ class DB(object):
                 add_success = False
             else:
                 # 增加数据行，注意字段和数据的格式：括号，‘字符串形式’而不是‘列表或元组形式’
-                fieldsstr = ','.join(self.get_table_fields(tablename))
-                rowdatastr = ','.join(rowdata)
-                c.execute("INSERT INTO {tbn} ({fdstr}) VALUES ({rdtstr})".format(tbn=tablename,
-                                                                                 fdstr=fieldsstr,
-                                                                                 rdtstr=rowdatastr))
+                # rowdatastr = ','.join(rowdata)
+                c.execute("INSERT INTO {tbn} VALUES ({rdtstr})".format(tbn=tablename,
+                                                                       rdtstr=rowdata))
                 add_success = True
                 self.conn.commit()
         return add_success
@@ -136,37 +135,43 @@ class DB(object):
 
 if __name__ == '__main__':
     # 链接已存在的db文件
-    file = DB()
-    file.get('示教文件demo.db')
-    file.get_tablesnames()
-    print("""get .sjf file:
-             path: {}
-             name: {}
-             cursor: {}
-             table list: {}""".format(file.path,
-                                      file.name,
-                                      file.cursor,
-                                      file.tablenames))
-    fields = file.get_table_fields('SJJT_PointInfo')
-    data = file.get_table_data('SJJT_PointInfo', 'ID, X, Y, Z')
-    data2 = file.execute('SELECT name FROM sqlite_master WHERE type=\'table\'')
-    print(fields)
-    print(data)
-    print(data2)
-    file.conn.close()
+    # file = DB()
+    # file.get('示教文件demo.db')
+    # file.get_tablesnames()
+    # print("""get .sjf file:
+    #          path: {}
+    #          name: {}
+    #          cursor: {}
+    #          table list: {}""".format(file.path,
+    #                                   file.name,
+    #                                   file.cursor,
+    #                                   file.tablenames))
+    # fields = file.get_table_fields('SJJT_PointInfo')
+    # data = file.get_table_data('SJJT_PointInfo', 'ID, X, Y, Z')
+    # data2 = file.execute('SELECT name FROM sqlite_master WHERE type=\'table\'')
+    # print(fields)
+    # print(data)
+    # print(data2)
+    # file.conn.close()
 
     print('*'*50 + '我是分割线' + '*'*50)
-    time.sleep(.2)
+    time.sleep(.5)
     # 创建并链接db文件
     os.remove('demo.db')
     db = DB()
     dbpath = 'demo.db'
     tbn = 'COMPANY'
-    tbfd =  """ID INT PRIMARY KEY     NOT NULL,
-               NAME           TEXT    NOT NULL,
-               AGE            INT     NOT NULL,
-               ADDRESS        CHAR(50),
-               SALARY         REAL"""
+    # tbfd =  """ID INT PRIMARY KEY     NOT NULL,
+    #            NAME           TEXT    NOT NULL,
+    #            AGE            INT     NOT NULL,
+    #            ADDRESS        CHAR(50),
+    #            SALARY         REAL"""
+    tbfd = """ID, NAME, AGE, ADDRESS, SALARY"""
+    tbfd = ('ID', 'NAME', 'AGE', 'ADDRESS', '你好')
+    rowdata = "1, 'Paul', 32, 'California', 20000.00"
+    rowdatas = [(2, 'Jack', 14, 'Beijing', 3002.44),
+                (3, 'Jack', 14, 'Beijing', 3002.44),
+                (4, 'Jack', 14, 'Beijing', 3002.44)]
     db.get(dbpath)
     if db.create_table(tbn, tbfd):
         time.sleep(1)
@@ -185,6 +190,8 @@ if __name__ == '__main__':
                                                tbn,
                                                fields))
 
-    # data = file.get_table_data(tbn, '')
+
+        db.add_records(tbn, rowdata)
+        db.add_data(tbn, rowdatas)
         db.conn.close()
 

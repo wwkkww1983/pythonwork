@@ -22,19 +22,23 @@ class XLS(object):
         self.currentsheet_data = None
 
     def get_xls(self, xlspath):
+        [workdir, name] = os.path.split(xlspath)
         book = xlrd.open_workbook(xlspath)
         if book:
             self.book = book
             self.filepath = xlspath
-            [self.workdir, self.name] = os.path.split(self.filepath)
+            self.workdir = workdir
+            self.name = name
+        return book
 
     def get_sheet_names(self):
-        shtnm = None
+        shtnms = None
         if self.filepath and self.book:
-            shtnm = self.book.sheet_names()
+            shtnms = self.book.sheet_names()
         else:
             print("can't find any sheets in this xls book")
-        self.sheetnames = shtnm
+        self.sheetnames = shtnms
+        return shtnms
 
     def get_read_sheet(self, sheetname):
         sheet = None
@@ -51,8 +55,7 @@ class XLS(object):
             for i in range(2, row_count-2):
                 rowdata = list(sheet.row_values(i))
                 for j in range(len(rowdata)):
-                    rowdata[j] = int(rowdata[j])
-                data.append(tuple(rowdata))
+                    data.append(tuple(rowdata))
             data = tuple(data)
         else:
             print("can't find any sheets in this xls book")
@@ -60,7 +63,7 @@ class XLS(object):
         self.currentsheet_name = name
         self.currentsheet_fields = fields
         self.currentsheet_fieldcount = col_count
-        self.currentsheet_records = row_count-3
+        self.currentsheet_records = row_count-2
         self.currentsheet_data = data
 
     def get_read_cell_data(self):
@@ -87,7 +90,7 @@ def add_to_xls(xls, tables):
 
 if __name__ == '__main__':
     xls = XLS()
-    xls.get_xls('示教文件demo.xls')
+    xls.get_xls('demo.xls')
     xls.get_sheet_names()
     print("""\
     xls.filepath: {0},
@@ -101,7 +104,7 @@ if __name__ == '__main__':
                                   xls.sheetnames))
 
     print("    ********************我是分割线********************")
-    xls.get_read_sheet('SJJT_PointInfo')
+    xls.get_read_sheet('COMPANY')
     print("""\
     sheet.name: {0}
     sheet.fields: {1}
