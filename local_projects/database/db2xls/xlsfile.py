@@ -44,6 +44,7 @@ class XLS(object):
         sheet = None
         name = ''
         fields = []
+        field_types = []
         data = []
         row_count = 0
         col_count = 0
@@ -52,14 +53,15 @@ class XLS(object):
             name = sheet.row_values(0)[0]
             [row_count, col_count] = sheet.nrows, sheet.ncols
             fields = tuple(sheet.row_values(1))
-            for i in range(2, row_count):
+            field_types = tuple(sheet.row_values(2))
+            for i in range(3, row_count):
                 rowdata = list(sheet.row_values(i))
-                for j in range(len(rowdata)):
-                    try:
-                        s = int(rowdata[j])
-                    except:
-                        s = rowdata[j]
-                    rowdata[j] = s
+                # for j in range(len(rowdata)):
+                #     try:
+                #         s = int(rowdata[j])
+                #     except:
+                #         s = rowdata[j]
+                #     rowdata[j] = s
                 data.append(rowdata)
             data = tuple(data)
         else:
@@ -67,8 +69,9 @@ class XLS(object):
         self.currentsheet = sheet
         self.currentsheet_name = name
         self.currentsheet_fields = fields
+        self.currentsheet_field_types = field_types
         self.currentsheet_fieldcount = col_count
-        self.currentsheet_records = row_count-2
+        self.currentsheet_records = row_count-3
         self.currentsheet_data = data
 
     def get_read_cell_data(self):
@@ -77,20 +80,22 @@ class XLS(object):
 
 def add_to_xls(xls, tables):
     """
-    将表格信息按照一定格式（表格名_str，字段_tuple，数据_tuple(tuple)）记录到指定xls文件当中
+    将表格信息按照一定格式（表格名_str，字段_tuple，字段数据类型_tuple, 数据_tuple(tuple)）记录到指定xls文件当中
     """
     table_name = tables[0]
     table_firstline = tables[1]
-    table_data = tables[2]
+    table_secondline = tables[2]
+    table_data = tables[3]
     # xls = xlwt.Workbook()
     sheet = xls.add_sheet(table_name)
     sheet.write(0, 0, table_name)
     for i in range(len(table_firstline)):
-        sheet.write(1, i, tables[1][i])
+        sheet.write(1, i, table_firstline[i])
+        sheet.write(2, i, table_secondline[i])
 
     for i in range(len(table_data)):
         for j in range(len(table_data[0])):
-            sheet.write(i + 2, j, table_data[i][j])
+            sheet.write(i + 3, j, table_data[i][j])
 
 
 if __name__ == '__main__':
@@ -113,6 +118,7 @@ if __name__ == '__main__':
     print("""\
     sheet.name: {0}
     sheet.fields: {1}
+    sheet.field_types: {6}: 
     sheet.records: {2}
     sheet.fieldcount: {3}
     sheet.data: {4}
@@ -121,5 +127,6 @@ if __name__ == '__main__':
                               xls.currentsheet_records,
                               xls.currentsheet_fieldcount,
                               xls.currentsheet_data,
-                              xls.currentsheet))
+                              xls.currentsheet,
+                              xls.currentsheet_field_types))
 

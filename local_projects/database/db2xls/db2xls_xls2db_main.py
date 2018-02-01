@@ -110,8 +110,10 @@ class Main(QWidget, Ui_Dialog):
         try:
             for tablename in tablenames:
                 tablefields = db.get_table_fields(tablename)
+                tablefield_types = db.get_table_field_types(tablename)
                 tabledata = db.get_table_data(tablename, '')
-                add_to_xls(xls, (tablename, tablefields, tabledata))
+                add_to_xls(xls, (tablename, tablefields, tablefield_types, tabledata))
+
             xls.save(self.save_xls_name)
             db.conn.commit()
             db.conn.close()
@@ -147,9 +149,12 @@ class Main(QWidget, Ui_Dialog):
             sheetdata: {}""".format(
                 xls.currentsheet_name, xls.currentsheet_fields, xls.currentsheet_data
             ))
-            # fields = xls.currentsheet_fields
-            if db.create_table(sheetname, xls.currentsheet_fields):
-                print(db.get_table_fields(sheetname))
+            fmt_fields = []
+            for i, j in zip(xls.currentsheet_fields, xls.currentsheet_field_types):
+                fmt_fields.append(' '.join([i, j]))
+            # fmt_fields = [' '.join([i, j] for i,j in zip(xls.currentsheet_fields[i], xls.currentsheet_field_types[j]))]
+            if db.create_table(sheetname, fmt_fields):
+                print(fmt_fields)
             if db.add_data(sheetname, xls.currentsheet_data):
                 print(db.get_table_data(sheetname, '*'))
         db.conn.commit()

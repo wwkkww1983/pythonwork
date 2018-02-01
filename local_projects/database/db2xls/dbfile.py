@@ -61,6 +61,15 @@ class DB(object):
             print('cursor not existed while getting table fields.')
         return tuple(table_fields)
 
+    def get_table_field_types(self, tablename):
+        table_field_types = []
+        if self.cursor:
+            for info in self.cursor.execute("PRAGMA table_info('{}')".format(tablename)):
+                table_field_types.append(info[2])
+        else:
+            print('cursor not existed while getting table fields.')
+        return tuple(table_field_types)
+
     def get_table_data(self, tablename, fields=''):
         tabledata = ()
         if self.cursor:
@@ -73,10 +82,10 @@ class DB(object):
                 print('table not found:', tablename)
         return tuple(tabledata)
 
-    def create_table(self, tablename, tablefields):
+    def create_table(self, tablename, fmt_tablefields):
         create_success = False
-        if type(tablefields) in(tuple, list):
-            tablefields = ','.join(tablefields)
+        if type(fmt_tablefields) in(tuple, list):
+            fmt_tablefields = ','.join(fmt_tablefields)
         if self.cursor:
             c = self.cursor
             if tablename in self.get_tablesnames():
@@ -84,8 +93,8 @@ class DB(object):
                 print('There has been a table named {} in this db file'.format(tablename))
                 create_success = False
             else:
-                print('test:', tablename, tablefields)
-                c.execute("CREATE TABLE {0} ({1})".format(tablename, tablefields))
+                print('test:', tablename, fmt_tablefields)
+                c.execute("CREATE TABLE {0} ({1})".format(tablename, fmt_tablefields))
                 create_success = True
                 self.conn.commit()
         return create_success
@@ -131,6 +140,7 @@ class DB(object):
                 self.conn.commit()
             except Exception as e:
                 print('the sql order is not corrected: "{}"'.format(sqltext))
+        self.conn.commit()
         return tuple(data)
 
 if __name__ == '__main__':
@@ -146,16 +156,18 @@ if __name__ == '__main__':
     #                                   file.name,
     #                                   file.cursor,
     #                                   file.tablenames))
-    # fields = file.get_table_fields('SJJT_PointInfo')
-    # data = file.get_table_data('SJJT_PointInfo', 'ID, X, Y, Z')
+    # fields = file.get_table_fields('SJJT_GlueInfo')
+    # field_types = file.get_table_field_types('SJJT_GlueInfo')
+    # data = file.get_table_data('SJJT_GlueInfo', '')
     # data2 = file.execute('SELECT name FROM sqlite_master WHERE type=\'table\'')
     # print(fields)
+    # print(field_types)
     # print(data)
     # print(data2)
     # file.conn.close()
 
     print('*'*50 + '我是分割线' + '*'*50)
-    time.sleep(.5)
+    # time.sleep(.5)
     # 创建并链接db文件
     os.remove('demo.db')
     db = DB()
@@ -166,17 +178,20 @@ if __name__ == '__main__':
     #            AGE            INT     NOT NULL,
     #            ADDRESS        CHAR(50),
     #            SALARY         REAL"""
-    tbfd = """ID, NAME, AGE, ADDRESS, SALARY"""
     tbfd = ('ID', 'NAME', 'AGE', 'ADDRESS', '你好')
+    fdtypes = ('INT', 'TEXT', 'INT', 'CHAR(50)', 'REAL')
+    # 优化：字段增加数据类型描述
+    fmt_fields = [' '.join([i, j]) for i, j in zip(tbfd, fdtypes)]
     rowdata = "1, 'Paul', 32, 'California', 20000.00"
     rowdatas = [(2, 'Jack', 14, 'Beijing', 3002.44),
                 (3, 'Jack', 14, 'Beijing', 3002.44),
                 (4, 'Jack', 14, 'Beijing', 3002.44)]
     db.get(dbpath)
-    if db.create_table(tbn, tbfd):
+    if db.create_table(tbn, fmt_fields):
         time.sleep(1)
         db.get_tablesnames()
         fields = db.get_table_fields(tbn)
+        fieldtypes = db.get_table_field_types(tbn)
         print("""get .db file:
                  path: {}
                  name: {}
@@ -185,10 +200,12 @@ if __name__ == '__main__':
                                       db.cursor,
                                       db.tablenames,))
         print("""about table:
-                 table names: {}
-                 table fields: {}:{}""".format(db.tablenames,
-                                               tbn,
-                                               fields))
+                 table names: {0}
+                 table fields: {1}:{2}
+                 table field types: {3}""".format(db.tablenames,
+                                                  tbn,
+                                                  fields,
+                                                  fieldtypes))
 
 
         db.add_records(tbn, rowdata)
