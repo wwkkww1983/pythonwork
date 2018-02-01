@@ -64,7 +64,10 @@ def create_db(dbpath, tablename, fieldstypes, rowdata, rowdatas):
     conn.close()
 
 if __name__ == '__main__':
-    os.remove('demo.db')
+    try:
+        os.remove('demo.db')
+    except Exception as e:
+        print(e)
     dbpath = 'demo.db'
     tbn = 'COMPANY'
     # tbfd = """ID INT PRIMARY KEY     NOT NULL,
@@ -84,8 +87,8 @@ if __name__ == '__main__':
     #            (4, 'SALARY', 'REAL', 0, None, 0))"""
     tbfd = """ID, NAME, AGE, ADDRESS, SALARY"""
     rowdata = "1, 'Paul', 32, 'California', 20000.00"
-    rowdatas = [(2, 'Jack', 14, 'Beijing', 3002.44),
-                (3, 'Jack', 14, 'Beijing', 3002.44),
-                (4, 'Jack', 14, 'Beijing', 3002.44)]
+    rowdatas = [(2, 'Apple', 14, 'Washington', 2500.02),
+                (3, 'GM', 65, 'New York', 3002.44),
+                (4, 'Ford', 37, 'Seattle', 1783.91)]
     create_db(dbpath, tbn, tbfd, rowdata, rowdatas)
 

@@ -79,14 +79,14 @@ class Main(QWidget, Ui_Dialog):
             print('fail to select xls file.')
 
     def set_save_dbfile(self):
-        initial_save_name = os.path.splitext(self.select_xls_name)[0] + '.sjf'
+        initial_save_name = os.path.splitext(self.select_xls_name)[0] + '.db'
         self.save_db_name = ''
         file_dialog = QFileDialog()
         save_path, save_type = \
             file_dialog.getSaveFileName(self,
                                         '导出',
                                         os.path.join(self.workpath, initial_save_name),
-                                        '示教文件(*.sjf);; Sqlite3数据文件(*.db)')
+                                        'Sqlite3数据文件(*.db);;示教文件(*.sjf) ')
         self.save_db_name = save_path
         if save_path:
             # print(save_path)
@@ -113,6 +113,7 @@ class Main(QWidget, Ui_Dialog):
                 tabledata = db.get_table_data(tablename, '')
                 add_to_xls(xls, (tablename, tablefields, tabledata))
             xls.save(self.save_xls_name)
+            db.conn.commit()
             db.conn.close()
             self.messagebox.information(self,
                                         '提示',
@@ -131,21 +132,29 @@ class Main(QWidget, Ui_Dialog):
         """
         xls = XLS()
         xls.get_xls(self.select_xls_name)
-        xlsname = xls.name
-        workdir = xls.workdir
-        dbname = os.path.splitext(xlsname)[0]+ '.sjf'
+        dbname = self.save_db_name
         # 创建空数据库文件
         db = DB()
         db.get(dbname)
 
         sheetnames = xls.get_sheet_names()
-        print(sheetnames)
+        print('get sheet names:',sheetnames)
         for sheetname in sheetnames:
             xls.get_read_sheet(sheetname)
-            fields = xls.currentsheet_fields
-            print(fields)
-            if db.create_table(sheetname, fields):
-                print(fields)
+            print("""\
+            get the sheet: {}
+            sheetfields: {}
+            sheetdata: {}""".format(
+                xls.currentsheet_name, xls.currentsheet_fields, xls.currentsheet_data
+            ))
+            # fields = xls.currentsheet_fields
+            if db.create_table(sheetname, xls.currentsheet_fields):
+                print(db.get_table_fields(sheetname))
+            if db.add_data(sheetname, xls.currentsheet_data):
+                print(db.get_table_data(sheetname, '*'))
+        db.conn.commit()
+        db.conn.close()
+
 
 
 

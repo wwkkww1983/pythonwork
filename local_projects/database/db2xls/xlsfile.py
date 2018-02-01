@@ -52,10 +52,15 @@ class XLS(object):
             name = sheet.row_values(0)[0]
             [row_count, col_count] = sheet.nrows, sheet.ncols
             fields = tuple(sheet.row_values(1))
-            for i in range(2, row_count-2):
+            for i in range(2, row_count):
                 rowdata = list(sheet.row_values(i))
                 for j in range(len(rowdata)):
-                    data.append(tuple(rowdata))
+                    try:
+                        s = int(rowdata[j])
+                    except:
+                        s = rowdata[j]
+                    rowdata[j] = s
+                data.append(rowdata)
             data = tuple(data)
         else:
             print("can't find any sheets in this xls book")
