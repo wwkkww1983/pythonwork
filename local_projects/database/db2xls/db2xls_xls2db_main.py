@@ -71,12 +71,14 @@ class Main(QWidget, Ui_Dialog):
             file_dialog.getOpenFileName(self, "打开Excel文件",
                                         self.workpath,
                                         "Excel文件 (*.xls);;All Files (*.*)")
+
         if select_path:
             # print(select_path)
             self.lineEdit_xlspath.setText(select_path)
             self.select_xls_name = self.lineEdit_xlspath.text()
         else:
             print('fail to select xls file.')
+
 
     def set_save_dbfile(self):
         initial_save_name = os.path.splitext(self.select_xls_name)[0] + '.db'
@@ -88,6 +90,7 @@ class Main(QWidget, Ui_Dialog):
                                         os.path.join(self.workpath, initial_save_name),
                                         'Sqlite3数据文件(*.db);;示教文件(*.sjf) ')
         self.save_db_name = save_path
+
         if save_path:
             # print(save_path)
             self.save_db()
@@ -97,11 +100,13 @@ class Main(QWidget, Ui_Dialog):
                                         'xls未保存',
                                         QMessageBox.Ok)
 
+
     def save_xls(self):
         """
         从UI获取.db文件名和欲保存.xls名，经过处理后保存.xls文件
         :return: 无返回
         """
+        self.pushButton_quit.setDisabled(True)
         db = DB()
         xls = xlwt.Workbook()
 
@@ -126,39 +131,57 @@ class Main(QWidget, Ui_Dialog):
                                         '提示',
                                         e,
                                         QMessageBox.Ok)
+        self.pushButton_quit.setDisabled(False)
 
     def save_db(self):
         """
         从UI获取.xls文件名和欲保存.db名，经过转换处理保存.db文件
         :return:
         """
+        self.pushButton_quit.setDisabled(True)
         xls = XLS()
         xls.get_xls(self.select_xls_name)
+
         dbname = self.save_db_name
+        if os.path.exists(dbname):
+            os.remove(dbname)
         # 创建空数据库文件
         db = DB()
         db.get(dbname)
 
         sheetnames = xls.get_sheet_names()
         print('get sheet names:',sheetnames)
-        for sheetname in sheetnames:
-            xls.get_read_sheet(sheetname)
-            print("""\
-            get the sheet: {}
-            sheetfields: {}
-            sheetdata: {}""".format(
-                xls.currentsheet_name, xls.currentsheet_fields, xls.currentsheet_data
-            ))
-            fmt_fields = []
-            for i, j in zip(xls.currentsheet_fields, xls.currentsheet_field_types):
-                fmt_fields.append(' '.join([i, j]))
-            # fmt_fields = [' '.join([i, j] for i,j in zip(xls.currentsheet_fields[i], xls.currentsheet_field_types[j]))]
-            if db.create_table(sheetname, fmt_fields):
-                print(fmt_fields)
-            if db.add_data(sheetname, xls.currentsheet_data):
-                print(db.get_table_data(sheetname, '*'))
+        try:
+            for sheetname in sheetnames:
+                xls.get_read_sheet(sheetname)
+                print("""\
+                get the sheet: {}
+                sheetfields: {}
+                sheetdata: {}""".format(
+                    xls.currentsheet_name, xls.currentsheet_fields, xls.currentsheet_data
+                ))
+                fmt_fields = []
+                for i, j in zip(xls.currentsheet_fields, xls.currentsheet_field_types):
+                    fmt_fields.append(' '.join([i, j]))
+                # fmt_fields = [' '.join([i, j] for i,j in zip(xls.currentsheet_fields[i], xls.currentsheet_field_types[j]))]
+                if db.create_table(sheetname, fmt_fields):
+                    print(fmt_fields)
+                if db.add_data(sheetname, xls.currentsheet_data):
+                    print(db.get_table_data(sheetname, '*'))
+            self.messagebox.information(self,
+                                        '提示',
+                                        '保存成功',
+                                        QMessageBox.Ok)
+            self.pushButton_quit.setDisabled(False)
+        except Exception as e:
+            self.messagebox.information(self,
+                                        '提示',
+                                        e,
+                                        QMessageBox.Ok)
+        self.pushButton_quit.setDisabled(False)
         db.conn.commit()
         db.conn.close()
+
 
 
 

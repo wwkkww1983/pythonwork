@@ -87,7 +87,7 @@ class Ui_Dialog(object):
         self.label_6.setText(_translate("Dialog", "EXCEL文件另存为"))
         self.lineEdit_6.setText(_translate("Dialog", "示教胶头动作点列表.xls"))
         self.pushButton_4.setText(_translate("Dialog", "另存为..."))
-        self.label_7.setText(_translate("Dialog", "V1.0 2018.1.30"))
+        self.label_7.setText(_translate("Dialog", "V1.1 2018.2.2"))
 
 
 if __name__ == "__main__":

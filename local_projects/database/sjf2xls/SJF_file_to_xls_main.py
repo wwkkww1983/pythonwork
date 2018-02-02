@@ -79,11 +79,11 @@ class Main(QWidget, Ui_Dialog):
         从UI获取.db文件名和欲保存.xls名，经过处理后保存.xls文件
         :return: 无返回
         """
-        point_array = sjf.func_get_sqlite_data('示教文件demo.db',
+        point_array = sjf.func_get_sqlite_data(self.db_file_name,
                                                'SJJT_GlueInfo',
                                                ['SortID', 'GlueName', 'XCompensation', 'YCompensation',
                                                 'ZCompensation'])
-        common_position = sjf.func_get_sqlite_data('示教文件demo.db',
+        common_position = sjf.func_get_sqlite_data(self.db_file_name,
                                                    'SJJT_PointInfo',
                                                    ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
         glue_io_position_data = sjf.func_get_glueio_positon(point_array[2], common_position[2])
