@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # -----------------------------------------------------------
@@ -15,10 +14,11 @@ log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
 # 申明（起始）地址类型
-COM_ADDRESS = {'Y0': 0x0180,
-               'X0': 0x0240,
-               'M0': 0x0000,
-               'M8000': 0x01C0,
+# _com:通信地址；_phy:物理地址
+COM_ADDRESS = {'Y0': 0x0C00,   # 物理地址
+               'X0': 0x1200,   # 物理地址
+               'M0': 0x0000,    # 物理地址
+               'M8000': 0x0E00,   # 物理地址
                'C0_B': 0x01E0,
                'T0_B': 0x0200,
                'S0': 0x0280,
@@ -31,8 +31,8 @@ COM_ADDRESS = {'Y0': 0x0180,
 # 申明功能码类型
 FUNC_CODE = {'read_words': 0xE00,
              'write_words': 0xE10,
-             'read_bit': 0xE8,
-             'write_bit': 0xE7,
+             'reset_bit': 0xE8,
+             'set_bit': 0xE7,
              'test': 0x05}
 
 class LxPlcCom(object):
@@ -64,10 +64,11 @@ class LxPlcCom(object):
         :return:
         """
         _type = _strt_add[0]
-        _id = int(_strt_add[1:])
+        _id_str = _strt_add[1:]
         strt_strt_add = None
         strt_addr_fmt = None
         if _type == 'd' or 'D':
+            _id = int(_id_str)
             if 0 <= int(_id) <= 7999:
                 strt_strt_add = COM_ADDRESS['D0']
             if 8000 <= int(_id) <= 8255:
@@ -75,6 +76,11 @@ class LxPlcCom(object):
                 _id -= 8000
             strt_add_str = '{:#06X}'.format(_id * 2 + strt_strt_add)
             strt_addr_fmt = [ord(letter) for letter in strt_add_str][2:]
+        if _type == 'y' or 'Y':
+            strt_strt_add = COM_ADDRESS['Y0']
+            strt_add_str = '{:#06X}'.format(int(_id_str, 8) + strt_strt_add)
+            fmt = [ord(letter) for letter in strt_add_str][2:]
+            strt_addr_fmt = [fmt[2], fmt[3], fmt[0], fmt[1]]
         return strt_addr_fmt
 
     def lengh_to_ascii(self, _len):
@@ -138,6 +144,18 @@ class LxPlcCom(object):
         check_bytes = self.checksum_to_ascii(func_bytes, startadd_bytes, lengh_bytes, data_bytes, self.etx_bytes)
         return self.stx_bytes + func_bytes + startadd_bytes + lengh_bytes + data_bytes + self.etx_bytes + check_bytes
 
+    def pack_write_bit(self, startadd, value):
+        func_bytes = ''
+        if value in (True, False, 1, 0):
+            if value:
+                func_bytes = self.func_code_to_ascii('set_bit')
+            else:
+                func_bytes = self.func_code_to_ascii('reset_bit')
+
+        startadd_bytes = self.strt_addr_to_ascii(startadd)
+        check_bytes = self.checksum_to_ascii(func_bytes, startadd_bytes, self.etx_bytes)
+        return self.stx_bytes + func_bytes + startadd_bytes + self.etx_bytes + check_bytes
+
     def unpack_read_return_bytes(self, bytes):
         datavalues = []
         databytes = []
@@ -178,12 +196,11 @@ if __name__ == '__main__':
     # print(s.data_value_to_ascii([0x1234, 0x5678, 0xffff]))
     # l = s.pack_read_words('d8000', 32)
     # print('read words: ', l, '\n', ' '.join([hex(i)[2:] for i in l]))
-    randoml = []
-    for i in range(32):
-        randoml.append(random.randint(-32768, 32767))
-    l = s.pack_write_words('d0', 32, randoml)
-    print(randoml, '\n', l, '\n', ' '.join([hex(i)[2:] for i in l]))
-    print(s.unpack_read_return_bytes([0x2] + l[6:-3] + [0x3] + s.checksum_to_ascii(l[6:-3]+[0x3])))
+    # randoml = []
+    # for i in range(32):
+    #     randoml.append(random.randint(-32768, 32767))
+    # l = s.pack_write_words('d0', 32, randoml)
+    # print(randoml, '\n', l, '\n', ' '.join([hex(i)[2:] for i in l]))
+    # print(s.unpack_read_return_bytes([0x2] + l[6:-3] + [0x3] + s.checksum_to_ascii(l[6:-3]+[0x3])))
+    print(s.pack_write_bit('Y1', 1))
 
-=======
->>>>>>> 184d0a29663d2ad08e595ea5ed57b92eee639abb

@@ -8,7 +8,7 @@ from crccheck.checksum import Checksum8
 from PyQt5.QtWidgets import QWidget
 
 
-def set_com(com_id, com_baudrate):
+def set_com(com_id, com_baudrate, com_bytesize, com_parity, com_stopbits):
     """
     :param com_id: 串口号
     :param com_baudrate: 串口波特率
@@ -16,7 +16,7 @@ def set_com(com_id, com_baudrate):
     """
     if com_id and com_baudrate:
         try:
-            com = serial.Serial(com_id, com_baudrate)
+            com = serial.Serial(com_id, com_baudrate, )
         except WindowsError as e:
             print('WindowsError: {0}'.format(e))
         else:
@@ -152,7 +152,7 @@ def load_port(this_port, relative=6000, word_len=1, data=None, read_or_write='re
     return operation
 
 if __name__ == '__main__':
-    port = set_com('com7', 9600)
+    port = set_com('com2', 115200, )
     if port:
         test = port_test(port)
         time.sleep(.3)

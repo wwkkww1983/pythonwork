@@ -8,12 +8,17 @@ import struct
 import binascii
 import time
 
-t = Serial('com3', 9600)
+t = Serial('com2')
+t.baudrate = 115200
+t.bytesize = 7
+t.stopbits = 1
+t.parity = 'E'
+
 print('''
-      com       = %s
+            com = %s
       baud_rate = %d
       data_size = %d
-      parity    = %s
+         parity = %s
       stop_bits = %d''' % (t.port, t.baudrate, t.bytesize, t.parity, t.stopbits))
 
 
@@ -24,7 +29,7 @@ def watch_com(read_size=4, write_data='ff', sleep_time=0.1):
         if i == 32767:
             i = 0
         time.sleep(sleep_time)
-        read_str_hex       = t.read(size=read_size)
+        read_str_hex = t.read(size=read_size)
         if read_str_hex:
             read_str = binascii.b2a_hex(read_str_hex)
             l = read_str[0:4]
@@ -33,8 +38,11 @@ def watch_com(read_size=4, write_data='ff', sleep_time=0.1):
             t.write(write_str_hex)
             print('%5d <-- %s \t(%s)' % (i, read_str, read_str_hex))
             print('%5d --> %s \t(%s)' % (i, write_str, write_str_hex))
-#           print(hex(l.decode('ascii')))
-watch_com()
 
-# class rw_serial(t,Serial):
-#
+if __name__ == '__main__':
+    print(t)
+    # t.write([0x02, 0x45, 0x37, 0x30, 0x38, 0x30, 0x43, 0x03, 0x35, 0x32])   # Y0 置1
+    t.write([2, 69, 55, 48, 49, 48, 67, 3, 53, 51])
+    t.write([2, 69, 56, 48, 56, 48, 67, 3, 53, 66])   # Y10 置1
+    time.sleep(1)
+    t.close()

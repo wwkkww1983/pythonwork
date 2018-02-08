@@ -65,7 +65,7 @@ class FxCommSerial(object):
             self.com.read(self, size=datalengh)
 
 if __name__ == '__main__':
-    com = FxCommSerial('com1')
-    com.reconfig(baud=115200, bytes=8, stops=1, parity='N', timeout=1)
+    com = FxCommSerial('com2')
+    com.reconfig(baud=115200, bytes=7, stops=1, parity='N', timeout=1)
     print(com.com, com.com.is_open)
     com.close()

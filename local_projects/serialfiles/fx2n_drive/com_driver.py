@@ -12,7 +12,7 @@ log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
 
-def set_com(com_id, com_baudrate):
+def set_com(com_id, com_baudrate=9600, com_bytesize=8, com_parity ='N', com_stopbits=1):
     """
     :param com_id: 串口号
     :param com_baudrate: 串口波特率
@@ -26,18 +26,19 @@ def set_com(com_id, com_baudrate):
             log.error('WindowsError:{}'.format(e))
         else:
             com.timeout = 0.3
-            com.bytesize = 7
-            com.parity = 'E'
-            com.stopbits = 1
-            com.xonxoff = None
+            com.bytesize = com_bytesize
+            com.parity = com_parity
+            com.stopbits = com_stopbits
+            com.xonxoff = False
 
-            log.info("串口设置成功 ---- "
-                     "串口:{0}, "
-                     "波特率:{1}bps, "
-                     "数据位:{2},"
-                     "校验:{3},"
-                     "停止位:{4},"
-                     "超时设置:{5}ms.".format(com.port, com.baudrate, com.bytesize,
+            log.info("""
+                     串口设置成功
+                     串口:{0},
+                     波特率:{1}bps,
+                     数据位:{2},
+                     校验:{3},
+                     停止位:{4},
+                     超时设置:{5}ms.""".format(com.port, com.baudrate, com.bytesize,
                                           com.parity, com.stopbits, com.timeout*1000))
     return com
 
@@ -115,14 +116,15 @@ def pack_bytes_list(_relative=6000, _word_len=1, _data=None, _read_or_write='rea
     else:
         data = b''
 
-    log.info("the follow parameter packed:"
-             "stx: {0}: "
-             "function code: {1}; "
-             "start address: {2}; "
-             "data lengh: {3};"
-             "write data: {4}; "
-             "etx: {5}; "
-             "check sum: {6}".format(stx, func_code, start_address, lengh, _data, etx, checksum))
+    log.info("""
+             the follow parameter packed:
+             stx: {0}:
+             function code: {1};
+             start address: {2};
+             data lengh: {3};
+             write data: {4};
+             etx: {5};
+             check sum: {6}""".format(stx, func_code, start_address, lengh, _data, etx, checksum))
 
     # 待发送字节串list
     if _read_or_write == 'read':
@@ -152,11 +154,12 @@ def port_doing(dig_port, bytes_list):
         for item in bytes_list:
             ready_bytes += item
 
-    log.info('send bytes were ready; {0},'
-             'response size will be {1} bytes'.format(ready_bytes, response_size))
+    log.info("""
+             send bytes were ready; {0},
+             response size will be {1} bytes""".format(ready_bytes, response_size))
     write_flag = 'fail'
     read_flag = 'fail'
-    timeout = None
+    timeout = False
     _response_bytes = b''
     if dig_port.is_open:
         for i in range(3):
@@ -175,9 +178,10 @@ def port_doing(dig_port, bytes_list):
                     if i == 2:
                         read_flag = 'fail'
                         timeout = True
-    log.info('port writing: {0},'
-             'port reading: {1},'
-             'response timeout: {2}'.format(write_flag, read_flag, timeout))
+    log.info("""
+             port writing: {0},
+             port reading: {1},
+             response timeout: {2}""".format(write_flag, read_flag, timeout))
     log.info('response data: {}'.format(_response_bytes))
     return {'flag': read_flag, 'read_bytes': _response_bytes}
 
@@ -191,7 +195,7 @@ def bytes_to_data(bytes, datatype):
 
 
 if __name__ == '__main__':
-    port = set_com('com1', 115200)
+    port = set_com('com2', com_baudrate=115200, com_bytesize=7, com_parity='E', com_stopbits=1)
     if port:
         test = port_test(port)
         time.sleep(.3)
