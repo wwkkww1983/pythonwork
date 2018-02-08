@@ -107,13 +107,14 @@ class DB(object):
                 print('No table named {} in this db file, adding data fail.'.format(tablename))
                 add_success = False
             else:
-                # 增加数据行，注意字段和数据的格式：括号，‘字符串形式’而不是‘列表或元组形式’
-                tempstr = ','.join('?' for i in tabledata[0])
-                # print(tempstr)
-                # 需要使用c.executemany()操作多个记录
-                c.executemany("INSERT INTO {} VALUES ({})".format(tablename, tempstr), tabledata)
-                add_success = True
-                self.conn.commit()
+                if tabledata:
+                    # 增加数据行，注意字段和数据的格式：括号，‘字符串形式’而不是‘列表或元组形式’
+                    tempstr = ','.join('?' for i in tabledata[0])
+                    # print(tempstr)
+                    # 需要使用c.executemany()操作多个记录
+                    c.executemany("INSERT INTO {} VALUES ({})".format(tablename, tempstr), tabledata)
+            add_success = True
+            self.conn.commit()
         return add_success
 
     def add_records(self, tablename, rowdata):
@@ -126,9 +127,10 @@ class DB(object):
             else:
                 # 增加数据行，注意字段和数据的格式：括号，‘字符串形式’而不是‘列表或元组形式’
                 # rowdatastr = ','.join(rowdata)
-                c.execute("INSERT INTO {tbn} VALUES ({rdtstr})".format(tbn=tablename,
-                                                                       rdtstr=rowdata))
-                add_success = True
+                if rowdata:
+                    c.execute("INSERT INTO {tbn} VALUES ({rdtstr})".format(tbn=tablename,
+                                                                           rdtstr=rowdata))
+                    add_success = True
                 self.conn.commit()
         return add_success
 

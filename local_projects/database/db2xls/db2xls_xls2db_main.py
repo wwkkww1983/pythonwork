@@ -153,6 +153,7 @@ class Main(QWidget, Ui_Dialog):
         print('get sheet names:',sheetnames)
         try:
             for sheetname in sheetnames:
+                # 遍历从Excel获取的表名、字段信息、表数据，创建对应DB数据表、添加数据
                 xls.get_read_sheet(sheetname)
                 print("""\
                 get the sheet: {}
@@ -162,12 +163,14 @@ class Main(QWidget, Ui_Dialog):
                 ))
                 fmt_fields = []
                 for i, j in zip(xls.currentsheet_fields, xls.currentsheet_field_types):
+                    # Excel表格中字段名和数据格式连接起来，作为SQL语句内容
                     fmt_fields.append(' '.join([i, j]))
-                # fmt_fields = [' '.join([i, j] for i,j in zip(xls.currentsheet_fields[i], xls.currentsheet_field_types[j]))]
-                if db.create_table(sheetname, fmt_fields):
-                    print(fmt_fields)
-                if db.add_data(sheetname, xls.currentsheet_data):
-                    print(db.get_table_data(sheetname, '*'))
+                if sheetname:
+                    db.create_table(sheetname, fmt_fields)
+                if xls.currentsheet_data:
+                    db.add_data(sheetname, xls.currentsheet_data)
+                else:
+                    print("No data in this sheet: {}".format(sheetname))
             self.messagebox.information(self,
                                         '提示',
                                         '保存成功',
@@ -181,10 +184,6 @@ class Main(QWidget, Ui_Dialog):
         self.pushButton_quit.setDisabled(False)
         db.conn.commit()
         db.conn.close()
-
-
-
-
 
 if __name__ == '__main__':
     import sys
