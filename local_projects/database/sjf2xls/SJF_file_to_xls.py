@@ -52,7 +52,7 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
         if temp_list == table_fields:
             print('查询字段：{}'.format(table_fields))
             print('数据：')
-            table_data = c.execute('SELECT {0} FROM {1} ORDER BY ID'.format(fields_str, table_name))
+            table_data = c.execute('SELECT {0} FROM {1}'.format(fields_str, table_name))
             table_data = tuple(table_data)
             for row in table_data:
                 # 获取指定数据表按指定字段顺序排列
@@ -61,7 +61,7 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
             return table_name, table_fields, table_data
 
 
-def func_get_glueio_positon(glues, point_arr):
+def func_get_glueio_positon(glues, pointseq, arraybase=None, arraycount=None):
     """
     胶头列表中有多少胶头、点列表中就有几组点列表对应
     点类型：
@@ -69,10 +69,16 @@ def func_get_glueio_positon(glues, point_arr):
         1,2,3: 折线起点、中间点、终点
         4,5,6: 圆弧起点、中间点、终点
         7,8,9: 整圆起点、中间点、终点
+    阵列加工方式：
+            1.阵列第二个位置基准点为：SJJT_ArrayInfo数据表第二行与第一行相对位置
+            2.加工顺序：蛇形；与SJJT_ArrayInfo点顺序不一致
     """
     table_name = '示教文件开关胶动作位置列表'
     # 获取点列表
-    point_data = point_arr
+    point_data = pointseq
+    arry_basepoints = arraybase
+    array_row_count = arraycount[0][1]
+    array_col_count = arraycount[0][0]
     table_fields = ('胶头',
                     '开关胶点ID',
                     '点类型',
@@ -156,19 +162,32 @@ def add_to_xls(xls, tables):
             sheet.write(i+2, j, table_data[i][j])
 
 if __name__ == '__main__':
-    point_array = func_get_sqlite_data('示教文件demo.db',
-                                       'SJJT_GlueInfo',
-                                       ['SortID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
-    common_position = func_get_sqlite_data('示教文件demo.db',
+    filepath = '阵列示教-15商标_001.sjf'
+    point_seq = func_get_sqlite_data(filepath,
+                                     'SJJT_GlueInfo',
+                                     ['SortID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
+    common_position = func_get_sqlite_data(filepath,
                                            'SJJT_PointInfo',
                                            ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
-    glue_io_position_data = func_get_glueio_positon(point_array[2], common_position[2])
+    arry_info = func_get_sqlite_data(filepath,
+                                     'SJJT_ArrayInfo',
+                                     ['ID', 'X', 'Y', 'Z'])
+    arry_format = func_get_sqlite_data(filepath,
+                                       'SJJT_FileInfo',
+                                       ['XDirectionNum', 'YDirectionNum'])
+    for i in [point_seq, common_position, arry_info, arry_format]:
+        # 打印需要使用的数据表、数据列
+        for row in i:
+            print(row)
+    glue_io_position_data = func_get_glueio_positon(point_seq[2], common_position[2], arry_info[2], arry_format[2])
+
     # print(glue_io_position_data[0])
-    for point in glue_io_position_data[2]:
-        print(point)
+    # for point in glue_io_position_data[2]:
+    #     # 打印获得的点列表
+    #     print(point)
 
     xls = xlwt.Workbook()
-    add_to_xls(xls, point_array)
+    add_to_xls(xls, point_seq)
     add_to_xls(xls, common_position)
     add_to_xls(xls, glue_io_position_data)
     xls.save('示教胶头动作点列表.xls')
