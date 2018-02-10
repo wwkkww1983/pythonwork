@@ -61,7 +61,86 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
             return table_name, table_fields, table_data
 
 
-def func_get_glueio_positon(glues, pointseq, arraybase=None, arraycount=None):
+def func_get_array_procesing_seq(array_table, array_ncol_nrow):
+    arry_basepoints = array_table
+    # 获取阵列行数、列数、阵列个数信息
+    array_nrow = array_ncol_nrow[0][0]
+    array_ncol = array_ncol_nrow[0][1]
+    array_num = len(arry_basepoints)
+    # print(array_nrow, array_ncol, array_num)
+    array_seq = list(range(array_num))
+    array_processing_seq = []
+    if array_num != int(array_nrow) * int(array_ncol):
+        print('Array counts error')
+    else:
+        # 获取加工顺序
+        for i in range(array_nrow):
+            temp = []
+            tindex = 0
+            for j in range(array_ncol):
+                if i % 2 == 0:
+                    tindex = i * array_ncol + j
+                if i % 2 == 1:
+                    tindex = i * array_ncol + (array_ncol - 1 - j)
+                temp.append(array_seq[tindex])
+            array_processing_seq.extend(temp)
+    # print(array_processing_seq)
+    # 返回值：(阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
+    return array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq
+
+
+def func_get_processing_seq(arraybases, arraycount, gluedata):
+    # 统计阵列和胶头列表，获取所有阵列、胶头的加工起始点
+    array_data = func_get_array_procesing_seq(arraybases, arraycount)
+    array_basepoints = array_data[3]
+    array_processing_seq = array_data[4]
+    # 胶头列表
+    glue_basepoints = gluedata
+    # 阵列胶头加工起始点列表
+    array_start_points = []
+    for item in array_processing_seq:
+        # 加工顺序依据是阵列加工序列，而不是阵列起始点列表
+        for array_basepoint in array_basepoints:
+            # 获取对应的阵列起始点
+            if item != array_basepoint[0] - 1:
+                # 非对象阵列起始点，则略过;否则按胶头顺序进行点加工
+                continue
+            else:
+                for glue in glue_basepoints:
+                    # 初始化
+                    array_id = array_basepoint[0]
+                    glue_id = glue[0]
+                    x_base_pos = 0
+                    y_base_pos = 0
+                    z_base_pos = 0
+
+                    if item == 0:
+                        # 找到对应阵列后，分两种情况处理：
+                        # 1.如果是第一个阵列，则将胶头基准点作为阵列基准点；
+                        # 2.如果不是第一个阵列，则将计算第二个阵列基准点与第一个阵列基准点的偏移再与胶头基准点相加，
+                        # 作为第二个基准点加工起始位
+                        x_base_pos = glue[2]
+                        y_base_pos = glue[3]
+                        z_base_pos = glue[4]
+                    if item != 0:
+                        x_base_pos = array_basepoint[1] - array_basepoints[0][1] + glue[2]
+                        y_base_pos = array_basepoint[2] - array_basepoints[0][2] + glue[3]
+                        z_base_pos = array_basepoint[3] - array_basepoints[0][3] + glue[4]
+                    # 基准点（起始点坐标）
+                    basepoint = (array_id,
+                                 glue_id,
+                                 0,
+                                 '基准点',
+                                 x_base_pos,
+                                 y_base_pos,
+                                 z_base_pos,
+                                 '--')
+                    array_start_points.append(basepoint)
+                    print(basepoint)
+    return tuple(array_start_points)
+
+
+def func_get_glueio_positon(glues, pointseq, arraybases=None, arraycount=None):
     """
     胶头列表中有多少胶头、点列表中就有几组点列表对应
     点类型：
@@ -76,10 +155,9 @@ def func_get_glueio_positon(glues, pointseq, arraybase=None, arraycount=None):
     table_name = '示教文件开关胶动作位置列表'
     # 获取点列表
     point_data = pointseq
-    arry_basepoints = arraybase
-    array_row_count = arraycount[0][1]
-    array_col_count = arraycount[0][0]
-    table_fields = ('胶头',
+    # 获取阵列信息（初始相对位置）
+    table_fields = ('阵列ID',
+                    '胶头',
                     '开关胶点ID',
                     '点类型',
                     'X位置',
@@ -90,23 +168,15 @@ def func_get_glueio_positon(glues, pointseq, arraybase=None, arraycount=None):
                 1: '折线起点', 2: '折线中间点', 3: '折线终点',
                 4: '圆弧起点',
                 5: '圆弧中间点', 6: '圆弧终点', 7: '整圆起点', 8: '整圆中间点', 9: '整圆终点'}
+
     glue_io_positions = []
-    for glue in glues:
-        # 根据胶头列表将点列表分割处理
-        # 获取胶头和胶头起始点
-        glue_id = glue[0]
-        x_base_pos = glue[2]
-        y_base_pos = glue[3]
-        z_base_pos = glue[4]
-        # 基准点（起始点坐标）
-        basepoint = (glue_id,
-                     0,
-                     '基准点',
-                     x_base_pos,
-                     y_base_pos,
-                     z_base_pos,
-                     '--')
-        # print(basepoint)
+    basepoint_table = func_get_processing_seq(arraybases, arraycount, glues)
+    for basepoint in basepoint_table:
+        array_id = basepoint[0]
+        glue_id = basepoint[1]
+        x_base_pos = basepoint[4]
+        y_base_pos = basepoint[5]
+        z_base_pos = basepoint[6]
         glue_io_positions.append(basepoint)
         for point in point_data:
             # 开关胶动作时机：
@@ -120,12 +190,12 @@ def func_get_glueio_positon(glues, pointseq, arraybase=None, arraycount=None):
                 x_pos = x_base_pos + point[3]
                 y_pos = y_base_pos + point[4]
                 z_pos = z_base_pos + point[5]
-
                 if point_type in ['孤立点', '折线起点', '圆弧起点', '整圆起点']:
                     glue_act = '开胶'
-                    glue_io_currentpos = (point_glueid,
+                    glue_io_currentpos = (array_id,
+                                          point_glueid,
                                           point_id,
-                                          str(point[2])+' '+point_type,
+                                          str(point[2]) + ' ' + point_type,
                                           x_pos,
                                           y_pos,
                                           z_pos,
@@ -133,9 +203,10 @@ def func_get_glueio_positon(glues, pointseq, arraybase=None, arraycount=None):
                     glue_io_positions.append(glue_io_currentpos)
                 if point_type in ['孤立点', '折线终点', '圆弧终点', '整圆终点']:
                     glue_act = '关胶'
-                    glue_io_currentpos = (point_glueid,
+                    glue_io_currentpos = (array_id,
+                                          point_glueid,
                                           point_id,
-                                          str(point[2])+' '+point_type,
+                                          str(point[2]) + ' ' + point_type,
                                           x_pos,
                                           y_pos,
                                           z_pos,
@@ -163,23 +234,23 @@ def add_to_xls(xls, tables):
 
 if __name__ == '__main__':
     filepath = '阵列示教-15商标_001.sjf'
-    point_seq = func_get_sqlite_data(filepath,
+    glue_info = func_get_sqlite_data(filepath,
                                      'SJJT_GlueInfo',
-                                     ['SortID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
-    common_position = func_get_sqlite_data(filepath,
-                                           'SJJT_PointInfo',
-                                           ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
+                                     ['ID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
+    point_info = func_get_sqlite_data(filepath,
+                                      'SJJT_PointInfo',
+                                      ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
     arry_info = func_get_sqlite_data(filepath,
                                      'SJJT_ArrayInfo',
                                      ['ID', 'X', 'Y', 'Z'])
     arry_format = func_get_sqlite_data(filepath,
                                        'SJJT_FileInfo',
                                        ['XDirectionNum', 'YDirectionNum'])
-    for i in [point_seq, common_position, arry_info, arry_format]:
-        # 打印需要使用的数据表、数据列
-        for row in i:
-            print(row)
-    glue_io_position_data = func_get_glueio_positon(point_seq[2], common_position[2], arry_info[2], arry_format[2])
+    # for i in [glue_info, point_info, arry_info, arry_format]:
+    #     # 打印需要使用的数据表、数据列
+    #     for row in i:
+    #         print(row)
+    glue_io_position_data = func_get_glueio_positon(glue_info[2], point_info[2], arry_info[2], arry_format[2])
 
     # print(glue_io_position_data[0])
     # for point in glue_io_position_data[2]:
@@ -187,7 +258,10 @@ if __name__ == '__main__':
     #     print(point)
 
     xls = xlwt.Workbook()
-    add_to_xls(xls, point_seq)
-    add_to_xls(xls, common_position)
+    add_to_xls(xls, glue_info)
+    add_to_xls(xls, point_info)
+    add_to_xls(xls, arry_info)
+    add_to_xls(xls, arry_format)
     add_to_xls(xls, glue_io_position_data)
-    xls.save('示教胶头动作点列表.xls')
+    xls.save('商标001示教胶头动作点列表.xls')
+    func_get_processing_seq(arry_info[2], arry_format[2], glue_info[2])
