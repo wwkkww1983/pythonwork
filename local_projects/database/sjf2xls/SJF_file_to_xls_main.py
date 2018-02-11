@@ -79,17 +79,24 @@ class Main(QWidget, Ui_Dialog):
         从UI获取.db文件名和欲保存.xls名，经过处理后保存.xls文件
         :return: 无返回
         """
-        point_array = sjf.func_get_sqlite_data(self.db_file_name,
-                                               'SJJT_GlueInfo',
-                                               ['SortID', 'GlueName', 'XCompensation', 'YCompensation',
-                                                'ZCompensation'])
-        common_position = sjf.func_get_sqlite_data(self.db_file_name,
-                                                   'SJJT_PointInfo',
-                                                   ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
-        glue_io_position_data = sjf.func_get_glueio_positon(point_array[2], common_position[2])
+        glue_info = sjf.func_get_sqlite_data(self.db_file_name,
+                                             'SJJT_GlueInfo',
+                                             ['ID', 'GlueName', 'XCompensation', 'YCompensation', 'ZCompensation'])
+        point_info = sjf.func_get_sqlite_data(self.db_file_name,
+                                              'SJJT_PointInfo',
+                                              ['ID', 'ElemIndex', 'ElemType', 'X', 'Y', 'Z', 'OpenGlueDelayTime'])
+        arry_info = sjf.func_get_sqlite_data(self.db_file_name,
+                                             'SJJT_ArrayInfo',
+                                             ['ID', 'X', 'Y', 'Z'])
+        arry_format = sjf.func_get_sqlite_data(self.db_file_name,
+                                               'SJJT_FileInfo',
+                                               ['XDirectionNum', 'YDirectionNum'])
+        glue_io_position_data = sjf.func_get_glueio_positon(glue_info[2], point_info[2], arry_info[2], arry_format[2])
         xls = xlwt.Workbook()
-        add_to_xls(xls, point_array)
-        add_to_xls(xls, common_position)
+        add_to_xls(xls, glue_info)
+        add_to_xls(xls, point_info)
+        add_to_xls(xls, arry_info)
+        add_to_xls(xls, arry_format)
         add_to_xls(xls, glue_io_position_data)
         xls.save(self.xls_file_name)
 

@@ -61,19 +61,50 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
             return table_name, table_fields, table_data
 
 
-def func_get_array_procesing_seq(array_table, array_ncol_nrow):
-    arry_basepoints = array_table
+# def func_get_array_procesing_seq(array_table, array_ncol_nrow):
+#     arry_basepoints = array_table
+#     # 获取阵列行数、列数、阵列个数信息
+#     array_nrow = array_ncol_nrow[0][0]
+#     array_ncol = array_ncol_nrow[0][1]
+#     array_num = len(arry_basepoints)
+#     # print(array_nrow, array_ncol, array_num)
+#     array_seq = list(range(array_num))
+#     array_processing_seq = []
+#     if array_num != int(array_nrow) * int(array_ncol):
+#         print('Array counts error')
+#     else:
+#         # 获取加工顺序
+#         for i in range(array_nrow):
+#             temp = []
+#             tindex = 0
+#             for j in range(array_ncol):
+#                 if i % 2 == 0:
+#                     tindex = i * array_ncol + j
+#                 if i % 2 == 1:
+#                     tindex = i * array_ncol + (array_ncol - 1 - j)
+#                 temp.append(array_seq[tindex])
+#             array_processing_seq.extend(temp)
+#     # print(array_processing_seq)
+#     # 返回值：(阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
+#     return array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq
+
+
+def func_get_processing_seq(gluedata, arraybases, arraycount):
+    # 统计阵列和胶头列表，获取所有阵列、胶头的加工起始点
+    # 胶头列表
+    glue_basepoints = gluedata
+    arry_basepoints = arraybases
     # 获取阵列行数、列数、阵列个数信息
-    array_nrow = array_ncol_nrow[0][0]
-    array_ncol = array_ncol_nrow[0][1]
+    array_nrow = arraycount[0][0]
+    array_ncol = arraycount[0][1]
     array_num = len(arry_basepoints)
-    # print(array_nrow, array_ncol, array_num)
+
+    # 计算阵列加工顺序
     array_seq = list(range(array_num))
     array_processing_seq = []
     if array_num != int(array_nrow) * int(array_ncol):
         print('Array counts error')
     else:
-        # 获取加工顺序
         for i in range(array_nrow):
             temp = []
             tindex = 0
@@ -85,17 +116,11 @@ def func_get_array_procesing_seq(array_table, array_ncol_nrow):
                 temp.append(array_seq[tindex])
             array_processing_seq.extend(temp)
     # print(array_processing_seq)
-    # 返回值：(阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
-    return array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq
-
-
-def func_get_processing_seq(arraybases, arraycount, gluedata):
-    # 统计阵列和胶头列表，获取所有阵列、胶头的加工起始点
-    array_data = func_get_array_procesing_seq(arraybases, arraycount)
+    # (阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
+    array_data = (array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq)
     array_basepoints = array_data[3]
     array_processing_seq = array_data[4]
-    # 胶头列表
-    glue_basepoints = gluedata
+
     # 阵列胶头加工起始点列表
     array_start_points = []
     for item in array_processing_seq:
@@ -170,7 +195,7 @@ def func_get_glueio_positon(glues, pointseq, arraybases=None, arraycount=None):
                 5: '圆弧中间点', 6: '圆弧终点', 7: '整圆起点', 8: '整圆中间点', 9: '整圆终点'}
 
     glue_io_positions = []
-    basepoint_table = func_get_processing_seq(arraybases, arraycount, glues)
+    basepoint_table = func_get_processing_seq(glues, arraybases, arraycount)
     for basepoint in basepoint_table:
         array_id = basepoint[0]
         glue_id = basepoint[1]
@@ -252,7 +277,6 @@ if __name__ == '__main__':
     #         print(row)
     glue_io_position_data = func_get_glueio_positon(glue_info[2], point_info[2], arry_info[2], arry_format[2])
 
-    # print(glue_io_position_data[0])
     # for point in glue_io_position_data[2]:
     #     # 打印获得的点列表
     #     print(point)
@@ -264,4 +288,4 @@ if __name__ == '__main__':
     add_to_xls(xls, arry_format)
     add_to_xls(xls, glue_io_position_data)
     xls.save('商标001示教胶头动作点列表.xls')
-    func_get_processing_seq(arry_info[2], arry_format[2], glue_info[2])
+    # func_get_processing_seq(glue_info[2], arry_info[2], arry_format[2])
