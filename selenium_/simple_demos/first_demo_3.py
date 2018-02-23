@@ -15,7 +15,7 @@ if __name__ == "__main__":
     test_result = False
 
     ie_webdriver_server_path = \
-        r"C:\\Users\\fan\OneDrive\pythonwork\selenium_\selenium_drivers\IEDriverServer.exe"
+        r"C:\Python34\IEDriverServer.exe"
 
     driver = webdriver.Ie(ie_webdriver_server_path)
     driver.get("http://www.baidu.com")

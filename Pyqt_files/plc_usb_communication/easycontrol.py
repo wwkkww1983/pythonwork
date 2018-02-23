@@ -36,22 +36,25 @@ def close_port(port):
 
 if __name__ == '__main__':
     t = get_port(p_name='com2',
-                 p_baud=115200,
+                 p_baud=9600,
                  p_bysz=7,
                  p_stpb=1,
                  p_prt='E')
-    print(t)
-    for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
-        for v in [0, 0, 1, 0, 1, 0, 0]:
-            write(t, y, v)
-            time.sleep(.1)
-    time.sleep(1)
-    for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
-        write(t, y, 1)
-        time.sleep(.1)
-
-    time.sleep(1)
-    for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
-        write(t, y, 0)
-        time.sleep(.1)
+    # print(t)
+    # for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
+    #     for v in [0, 0, 1, 0, 1, 0, 0]:
+    #         write(t, y, v)
+    #         time.sleep(.1)
+    # time.sleep(1)
+    # for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
+    #     write(t, y, 1)
+    #     time.sleep(.1)
+    #
+    # time.sleep(1)
+    # for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
+    #     write(t, y, 0)
+    #     time.sleep(.1)
+    time.sleep(0.2)
+    write(t, 'Y0', 1)
+    time.sleep(0.2)
     t.close()

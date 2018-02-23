@@ -73,7 +73,7 @@ class DoSomething(object):
 
 
 if __name__ == '__main__':
-    path = r'C:\Users\fan\OneDrive\pythonwork\selenium_\selenium_drivers\IEDriverServer.exe'
+    path = r'C:\Python34\IEDriverServer.exe'
     url = 'www.baidu.com'
     do_baidu = DoSomething()
     do_baidu.setup(path, url)

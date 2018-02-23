@@ -44,6 +44,6 @@ def make_filelist(proj):
     print(filelist)
 if __name__ == "__main__":
     # project = open_project(r"http://192.168.22.61/")
-    project = open_project(r"http://ba701baf276e1a69cfbf078e3c84e6f9.hmi.we-con.com.cn:9999/")
+    project = open_project(r"http://35702dcc66ee7e0132ee71c7b21e256f.hmi.we-con.com.cn:9999/")
     time.sleep(3)
     make_filelist(project)
