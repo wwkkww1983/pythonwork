@@ -44,17 +44,28 @@ if __name__ == '__main__':
     # for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
     #     for v in [0, 0, 1, 0, 1, 0, 0]:
     #         write(t, y, v)
-    #         time.sleep(.1)
-    # time.sleep(1)
-    # for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
-    #     write(t, y, 1)
-    #     time.sleep(.1)
-    #
-    # time.sleep(1)
-    # for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
-    #     write(t, y, 0)
-    #     time.sleep(.1)
-    time.sleep(0.2)
-    write(t, 'Y0', 1)
-    time.sleep(0.2)
+    #         time.sleep(1)
+
+    while True:
+        time.sleep(1)
+        for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
+            write(t, y, 1)
+            time.sleep(1)
+
+        time.sleep(1)
+        for y in ['Y0', 'Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7']:
+            write(t, y, 0)
+            time.sleep(1)
+    # # 命令行方式进行自定义输入
+    #     time.sleep(0.2)
+    #     s = input('以“Ym, X”的方式输入Y点ID和相应的值并按回车，注意逗号分割, 输入quit结束：')
+    #     if s == 'quit':
+    #         break
+    #     else:
+    #         try:
+    #             Y, value = s.split(',')
+    #             write(t, Y, int(value))
+    #             time.sleep(0.2)
+    #         except Exception as e:
+    #             print('写入出错，请重新输入：')
     t.close()
