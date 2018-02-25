@@ -17,19 +17,28 @@ import logging as log
 log.basicConfig(filename=os.path.join(os.getcwd(), 'log.txt'),
                 level=log.INFO,
                 format='%(asctime)s %(levelname)s: %(message)s')
-# log.info('hmi checking format: [hmi name] [alive] [date str] [time str] [info]')
 
 
 def open_browser():
     browser = webdriver.Firefox()
-    browser.set_window_size(400, 300)
+    # browser.set_window_size(400, 300)
     return browser
 
 
 def open_project(brsr, httppath):
     """打开工程网页"""
     try:
-        brsr.get(httppath)
+        for i in range(10):
+            brsr.get(httppath)
+            try:
+                text = brsr.find_element_by_xpath("/html/body/pre")
+                if 'not found' not in text.text:
+                    break
+                else:
+                   pass
+            except:
+                break
+            time.sleep(1)
     except Exception as e:
         log.error('open remote hmi webpage fail: {}'.format(httppath))
         print(e)
@@ -45,12 +54,13 @@ def check_hmi(proj):
     elem = None
     if not proj:
         check_info = '打开连接失败'
-        log.info(check_info, proj)
+        log.info(check_info)
+        print(proj)
         # 无法获取目标页面
         return hmi_alive, hmi_date, hmi_time, check_info
     else:
         try:
-            elem = WebDriverWait(proj, 20).until(
+            elem = WebDriverWait(proj, 5).until(
                 expected_conditions.presence_of_element_located((By.XPATH, "/html/body/div")))
             if not elem:
                 pass
@@ -86,24 +96,25 @@ def check_hmi(proj):
                 except Exception as e:
                     # 查找第一个div元素失败 = HMI未在线
                     check_info = '查找date/time部件失败'
-                    log.info(check_info)
+                    # log.info(check_info)
                     print(e)
         except Exception as e:
             # 无法获得对应HMI的网页，退出当前连接
             check_info = '查找网页div元素失败， 连接失败'
             print(e)
-            log.error(check_info)
+            # log.error(check_info)
             return hmi_alive, hmi_date, hmi_time, check_info
     return hmi_alive, hmi_date, hmi_time, check_info
 
 if __name__ == "__main__":
-    # project = open_project(r"http://192.168.22.61/")
+    log.info('hmi checking format: [hmi name] [alive] [date str] [time str] [info]')
     hmiurl = r"http://d3bbfa1084f1a5eb107baf22a622a32e.hmi.we-con.com.cn:9999/"
     hmitempname = hmiurl[-28:-24]
     browser = open_browser()
     project = open_project(browser, hmiurl)
     time.sleep(3)
     hmialive, hmidate, hmitime, checkinfo = check_hmi(project)
+    log.info('[{}], [{}], [{}], [{}], [{}]'.format(hmitempname, hmialive, hmidate, hmitime, checkinfo))
     time.sleep(1)
     try:
         project.quit()
