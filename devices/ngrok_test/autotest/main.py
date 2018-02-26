@@ -73,7 +73,7 @@ def get_each_hmi_status(browser, hmiurls):
         hmi = open_project(browser, url)
         time.sleep(1)
         hmialive, hmidate, hmitime, checkinfo = check_hmi(hmi)
-        log.info((hmitempname, hmialive, hmidate, hmitime, checkinfo))
+        log.info('[{}], [{}], [{}], [{}], [{}]'.format(hmitempname, hmialive, hmidate, hmitime, checkinfo))
 
 
 def set_device_power(port, powercodes):
@@ -91,13 +91,29 @@ def set_device_power(port, powercodes):
     :param pcode: powered code
     :return: True
     """
-    port.open()
+    open_port(port)
     # # 打乱顺序：避免总是相同的设备切换顺序。问题：有时会造前一次的最后一个供电代码与后一次的第一个供电代码相同，设备不会实现切换
     # shuffle(powercodes)
 
     for y, value in zip(('y0', 'y1', 'y2', 'y3', 'y4', 'y5', 'y6', 'y7'), tuple(powercodes)):
         switch(port, y, int(value))
         time.sleep(.1)
+    time.sleep(.5)
+    close_port(port)
+
+
+def main_no_plc():
+    urls = get_hmiurls('ngrok测试用例设备信息.xls')
+    log.info('checking remote hmi status')
+    # 开始测试
+    browser = open_browser()
+    t = threading.Thread(target=get_each_hmi_status, args=(browser, urls))
+    t.setDaemon(True)
+    time.sleep(20)
+    t.start()
+    t.join()
+    browser.quit()
+    log.info('checking finished')
 
 
 def main():
@@ -112,27 +128,44 @@ def main():
     urls = get_hmiurls('ngrok测试用例设备信息.xls')
     log.info('checking remote hmi status')
     # 开始测试
-    open_port(p)
     times = 0
+    browser = open_browser()
+    time.sleep(3)
     while True:
-        browser = open_browser()
-        time.sleep(3)
         # 使前两种方式交替，实现三台设备两两切换12，23，31，32，21，13
         temp = powercodes[0]
         powercodes[0] = powercodes[1]
         powercodes[1] = temp
-        t = threading.Thread(target=get_each_hmi_status, args=(browser, urls))
-        t.setDaemon(True)
         for powcode in powercodes:
             times += 1
             log.info('当前测试供电代码：'+powcode + ' 总切换次数：' + str(times))
             set_device_power(p, powcode)
-            time.sleep(20)
+            time.sleep(60)
+            t = threading.Thread(target=get_each_hmi_status, args=(browser, urls))
+            t.setDaemon(True)
             t.start()
             t.join()
-        browser.quit()
-        log.info('checking finished')
+        # browser.quit()
+        log.info('powercode {} checking finished'.format(powercodes))
 
 
 if __name__ == '__main__':
     main()
+    # main_no_plc()
+    """
+    powercodes = ['11110000', '11101000', '11100100']
+    p = get_port(p_name='com2',
+                 p_baud=9600,
+                 p_bysz=7,
+                 p_stpb=1,
+                 p_prt='E')
+    close_port(p)
+    times = 0
+    for powcode in powercodes:
+        times += 1
+        log.info('当前测试供电代码：' + powcode + ' 总切换次数：' + str(times))
+        set_device_power(p, powcode)
+        print(powcode)
+        time.sleep(20)"""
+
+

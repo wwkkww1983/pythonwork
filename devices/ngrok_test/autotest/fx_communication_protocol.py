@@ -9,7 +9,6 @@
 # -----------------------------------------------------------
 import logging as log
 from crccheck.checksum import Checksum8
-import random
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
