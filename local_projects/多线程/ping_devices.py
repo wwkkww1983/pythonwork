@@ -130,13 +130,13 @@ if __name__ == "__main__":
     # app = QApplication(sys.argv)
     # ex = Ui('Ping IP')
     # print('start time {}'.format(time.ctime()))
-    ip_prefix = '192.168.22'
+    ip_prefix = '192.168.35'
     find_ips(ip_prefix)
     # print('end time {}'.format(time.ctime()))
-    time.sleep(20)
+    time.sleep(2)
     print('检测到有效ip数：{0}, ips = {1}'.format(len(ip_addresses), ip_addresses))
     check_ips(ip_addresses)
-    time.sleep(200)
+    time.sleep(20)
     print(ping_result_data, ping_result_time)
     # sys.exit(app.exec_())
 

@@ -28,8 +28,9 @@ def open_browser():
 def open_project(brsr, httppath):
     """打开工程网页"""
     try:
-        for i in range(10):
+        for i in range(5):
             brsr.get(httppath)
+            time.sleep(2)
             try:
                 text = brsr.find_element_by_xpath("/html/body/pre")
                 if 'not found' not in text.text:
@@ -38,7 +39,6 @@ def open_project(brsr, httppath):
                    pass
             except:
                 break
-            time.sleep(1)
     except Exception as e:
         log.error('open remote hmi webpage fail: {}'.format(httppath))
         print(e)
@@ -48,12 +48,12 @@ def open_project(brsr, httppath):
 
 def check_hmi(proj):
     hmi_alive = False
-    hmi_date = 'None'
-    hmi_time = 'None'
+    hmi_date = '-'
+    hmi_time = '-'
     check_info = '-'
     elem = None
     if not proj:
-        check_info = '打开连接失败'
+        check_info = 'fail to open the url'
         log.info(check_info)
         print(proj)
         # 无法获取目标页面
@@ -95,12 +95,12 @@ def check_hmi(proj):
                             # print(i, span_ids[i], span_texts[i])
                 except Exception as e:
                     # 查找第一个div元素失败 = HMI未在线
-                    check_info = '查找date/time部件失败'
+                    check_info = 'fail to check out date/time part'
                     # log.info(check_info)
                     print(e)
         except Exception as e:
             # 无法获得对应HMI的网页，退出当前连接
-            check_info = '查找网页div元素失败， 连接失败'
+            check_info = 'fail to check out element id= div, fail to link'
             print(e)
             # log.error(check_info)
             return hmi_alive, hmi_date, hmi_time, check_info
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     time.sleep(1)
     try:
         project.quit()
-        log.info('浏览器已关闭')
+        log.info('browser closed safely.')
     except:
-        log.error('浏览器异常关闭')
+        log.error('broser closed ERROR.')
 
