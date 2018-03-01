@@ -202,34 +202,39 @@ def set_device_power(prt, pwcd):
     time.sleep(.5)
     close_port(prt)
 
+
 def main_no_plc():
     # 初始化
-    log.info('hmi checking format: [device] [hmi name] [alive] [date str] [time str] [info]')
-    powercodes = ['11110000', '11101000', '11100100']
-    code_device_map = {'11110000': 'switch0', '11101000': 'g4router0', '11100100': 'router0'}
-    p = get_port(p_name='com2',
-                 p_baud=9600,
-                 p_bysz=7,
-                 p_stpb=1,
-                 p_prt='E')
-    close_port(p)
+    # 关闭PLC控制电源，4G路由器持续生效
+    # p = get_port(p_name='com2',
+    #              p_baud=9600,
+    #              p_bysz=7,
+    #              p_stpb=1,
+    #              p_prt='E')
+    # close_port(p)
     # 设置HMI监控类型：
     # 远程访问地址
-    urls = get_hmiurls('ngrok测试用例设备信息.xls')
+    url_xls = 'ngrok测试用例设备信息.xls'
+    urls = get_hmiurls(url_xls)
     """
-    # 局域网方位地址
+    # 局域网访问地址
     # urls = ['192.168.35.223', '192.168.35.224', ]
     # for i in range(len(urls)):
     #     urls[i] = 'http://' + urls[i]
     """
     report_path = 'Ngrok问题测试报告.xls'
     rept_xls, rept_sht, dt_ar = create_report(report_path, urls)
-    log.info('checking remote hmi status')
 
+    log.info('hmi urls from:'+url_xls)
+    log.info('report file:'+report_path)
+    log.info('record format: [device] [hmi name] [alive] [date str] [time str] [info]')
+    log.info('start checking remote hmi status')
     # 开始测试
     times = 0
     browser = open_browser()
     time.sleep(3)
+    powercodes = ['11110000', '11101000', '11100100']
+    code_device_map = {'11110000': 'switch0', '11101000': 'g4router0', '11100100': 'router0'}
     while True:
         # 使前两种方式交替，实现三台设备两两切换12，23，31，32，21，13
         # temp = powercodes[0]
