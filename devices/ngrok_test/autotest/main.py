@@ -224,7 +224,6 @@ def main_no_plc():
     """
     report_path = 'Ngrok问题测试报告.xls'
     rept_xls, rept_sht, dt_ar = create_report(report_path, urls)
-
     log.info('hmi urls from:'+url_xls)
     log.info('report file:'+report_path)
     log.info('record format: [device] [hmi name] [alive] [date str] [time str] [info]')
@@ -251,15 +250,13 @@ def main_no_plc():
             t.start()
             t.join()
         rept_xls.save(report_path)
-        time.sleep(5)
+        time.sleep(1)
         log.info('powercode {} checking finished'.format(powercodes))
 
 
-def main():
+def main_4g_onoff():
     # 初始化
-    log.info('hmi checking format: [device] [hmi name] [alive] [date str] [time str] [info]')
-    powercodes = ['11110000', '11101000', '11100100']
-    code_device_map = {'11110000': 'switch0', '11101000': 'g4router0', '11100100': 'router0'}
+    # PLC控制电源，4G路由器重启
     p = get_port(p_name='com2',
                  p_baud=9600,
                  p_bysz=7,
@@ -268,58 +265,45 @@ def main():
     close_port(p)
     # 设置HMI监控类型：
     # 远程访问地址
-    urls = get_hmiurls('ngrok测试用例设备信息.xls')
+    url_xls = 'ngrok测试用例设备信息.xls'
+    urls = get_hmiurls(url_xls)
     """
     # 局域网访问地址
     # urls = ['192.168.35.223', '192.168.35.224', ]
     # for i in range(len(urls)):
     #     urls[i] = 'http://' + urls[i]
     """
-    report_path = 'ngrok测试用例设备信息.xls'
+    report_path = 'Ngrok问题测试报告.xls'
     rept_xls, rept_sht, dt_ar = create_report(report_path, urls)
-    log.info('checking remote hmi status')
-
+    log.info('hmi urls from:'+url_xls)
+    log.info('report file:'+report_path)
+    log.info('record format: [device] [hmi name] [alive] [date str] [time str] [info]')
+    log.info('start checking remote hmi status')
     # 开始测试
     times = 0
     browser = open_browser()
     time.sleep(3)
+    powercodes = ['11101000']
+    code_device_map = {'11110000': 'switch0', '11101000': 'g4router0', '11100100': 'router0'}
     while True:
-        # 使前两种方式交替，实现三台设备两两切换12，23，31，32，21，13
-        temp = powercodes[0]
-        powercodes[0] = powercodes[1]
-        powercodes[1] = temp
         for powcode in powercodes:
             times += 1
             log.info('current powercode:{}, net swtich times:{}'.format(powcode, times))
+            set_device_power(p, '11100000')
+            time.sleep(30)
             set_device_power(p, powcode)
-            time.sleep(60)
-            t = threading.Thread(target=get_each_hmi_status, args=(browser, urls, code_device_map[powcode]))
+            time.sleep(90)
+            t = threading.Thread(target=get_each_hmi_status,
+                                 args=(browser, urls, code_device_map[powcode], rept_sht, dt_ar))
             t.setDaemon(True)
             t.start()
             t.join()
         rept_xls.save(report_path)
+        time.sleep(1)
         log.info('powercode {} checking finished'.format(powercodes))
 
 
 if __name__ == '__main__':
     # data_report()
-    # main()
-    main_no_plc()
-    # create_report('ngrok测试用例设备信息.xls')[0].save('Ngrok问题测试报告.xls')
-    """
-    powercodes = ['11110000', '11101000', '11100100']
-    p = get_port(p_name='com2',
-                 p_baud=9600,
-                 p_bysz=7,
-                 p_stpb=1,
-                 p_prt='E')
-    close_port(p)
-    times = 0
-    for powcode in powercodes:
-        times += 1
-        log.info('当前测试供电代码：' + powcode + ' 总切换次数：' + str(times))
-        set_device_power(p, powcode)
-        print(powcode)
-        time.sleep(20)"""
-
-
+    main_4g_onoff()
+    # main_no_plc()
