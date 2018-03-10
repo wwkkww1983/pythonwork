@@ -26,7 +26,7 @@ def getwindow(app, window_title=r'Wecon PLC Editor'):
         mwindow.print_control_identifiers()
     else:
         pass
-    return 'return {1} while trying to find window or dialog: "{1}" '.format(result, window_title)
+    return 'return {0} while trying to find window or dialog: "{1}" '.format(result, window_title)
 
 
 def modifydata():
