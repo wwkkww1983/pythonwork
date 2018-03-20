@@ -19,65 +19,27 @@ class SignUp(QWidget, Ui_dialog_sign):
         self.setMaximumSize(400, 300)
         self.setMinimumSize(400, 300)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
-        palette = QPalette()
-        picture = QPixmap('background.jpg')
-        palette.setBrush(self.backgroundRole(), QBrush(picture))
-        self.setPalette(palette)
-        self.pushButton_cancel.setPalette(palette)
+        self.setWindowTitle('用户登录')
+        # palette = QPalette()
+        # picture = QPixmap('background.jpg')
+        # palette.setBrush(self.backgroundRole(), QBrush(picture))
+        # self.setPalette(palette)
         self.pushButton_cancel.clicked.connect(self.cancel)
-        self.pushButton_sign.setPalette(palette)
         self.pushButton_sign.clicked.connect(self.start_sign)
         self.messagebox = QMessageBox()
         self.name = ''
         self.pswd = ''
 
-    # def name_null_err(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '用户名为空，注册失败。',
-    #                                 QMessageBox.Ok)
-
-    # def pswd_null_err(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '密码为空，注册失败。',
-    #                                 QMessageBox.Ok)
-    #
-    # def name_len_err(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '用户名长度错误，注册失败。',
-    #                                 QMessageBox.Ok)
-    #
-    # def pswd_len_err(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '密码长度错误，注册失败。',
-    #                                 QMessageBox.Ok)
-    #
-    # def name_char_err(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '用户名包含不支持的字符，注册失败。',
-    #                                 QMessageBox.Ok)
-    #
-    # def pswd_char_err(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '密码包含不支持的字符，注册失败。',
-    #                                 QMessageBox.Ok)
-    #
-    # def sign_success(self):
-    #     self.messagebox.information(self,
-    #                                 '提示',
-    #                                 '注册成功！',
-    #                                 QMessageBox.Ok)
-
     def get_sign_result(self, word):
-        if word == '注册成功！':
+        """
+        获取登录结果，弹出消息提示框
+        :param word: 
+        :return: 
+        """
+        if word == '登录成功！':
             info = word
         else:
-            info = word + '，注册失败！'
+            info = word + '，登录失败！'
         self.messagebox.information(self,
                                     '提示',
                                     info,
@@ -133,7 +95,7 @@ class SignUp(QWidget, Ui_dialog_sign):
         elif not self.check_pswd():
             self.keyword = '密码包含不支持的字符'
         else:
-            self.keyword = '注册成功！'
+            self.keyword = '登录成功！'
 
         self.get_sign_result(self.keyword)
 
