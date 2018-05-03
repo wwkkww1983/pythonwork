@@ -82,7 +82,7 @@ if __name__ == '__main__':
     file.get_tablesnames()
     fields = file.get_table_fields('SJJT_PointInfo')
     data = file.get_table_data('SJJT_PointInfo', 'ID, X, Y, Z')
-    data2 = file.execute('SELECT name FROM sqlite_master WHERE type=\'table\'')
+    data2 = file.execrute('SELECT name FROM sqlite_master WHERE type=\'table\'')
     print("""get .sjf file:
              path: {}
              name: {}
