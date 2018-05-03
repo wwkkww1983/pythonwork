@@ -29,6 +29,9 @@ def main():
     combobox.addItem('A')
     combobox.addItem('B')
 
+    lineEdit = QtWidgets.QLineEdit(window)
+    lineEdit.setText()
+
     def show_time():
         label.setText(change())
 

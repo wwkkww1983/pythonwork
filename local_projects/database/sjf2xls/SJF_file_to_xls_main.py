@@ -109,5 +109,4 @@ if __name__ == '__main__':
     # 点击保存按钮则在目录下生成.xls文件
     win.pushButton_3.clicked.connect(win.set_read_dbfile)
     win.pushButton_4.clicked.connect(win.set_save_xlsfile)
-    win.pushButton_save_xls.clicked.connect(win.)
     sys.exit(app.exec_())

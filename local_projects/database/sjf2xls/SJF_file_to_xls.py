@@ -61,107 +61,101 @@ def func_get_sqlite_data(db_path, table_name, table_fields):
             return table_name, table_fields, table_data
 
 
-# def func_get_array_procesing_seq(array_table, array_ncol_nrow):
-#     arry_basepoints = array_table
-#     # 获取阵列行数、列数、阵列个数信息
-#     array_nrow = array_ncol_nrow[0][0]
-#     array_ncol = array_ncol_nrow[0][1]
-#     array_num = len(arry_basepoints)
-#     # print(array_nrow, array_ncol, array_num)
-#     array_seq = list(range(array_num))
-#     array_processing_seq = []
-#     if array_num != int(array_nrow) * int(array_ncol):
-#         print('Array counts error')
-#     else:
-#         # 获取加工顺序
-#         for i in range(array_nrow):
-#             temp = []
-#             tindex = 0
-#             for j in range(array_ncol):
-#                 if i % 2 == 0:
-#                     tindex = i * array_ncol + j
-#                 if i % 2 == 1:
-#                     tindex = i * array_ncol + (array_ncol - 1 - j)
-#                 temp.append(array_seq[tindex])
-#             array_processing_seq.extend(temp)
-#     # print(array_processing_seq)
-#     # 返回值：(阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
-#     return array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq
-
-
 def func_get_processing_seq(gluedata, arraybases, arraycount):
     # 统计阵列和胶头列表，获取所有阵列、胶头的加工起始点
     # 胶头列表
-    glue_basepoints = gluedata
-    arry_basepoints = arraybases
-    # 获取阵列行数、列数、阵列个数信息
-    array_nrow = arraycount[0][0]
-    array_ncol = arraycount[0][1]
-    array_num = len(arry_basepoints)
-
-    # 计算阵列加工顺序
-    array_seq = list(range(array_num))
-    array_processing_seq = []
-    if array_num != int(array_nrow) * int(array_ncol):
-        print('Array counts error')
-    else:
-        for i in range(array_nrow):
-            temp = []
-            tindex = 0
-            for j in range(array_ncol):
-                if i % 2 == 0:
-                    tindex = i * array_ncol + j
-                if i % 2 == 1:
-                    tindex = i * array_ncol + (array_ncol - 1 - j)
-                temp.append(array_seq[tindex])
-            array_processing_seq.extend(temp)
-    # print(array_processing_seq)
-    # (阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
-    array_data = (array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq)
-    array_basepoints = array_data[3]
-    array_processing_seq = array_data[4]
-
-    # 阵列胶头加工起始点列表
     array_start_points = []
-    for item in array_processing_seq:
-        # 加工顺序依据是阵列加工序列，而不是阵列起始点列表
-        for array_basepoint in array_basepoints:
-            # 获取对应的阵列起始点
-            if item != array_basepoint[0] - 1:
-                # 非对象阵列起始点，则略过;否则按胶头顺序进行点加工
-                continue
-            else:
-                for glue in glue_basepoints:
-                    # 初始化
-                    array_id = array_basepoint[0]
-                    glue_id = glue[0]
-                    x_base_pos = 0
-                    y_base_pos = 0
-                    z_base_pos = 0
+    arry_basepoints = arraybases
+    glue_basepoints = gluedata
+    if not arry_basepoints:
+        # 如果阵列数据表无数据，则以胶头基准点代替
+        for glue in glue_basepoints:
+            # 初始化，阵列id设为1
+            array_id = 1
+            glue_id = glue[0]
+            # 阵列信息为空情况下，按一个阵列处理：如果是第一个阵列，则将胶头基准点作为阵列基准点；
+            x_base_pos = glue[2]
+            y_base_pos = glue[3]
+            z_base_pos = glue[4]
+            basepoint = (array_id,
+                         glue_id,
+                         0,
+                         '基准点',
+                         x_base_pos,
+                         y_base_pos,
+                         z_base_pos,
+                         '--')
+            array_start_points.append(basepoint)
+            print(basepoint)
+    else:
+        # 如果存在阵列数据，则按阵列加工顺序及相关设定排列加工顺序
+        # 获取阵列行数、列数、阵列个数信息
+        array_nrow = arraycount[0][0]
+        array_ncol = arraycount[0][1]
+        array_num = len(arry_basepoints)
+        # 计算阵列加工顺序
+        array_seq = list(range(array_num))
+        array_processing_seq = []
+        if array_num != int(array_nrow) * int(array_ncol):
+            print('Array counts error')
+        else:
+            for i in range(array_nrow):
+                temp = []
+                tindex = 0
+                for j in range(array_ncol):
+                    if i % 2 == 0:
+                        tindex = i * array_ncol + j
+                    if i % 2 == 1:
+                        tindex = i * array_ncol + (array_ncol - 1 - j)
+                    temp.append(array_seq[tindex])
+                array_processing_seq.extend(temp)
+        # print(array_processing_seq)
+        # (阵列个数， 阵列行数，阵列列数， 阵列起始点列表，阵列顺序)
+        array_data = (array_num, array_nrow, array_ncol, arry_basepoints, array_processing_seq)
+        array_basepoints = array_data[3]
+        array_processing_seq = array_data[4]
 
-                    if item == 0:
-                        # 找到对应阵列后，分两种情况处理：
-                        # 1.如果是第一个阵列，则将胶头基准点作为阵列基准点；
-                        # 2.如果不是第一个阵列，则将计算第二个阵列基准点与第一个阵列基准点的偏移再与胶头基准点相加，
-                        # 作为第二个基准点加工起始位
-                        x_base_pos = glue[2]
-                        y_base_pos = glue[3]
-                        z_base_pos = glue[4]
-                    if item != 0:
-                        x_base_pos = array_basepoint[1] - array_basepoints[0][1] + glue[2]
-                        y_base_pos = array_basepoint[2] - array_basepoints[0][2] + glue[3]
-                        z_base_pos = array_basepoint[3] - array_basepoints[0][3] + glue[4]
-                    # 基准点（起始点坐标）
-                    basepoint = (array_id,
-                                 glue_id,
-                                 0,
-                                 '基准点',
-                                 x_base_pos,
-                                 y_base_pos,
-                                 z_base_pos,
-                                 '--')
-                    array_start_points.append(basepoint)
-                    print(basepoint)
+        # 阵列胶头加工起始点列表
+
+        for item in array_processing_seq:
+            # 加工顺序依据是阵列加工序列，而不是阵列起始点列表
+            for array_basepoint in array_basepoints:
+                # 获取对应的阵列起始点
+                if item != array_basepoint[0] - 1:
+                    # 非对象阵列起始点，则略过;否则按胶头顺序进行点加工
+                    continue
+                else:
+                    for glue in glue_basepoints:
+                        # 初始化
+                        array_id = array_basepoint[0]
+                        glue_id = glue[0]
+                        x_base_pos = 0
+                        y_base_pos = 0
+                        z_base_pos = 0
+
+                        if item == 0:
+                            # 找到对应阵列后，分两种情况处理：
+                            # 1.如果是第一个阵列，则将胶头基准点作为阵列基准点；
+                            # 2.如果不是第一个阵列，则将计算第二个阵列基准点与第一个阵列基准点的偏移再与胶头基准点相加，
+                            # 作为第二个基准点加工起始位
+                            x_base_pos = glue[2]
+                            y_base_pos = glue[3]
+                            z_base_pos = glue[4]
+                        if item != 0:
+                            x_base_pos = array_basepoint[1] - array_basepoints[0][1] + glue[2]
+                            y_base_pos = array_basepoint[2] - array_basepoints[0][2] + glue[3]
+                            z_base_pos = array_basepoint[3] - array_basepoints[0][3] + glue[4]
+                        # 基准点（起始点坐标）
+                        basepoint = (array_id,
+                                     glue_id,
+                                     0,
+                                     '基准点',
+                                     x_base_pos,
+                                     y_base_pos,
+                                     z_base_pos,
+                                     '--')
+                        array_start_points.append(basepoint)
+                        print(basepoint)
     return tuple(array_start_points)
 
 
