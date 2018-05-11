@@ -54,7 +54,7 @@ class Ui_Dialog(object):
         self.label_2.setText(_translate("Dialog", "选择下载波特率："))
         self.pushButton.setText(_translate("Dialog", "点击下载"))
         self.label_3.setText(_translate("Dialog", "下载状态"))
-        self.label_4.setText(_translate("Dialog", "LXBD板固件下载工具 V1.0"))
+        self.label_4.setText(_translate("Dialog", "LXBD板固件下载工具 V1.1"))
         self.label_5.setText(_translate("Dialog", "选择固件："))
         self.pushButton_2.setText(_translate("Dialog", "..."))
 

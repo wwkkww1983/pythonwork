@@ -10,7 +10,7 @@ import serial.tools.list_ports
 from stm32bl import download as bin_download
 from ui_download_ui import Ui_Dialog as UI
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QMessageBox
-from PyQt5.QtCore import pyqtSignal, QThread
+from PyQt5.QtCore import pyqtSignal, QThread, QDir
 from PyQt5.QtGui import QFont, QPalette, QColor
 
 
@@ -75,6 +75,7 @@ class DOWNLOAD(QWidget, UI):
         super(DOWNLOAD, self).__init__()
         self.setupUi(self)
         self.setWindowTitle(self.label_4.text())
+        self.direc = QDir()
         self.label_3.setText('准备就绪')
         # 设置下载状态字体
         self.label_3.setFont(QFont('Microsoft YaHei UI', 20, QFont.Bold))
@@ -82,7 +83,7 @@ class DOWNLOAD(QWidget, UI):
         port_list = scan_ser_ports()
         baud_list = [187500, 115200, 38400, 19200, 9600, 4800, 2400]
 
-        # 预留，用来读取上次有效参数用，注意当串口变更时需进行处理
+        # 用来读取上次有效参数用(通过配置文件)，注意当串口变更时需进行处理
         # 参数顺序：0-串口，1-bin路径，2-波特率
         with open('defaultconfig.ini', 'r', encoding='utf-8', errors='ignore') as f:
             last_defaultconfig = f.readlines()
@@ -140,10 +141,15 @@ def main_logic():
 
     def click_select_path():
         dialog = QFileDialog()
+        if download.lineEdit.text():
+            open_path = download.lineEdit.text()
+        else:
+            open_path = download.direc.homePath()
         path, t = dialog.getOpenFileName(download, "选择BD板固件.bin",
-                                         r'G:\C盘系统文档备份\我的文档',
+                                         open_path,
                                          'BD固件 (*.bin);;所有文件 (*.*)')
-        download.lineEdit.setText(path)
+        if path:
+            download.lineEdit.setText(path)
 
     def flag_todo(flag_list):
         # 处理下载线程返回标识
