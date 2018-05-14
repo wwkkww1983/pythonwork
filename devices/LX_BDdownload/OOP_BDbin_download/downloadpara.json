@@ -1,0 +1,6 @@
+{
+	"download_flag": true,
+	"port": "COM15",
+	"baud": 115200,
+	"path": "E:/Redmine/20180503 李为 两路型BD板模块（有壳）LX3V-2PTS-BD_V1.2/提交/旧的PTS固件/2PTS（增加消抖滤波）.bin"
+}
