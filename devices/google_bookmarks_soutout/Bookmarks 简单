@@ -1,0 +1,129 @@
+{
+   "checksum": "483acb880e48c006bac5149755625b7a",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13092130167000000",
+            "id": "7",
+            "meta_info": {
+               "last_visited_desktop": "13170741980972986"
+            },
+            "name": "",
+            "type": "url",
+            "url": "http://translate.google.cn/?sourceid=cnhp"
+         }, {
+            "date_added": "13095488041000000",
+            "id": "9",
+            "meta_info": {
+               "last_visited_desktop": "13170770027762506"
+            },
+            "name": "",
+            "type": "url",
+            "url": "https://www.baidu.com/"
+         }, {
+            "date_added": "13129021873000000",
+            "id": "139",
+            "meta_info": {
+               "last_visited_desktop": "13164774012481175"
+            },
+            "name": "",
+            "type": "url",
+            "url": "https://github.com/"
+         }, {
+            "date_added": "13122960714000000",
+            "id": "11",
+            "meta_info": {
+               "last_visited_desktop": "13168575128915499"
+            },
+            "name": "",
+            "type": "url",
+            "url": "https://www.sogou.com/web?query=cycon+licensed+code&_asf=www.sogou.com&_ast=&w=01019900&p=40040100&ie=utf8&from=index-nologin&sut=1228&sst0=1478487113339&lkt=0%2C0%2C0"
+         }, {
+            "date_added": "13160455637471692",
+            "id": "362",
+            "meta_info": {
+               "last_visited_desktop": "13170764661911484"
+            },
+            "name": "",
+            "type": "url",
+            "url": "http://192.168.11.118:7777/redmine/my/page"
+         }, {
+            "date_added": "13150379670262986",
+            "id": "297",
+            "meta_info": {
+               "last_visited_desktop": "13170137030852504"
+            },
+            "name": "",
+            "type": "url",
+            "url": "http://192.168.11.120/"
+         }, {
+            "date_added": "13166086490235692",
+            "id": "398",
+            "meta_info": {
+               "last_visited_desktop": "13166623922088656"
+            },
+            "name": "百度脑图",
+            "type": "url",
+            "url": "http://naotu.baidu.com/home"
+         }, {
+            "date_added": "13168527652575318",
+            "id": "400",
+            "meta_info": {
+               "last_visited_desktop": "13168674702782892"
+            },
+            "name": "透传云管理系统",
+            "type": "url",
+            "url": "http://console.usr.cn/main.html#/product"
+         }, {
+            "date_added": "13170303809031301",
+            "id": "402",
+            "meta_info": {
+               "last_visited_desktop": "13170303809040049"
+            },
+            "name": "Kivy中文编程指南 · GitBook",
+            "type": "url",
+            "url": "https://legacy.gitbook.com/book/cycleuser/kivy-guide-chinese/details"
+         }, {
+            "date_added": "13170303821676568",
+            "id": "403",
+            "meta_info": {
+               "last_visited_desktop": "13170303821677385"
+            },
+            "name": "python+kivy学起来有意思吗？ - 知乎",
+            "type": "url",
+            "url": "https://www.zhihu.com/question/23181452"
+         }, {
+            "date_added": "13170304021196964",
+            "id": "404",
+            "meta_info": {
+               "last_visited_desktop": "13170304021198976"
+            },
+            "name": "GitHub - cztomczak/cefpython: Chrome browser control, a HTML 5 based Python GUI framework.       Forum:",
+            "type": "url",
+            "url": "https://github.com/cztomczak/cefpython"
+         } ],
+         "date_added": "13150011666452958",
+         "date_modified": "13170494889669183",
+         "id": "1",
+         "name": "书签栏",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13150011666452968",
+         "date_modified": "0",
+         "id": "2",
+         "name": "其他书签",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13150011666452969",
+         "date_modified": "0",
+         "id": "3",
+         "name": "移动设备书签",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
