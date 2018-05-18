@@ -46,10 +46,12 @@ def savedata(filepath):
     pass
 
 if __name__ == "__main__":
-    ip_pre = '192.168.22'
+    ip_pre = '192.168.39'
     find_ips(ip_pre)
     time.sleep(20)
-    print('find ip addresses:\n', ip_addresses)
+    print('find ip addresses:')
+    for ip in ip_addresses:
+        print('    ', ip)
 
 
 
