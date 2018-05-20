@@ -23,11 +23,16 @@ if __name__ == '__main__':
     #
     # print(r1.encoding)
 
-    url = "https://api.github.com/some/endpoint"
-    payload = {"some": "data"}
-    headers = {"content-type": "application/json"}
-    r8 = requests.post(url, data=json.dumps(payload), headers=headers, timeout=1)
-    for item in r8.headers.items():
-        print(item[0], ' = ', item[1])
-    print("\n", r8.headers["server"])
+    # url = "https://api.github.com/some/endpoint"
+    # payload = {"some": "data"}
+    # headers = {"content-type": "application/json"}
+    # r8 = requests.post(url, data=json.dumps(payload), headers=headers, timeout=10)
+    # for key, value in r8.headers.items():
+    #     print(key, ' = ', value)
+    # print("\n", r8.headers["server"])
+
+    url = "http://p.3.cn/prices/mgets?"
+    para = {"skuIds": "J_19766392901", "type": "1"}
+    r9 = requests.get(url, params=para)
+    print(r9.url)
 
