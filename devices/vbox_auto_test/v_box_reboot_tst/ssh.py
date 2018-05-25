@@ -28,7 +28,7 @@ class Ssh(object):
     def __init__(self):
         self.ssh = paramiko.SSHClient()
 
-    def login(self, ip_, usrname_, password_):
+    def login(self, ip_, usrname_='root', password_='weconily'):
         """
         远程主机登录
         :param ip_:
@@ -55,6 +55,30 @@ class Ssh(object):
             out_strlist.append(line)
             # print(line[:-1])
         return out_strlist
+
+    def cat_file(self, filepath):
+        cmd = 'cat {file}'.format(file=filepath)
+        stdin, stdout, stderr = self.ssh.exec_command(cmd, timeout=1)
+        out = stdout.readlines()
+        return out
+
+    def get_lines(self, filepath, nline):
+        cmd = 'tail -n {n} {f}'.format(n=nline, f=filepath)
+        stdin, stdout, stderr = self.ssh.exec_command(cmd, timeout=1)
+        out = stdout.readlines()
+        return out
+
+    @staticmethod
+    def save_file(savepath, file1):
+        newfile1 = []
+        print(file1)
+        for line in file1:
+            newline = line.replace('\r', '')
+            print(newline)
+            newfile1.append(newline)
+        print(newfile1)
+        with open(savepath, 'w', encoding='gb2312') as f:
+            f.writelines(newfile1)
 
 
 def timelog_ethernet(port, n_i, offtime, ontime):
@@ -187,11 +211,11 @@ def main():
     set_device_power(port, '000000')
     open_port(port)
     threads = []  # 建立线程数组
-    t1 = thread.Thread(target=timelog_ethernet, args=(port, 1000, 10, 30))  # 线程1指定函数、参数
+    t1 = thread.Thread(target=timelog_ethernet, args=(port, 500, 10, 50))  # 线程1指定函数、参数
     threads.append(t1)  # 装载线程1
-    t2 = thread.Thread(target=timelog_wifi, args=(port, 1000, 10, 40))
+    t2 = thread.Thread(target=timelog_wifi, args=(port, 500, 10, 50))
     threads.append(t2)
-    t3 = thread.Thread(target=timelog_4g, args=(port, 1000, 10, 40))
+    t3 = thread.Thread(target=timelog_4g, args=(port, 500, 10, 50))
     threads.append(t3)
     # 参数内容以太网和wifi网络方式相同
     for t in threads:  # 循环执行线程数组中的线程
@@ -201,4 +225,14 @@ def main():
     close_port(port)
     print("all over")
 if __name__ == '__main__':
-    main()
+    # main()
+    hostip = '192.168.39.120'
+    username = 'root'
+    password = 'weconily'
+    file = '/wecon/run/project/test.pi'
+    savepath = 'cnet.log'
+    ssh = Ssh()
+    ssh.login(hostip)
+    f1 = ssh.cat_file(file)
+    ssh.save_file(savepath, f1)
+
