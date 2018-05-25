@@ -63,7 +63,7 @@ class VboxVist(object):
         ele_username.click()
 
     def do_quit(self):
-        time.sleep(5)
+        time.sleep(10)
         self.open_page("index")
         brsr = self.browser
 
