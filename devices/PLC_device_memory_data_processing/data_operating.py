@@ -91,11 +91,11 @@ def write_data(savepath, xdata, ydata, xlabel='时间/?s', ylabel='温度/0.1℃
         print(e)
 
 if __name__ == '__main__':
-    dir_path = r'E:\MyWorkPlace\pythonwork\devices\PLC_device_memory_data_processing\xlses'
-    sav_pth = r"E:\MyWorkPlace\pythonwork\devices\PLC_device_memory_data_processing\已处理表格.xls"
+    dir_path = r'E:\Redmine\20180503 李为 两路型BD板模块（有壳）LX3V-2PTS-BD_V1.2\PID验证实验'
+    sav_pth = r"E:\Redmine\20180503 李为 两路型BD板模块（有壳）LX3V-2PTS-BD_V1.2\PID验证实验\已处理表格.xls"
     # Dxxxx只能是出现在软元件内存文件中索引的D地址
     stt = ['D1000']
-    ed = ['D7000']
-    x_lab = '采样周期/*ms'
-    y_lab = '温度/*℃'
+    ed = ['D3392']
+    x_lab = '采样周期/0.5s'
+    y_lab = '温度/0.1℃'
     read_and_write(dir_path, stt, ed, x_lab, y_lab, sav_pth)
