@@ -226,11 +226,13 @@ def main():
     print("all over")
 if __name__ == '__main__':
     # main()
-    hostip = '192.168.39.120'
+    hostip = '192.168.39.123'
+    hostip = '192.168.33.173'
+    hostip = '192.168.39.117'
     username = 'root'
     password = 'weconily'
-    file = '/wecon/run/project/test.pi'
-    savepath = 'cnet.log'
+    file = '/wecon/run/project/mqttCnet.log'
+    savepath = '4g_cnet.log'
     ssh = Ssh()
     ssh.login(hostip)
     f1 = ssh.cat_file(file)
