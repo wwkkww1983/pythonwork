@@ -1,0 +1,69 @@
+Control Identifiers:
+
+Afx:00FB0000:b:00010003:00000006:000A00D5 - 'V-BOX'    (L-3, T-3, R1369, B677)
+['V-BOX', 'Afx:00FB0000:b:00010003:00000006:000A00D5', 'V-BOXAfx:00FB0000:b:00010003:00000006:000A00D5']
+child_window(title="V-BOX", class_name="Afx:00FB0000:b:00010003:00000006:000A00D5")
+   |
+   | StatusBar - 'Ready'    (L0, T655, R1366, B674)
+   | ['StatusBar', 'ReadyStatusBar', 'Ready']
+   | child_window(title="Ready", class_name="Afx:StatusBar:fb0000:8:10003:10")
+   |
+   | AfxFrameOrView140su - ''    (L0, T45, R1366, B655)
+   | ['AfxFrameOrView140su', 'V-BOXAfxFrameOrView140su']
+   | child_window(class_name="AfxFrameOrView140su")
+   |    |
+   |    | CefBrowserWindow - ''    (L2, T47, R1364, B653)
+   |    | ['V-BOXCefBrowserWindow', 'CefBrowserWindow']
+   |    | child_window(class_name="CefBrowserWindow")
+   |    |    |
+   |    |    | Chrome_WidgetWin_0 - ''    (L2, T47, R1364, B653)
+   |    |    | ['V-BOXChrome_WidgetWin_0', 'Chrome_WidgetWin_0']
+   |    |    | child_window(class_name="Chrome_WidgetWin_0")
+   |    |    |    |
+   |    |    |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    |    |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    |    |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |    |    |
+   |    |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |    |
+   |    | Chrome_WidgetWin_0 - ''    (L2, T47, R1364, B653)
+   |    | ['V-BOXChrome_WidgetWin_0', 'Chrome_WidgetWin_0']
+   |    | child_window(class_name="Chrome_WidgetWin_0")
+   |    |    |
+   |    |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |    |
+   |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |
+   | CefBrowserWindow - ''    (L2, T47, R1364, B653)
+   | ['V-BOXCefBrowserWindow', 'CefBrowserWindow']
+   | child_window(class_name="CefBrowserWindow")
+   |    |
+   |    | Chrome_WidgetWin_0 - ''    (L2, T47, R1364, B653)
+   |    | ['V-BOXChrome_WidgetWin_0', 'Chrome_WidgetWin_0']
+   |    | child_window(class_name="Chrome_WidgetWin_0")
+   |    |    |
+   |    |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |    |
+   |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |
+   | Chrome_WidgetWin_0 - ''    (L2, T47, R1364, B653)
+   | ['V-BOXChrome_WidgetWin_0', 'Chrome_WidgetWin_0']
+   | child_window(class_name="Chrome_WidgetWin_0")
+   |    |
+   |    | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   |    | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   |    | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
+   |
+   | Chrome_RenderWidgetHostHWND - 'Chrome Legacy Window'    (L2, T47, R1364, B653)
+   | ['Chrome_RenderWidgetHostHWND', 'Chrome Legacy WindowChrome_RenderWidgetHostHWND', 'Chrome Legacy Window']
+   | child_window(title="Chrome Legacy Window", class_name="Chrome_RenderWidgetHostHWND")
