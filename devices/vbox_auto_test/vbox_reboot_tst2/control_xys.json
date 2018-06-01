@@ -2,7 +2,9 @@
   "download": "1224,23",
   "set": "1246,24",
   "help": "1268,24",
+  "_comment1": "下载网络配置",
   "download_config": "950,498",
+  "_comment2": "选择组和V-Box",
   "default_group": "125,315",
   "box1": "105,355",
   "box2": "105,387",
@@ -12,9 +14,17 @@
   "box6": "105,515",
   "box7": "105,547",
   "box8": "105,580",
+  "_comment3": "远程下载",
   "basic_set": "1256,76",
   "basic_set1": "1256,150",
   "reboot_box": "785,560",
   "reboot_box_ok": "980,390",
-  "box_reboot_ok": "980,390"
+  "box_reboot_ok": "980,390",
+  "_comment4": "穿透",
+  "remote_download": "1079,87",
+  "start_to_penetrate": "618,702",
+  "penetrate_confirm": "1021,567",
+  "penetrate_started_ok": "1018,549",
+  "finish_penetrate": "441,732",
+  "penetrate_finished_ok": "1020,547"
 }

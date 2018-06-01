@@ -10,23 +10,36 @@ from pywinauto import mouse, keyboard
 import pyautogui
 import time
 import json
+import win32api
 from ssh import Ssh
 
 nowtimefmt = lambda: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())  # 格式化当前时间
+
 with open("control_xys.json", 'r', encoding="utf-8") as f:
     control_xys = json.loads(f.read())
     # print("页面按钮坐标:\n", control_xys)
 controls = {}
 for k, v in control_xys.items():
-    controls[k] = [int(i) for i in v.split(',')]
+    if '_comment' not in k:
+        controls[k] = [int(i) for i in v.split(',')]
 print("页面按钮坐标:\n", controls)
 with open("box_info.json", 'r', encoding="utf-8") as f:
     box_ips = json.loads(f.read())
-print(box_ips)
+print("盒子列表:\n", box_ips)
 
 
-def start_box():
-    app_path = r"D:\Program Files\WECONSOFT\V-Box\20180517测试\V-BOX.exe"
+def set_scrn_resol(width, height):
+    # 利用win32api库修改屏幕分辨率
+    dm = win32api.EnumDisplaySettings(None, 0)
+    dm.PelsHeight = width
+    dm.PelsWidth = height
+    dm.BitsPerPel = 32
+    dm.DisplayFixedOutput = 0
+    win32api.ChangeDisplaySettings(dm, 0)
+
+
+def start_box(exe_path):
+    app_path = exe_path
     box = app.Application()
     box.start(app_path)
     time.sleep(5)
@@ -42,6 +55,9 @@ def click(control_name: str, mousekey='left'):
 
 
 def download_reboot():
+    """
+    下载配置后重启
+    """
     click("download")
     time.sleep(1)
     click('download_config')
@@ -49,6 +65,9 @@ def download_reboot():
 
 
 def remote_reboot(box_es, n=1):
+    """
+    远程重启
+    """
     click('monitor')
     time.sleep(5)
     click('default_group')
@@ -119,7 +138,29 @@ def remote_reboot_single(box_id):
     click("box_reboot_ok")
     print("{}: box {} is rebooting".format(nowtimefmt(), box_id))
     time.sleep(1)
-    
+
+
+def penetrate_reboot_single(box_id):
+    """
+    穿透下载后重启
+    """
+    click('monitor')
+    time.sleep(5)
+    click('default_group')
+    click(box_id)
+    time.sleep(1)
+    click('remote_download')
+    time.sleep(1)
+    click('start_to_penetrate')
+    time.sleep(1)
+    click('penetrate_confirm')
+    time.sleep(2)
+    click('penetrate_started_ok')
+    time.sleep(5)  # 穿透进行中，等待时间较长
+    click('finish_penetrate')
+    time.sleep(1)
+    click('penetrate_finished_ok')
+
     
 def check_box_single(box_id, box_tobe):
     box_is_online = None
@@ -145,42 +186,49 @@ def check_box_single(box_id, box_tobe):
 
 
 if __name__ == '__main__':
-    box_win = start_box()["V-BOX"]
-    # box_win.print_control_identifiers()
-    boxes = ['box2', 'box3', 'box4', 'box5']
-    # remote_reboot(boxes, 1)
-
-    def tst_download_reboot():
-        download_reboot()
-        time.sleep(5)
-        # a = check_boxes(boxes, [1]*4)
-        a = check_box_single('box1', 0)
-        time.sleep(20)
-        b = check_box_single('box1', 1)
-        print('{}: download reboot test passed? ={} {}'.format(nowtimefmt(), a, b))
-
-    def tst_remote_reboot():
-        remote_reboot_single('box2')
-        time.sleep(5)
-        c = check_box_single('box2', 0)
-        time.sleep(20)
-        d = check_box_single('box2', 1)
-        print('{}: remote reboot test passed? ={} {}'.format(nowtimefmt(), c, d))
-
-
-    def tst_remote_reboot_multi(box_es):
-        check_result = []
-        for box in box_es:
-            remote_reboot_single(box)
-            time.sleep(5)
-            c = check_box_single(box, 0)
-            time.sleep(20)
-            d = check_box_single(box, 1)
-            check_result.append((c, d))
-        print('{}: remote reboot test passed? ={}'.format(nowtimefmt(), check_result))
-
-    for i in range(100):
-        print("{}: round {} begins".format(nowtimefmt(), i))
-        tst_download_reboot()
-        tst_remote_reboot_multi(boxes)
-        print("{}: round {} finished".format(nowtimefmt(), i))
+    set_scrn_resol(1366, 768)
+    time.sleep(5)
+    # box_path = r"D:\Program Files\WECONSOFT\V-Box\20180517测试\V-BOX.exe"
+    # box_pc = start_box(box_path)
+    # box_win = box_pc["V-BOX"]
+    # # box_win.print_control_identifiers()
+    # boxes = ['box2', 'box3', 'box4', 'box5']
+    # # remote_reboot(boxes, 1)
+    #
+    # def tst_download_reboot():
+    #     download_reboot()
+    #     time.sleep(5)
+    #     # a = check_boxes(boxes, [1]*4)
+    #     a = check_box_single('box1', 0)
+    #     time.sleep(20)
+    #     b = check_box_single('box1', 1)
+    #     print('{}: download reboot test passed? ={} {}'.format(nowtimefmt(), a, b))
+    #
+    # def tst_remote_reboot():
+    #     remote_reboot_single('box2')
+    #     time.sleep(5)
+    #     c = check_box_single('box2', 0)
+    #     time.sleep(20)
+    #     d = check_box_single('box2', 1)
+    #     print('{}: remote reboot test passed? ={} {}'.format(nowtimefmt(), c, d))
+    #
+    #
+    # def tst_remote_reboot_multi(box_es):
+    #     check_result = []
+    #     for box in box_es:
+    #         remote_reboot_single(box)
+    #         time.sleep(5)
+    #         c = check_box_single(box, 0)
+    #         time.sleep(30)
+    #         d = check_box_single(box, 1)
+    #         check_result.append((c, d))
+    #     print('{}: remote reboot test passed? ={}'.format(nowtimefmt(), check_result))
+    #
+    # # for i in range(1):
+    # #     print("{}: round {} begins".format(nowtimefmt(), i))
+    # #     # tst_download_reboot()
+    # #     # tst_remote_reboot_multi(boxes)
+    # #     penetrate_reboot_single(boxes[0])
+    # #     print("{}: round {} finished".format(nowtimefmt(), i))
+    # box_pc.kill()
+    set_scrn_resol(1440, 900)
