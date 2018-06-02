@@ -21,10 +21,10 @@
   "reboot_box_ok": "980,390",
   "box_reboot_ok": "980,390",
   "_comment4": "穿透",
-  "remote_download": "1079,87",
-  "start_to_penetrate": "618,702",
-  "penetrate_confirm": "1021,567",
-  "penetrate_started_ok": "1018,549",
-  "finish_penetrate": "441,732",
-  "penetrate_finished_ok": "1020,547"
+  "remote_download": "1027,85",
+  "start_to_penetrate": "606,544",
+  "penetrate_confirm": "984,404",
+  "penetrate_started_ok": "980,392",
+  "finish_penetrate": "432,531",
+  "penetrate_finished_ok": "980,394"
 }
