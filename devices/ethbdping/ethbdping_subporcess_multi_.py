@@ -17,7 +17,7 @@ ip_addresses = []
 nowtime = datetime.datetime.now
 
 
-def find_ips(ip_prefix='192.168.22'):
+def find_ips(ip_prefix='192.168.39'):
     """
     给出当前的网段范围，然后扫描整个段所有地址
     """
