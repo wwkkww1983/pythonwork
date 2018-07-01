@@ -1,10 +1,5 @@
-#!/usr/bin/python
-# -*- coding:utf-8 -*-
-# -----------------------------------------------------------
-# File Name: soft
-# Author:    fan
-# date:      2018/1/24
-# -----------------------------------------------------------
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # 注意：a.将代码写在给定函数范围内（先将“pass”删除）
 #       b.将调试代码写在“if __name__ == "__main__":”之后（先将“pass”删除），调试代码不影响评分
@@ -18,13 +13,15 @@ import os, shutil
 
 def look_over(f, t):
         for each in os.listdir(f):
-            if os.path.isfile(each):
-                name, lastname = os.path.split(each)
-                if lastname == u'hsc':
-                    print (each)
-                    shutil.copyfile(each, os.path.join(t, each))
-            if os.path.isdir(each):
-                look_over(each, t)
+            eachpath = os.path.join(f, each)
+            if os.path.isfile(eachpath):
+                dir_, file_ = os.path.split(eachpath)
+                hsc = file_[-3:]
+                if hsc == u'hsc':
+                    print (eachpath)
+                    shutil.copyfile(eachpath, os.path.join(t, file_))
+            if os.path.isdir(eachpath):
+                look_over(eachpath, t)
 
 
 def func():
