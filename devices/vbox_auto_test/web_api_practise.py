@@ -185,7 +185,7 @@ if __name__ == '__main__':
     print(r1.json())
     print(sid)
     r2 = post(api_boxes_list, {}, sid)
-    f = open("boxeslistresult.json", "w", encoding="utf-8")
+    f = open("boxeslistresult1.json", "w", encoding="utf-8")
     boxeslist_result = r2.json()
     f.write(json.dumps(boxeslist_result, ensure_ascii=False, indent=4))
     print(boxeslist_result)

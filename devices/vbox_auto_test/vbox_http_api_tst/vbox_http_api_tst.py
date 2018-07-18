@@ -27,7 +27,7 @@ common_para_dic = {"comid": "1",
                    "ts": None,  # ts在调用参数时动态生成
                    }
 
-login_data_dic = {"alias": "test_fan",
+login_data_dic = {"alias": "test_fanch",
                   "password": "123456",
                   "isremember": 1
                   }
@@ -116,35 +116,37 @@ def post(api: str, business_dic: dict, sid):
 if __name__ == '__main__':
 
     r1 = post(api_login, login_data_dic, '')
-    # r2 = post('we-data/boxs', {})
     sid = r1.json()["result"]["sid"]
     print("log in result:", r1.json(), '\n')
     print('sid: ', sid, '\n')
+    r2 = post(api_boxes_list, {}, sid)
+    print('box list info', r2.json())
+    f = open("boxeslistresult.json", "w", encoding="utf-8")
+    f.write(json.dumps(r2.json(), ensure_ascii=False, indent=4))
 
-    # f = open("boxeslistresult.json", "w", encoding="utf-8")
-    # f.write(json.dumps(boxeslist_result, ensure_ascii=False, indent=4))
-    with open("vbox_state_log.csv", 'w', encoding='gb2312') as f:
-        f.write('{0},{1},{2},{3},{4},{5},{6},{7},{8}\n'.format(
-            '记录时间', '测试部882', '测试部883', '测试部884', '测试部885', '测试部886', '测试部887', '测试部888', '测试部889'))
-    i = 0
-    while i < 200:
-        i += 1
-        r2 = post(api_boxes_list, {}, sid)
-        boxeslist_result = r2.json()
-        tobe_write_down = nowtimefmt()
-        name_state = {}
-        if boxeslist_result["code"] != 200:
-            tobe_write_down += '获取v-box列表失败：状态码{}\n'.format(boxeslist_result["code"])
-        else:
-            for box in boxeslist_result["result"]["list"][0]['boxList']:
-                for s in ['测试部882', '测试部883', '测试部884', '测试部885',
-                          '测试部886', '测试部887', '测试部888', '测试部889']:
-                    if box['boxName'] == s:
-                        name_state[s] = box['state']
-            for c in sorted(name_state):
-                tobe_write_down += ',{}'.format(str(name_state[c]))
-            tobe_write_down += '\n'
-            print(tobe_write_down)
-        with open("vbox_state_log.csv", 'a', encoding='utf-8') as f:
-            f.write(tobe_write_down)
-        time.sleep(30)
+    # 以下：将周期性获取盒子在线状态，形成记录
+    # with open("vbox_state_log.csv", 'w', encoding='gb2312') as f:
+    #     f.write('{0},{1},{2},{3},{4},{5},{6},{7},{8}\n'.format(
+    #         '记录时间', '测试部882', '测试部883', '测试部884', '测试部885', '测试部886', '测试部887', '测试部888', '测试部889'))
+    # i = 0
+    # while i < 200:
+    #     i += 1
+    #     r2 = post(api_boxes_list, {}, sid)
+    #     boxeslist_result = r2.json()
+    #     tobe_write_down = nowtimefmt()
+    #     name_state = {}
+    #     if boxeslist_result["code"] != 200:
+    #         tobe_write_down += '获取v-box列表失败：状态码{}\n'.format(boxeslist_result["code"])
+    #     else:
+    #         for box in boxeslist_result["result"]["list"][0]['boxList']:
+    #             for s in ['测试部882', '测试部883', '测试部884', '测试部885',
+    #                       '测试部886', '测试部887', '测试部888', '测试部889']:
+    #                 if box['boxName'] == s:
+    #                     name_state[s] = box['state']
+    #         for c in sorted(name_state):
+    #             tobe_write_down += ',{}'.format(str(name_state[c]))
+    #         tobe_write_down += '\n'
+    #         print(tobe_write_down)
+    #     with open("vbox_state_log.csv", 'a', encoding='utf-8') as f:
+    #         f.write(tobe_write_down)
+    #     time.sleep(30)
