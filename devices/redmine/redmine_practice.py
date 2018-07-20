@@ -7,125 +7,80 @@
 # -----------------------------------------------------------
 
 from redminelib import Redmine
+import logging as log
+
+log.basicConfig(level=log.INFO,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
 
-def visit_redmine_self():
-    url = 'http://192.168.0.110/redmine'
-    user = 'yonghuer'
-    passwd = '111111111'
+def login_redmine(url, user, passwd):
     redmine = Redmine(url, username=user, password=passwd)
-    project = redmine.project.get('xiangmuyi')    # 必须是'项目标识'
-    for resouce in sorted(list(project)):
-        print(resouce[0], ':', resouce[1])
-    issues = project.issues
-    issue = issues[1]
-    print('\n\n问题/任务数量: {}\n\n'.format(len(issues)))
-    for resouce in sorted(list(issue)):
-        print(resouce[0], ':', resouce[1])
+    return redmine
 
 
-def visit_redmine_comp():
-    url = "http://192.168.11.118:7777/redmine/"
-    user = "fanchunhui"
-    passwd = "a6361255"
-    identifier = 'demp'
-    redmine = Redmine(url, username=user, password=passwd)
-    project = redmine.project.get(identifier)    # 必须是'项目标识'
-    for resouce in sorted(list(project)):
-        print(resouce[0], ':', resouce[1])
-    # issues = project.issues
-    # issue = issues[1]
-    # print('\n\n问题/任务数量: {}\n\n'.format(len(issues)))
-    # for resouce in sorted(list(issue)):
+def read_project(redmine:Redmine):
+    # project.get, 获得特定条件的单个项目
+    pro_identifier = 'demp'
+    project = redmine.project.get(pro_identifier)
+    print('项目标识为demp的项目是：', project)
+    # for resouce in sorted(list(project)):
     #     print(resouce[0], ':', resouce[1])
 
+    # project.all, 获取所有公开项目集合
+    projects = redmine.project.all()
+    print('获得全部项目：'.format(projects))
+    print('详细列表: 项目id 项目标识 项目名称')
+    # for pro in projects:
+    #     print('', pro.id, pro.identifier, pro.name)
 
-class RedmineGo(object):
-    def __init__(self, url, user, passwd):
-        self.redmine = None
-        self.project = None
-        try:
-            self.redmine = Redmine(url, username=user, password=passwd)
-        except Exception as e:
-            print('fail to log redmine, please check url/username/password. detail: {}'.format(e))
-
-    def get_project_by_identifier(self, identifier):
-        try:
-            self.project = self.redmine.project.get(identifier)
-        except Exception as e:
-            print('fail to get project, please check. detail: {}'.format(e))
-        return self.project
-        # self.print_project_info()
-
-    def print_projects_info(self):
-        try:
-            for resouce in sorted(list(self.project)):
-                print(resouce[0], ':', resouce[1])
-            # print('\n\n问题/任务数量: {}\n\n'.format(len(self.project.issues)))
-            return True
-        except Exception as e:
-            print('fail to print projects info. plcease check.')
-
-    def count_projects(self):
-        """
-        统计公开的项目数量及项目列表
-        :return:{项目数量，项目名字清单}
-        """
-        pro_counts = 0
-        pro_names = []
-        try:
-            projects = self.redmine.project.all()
-            pro_counts = len(projects)
-            for pro in projects:
-                if pro.name not in pro_names:
-                    pro_names.append(pro.name)
-        except Exception as e:
-            print('fail to count projects. detail: {}'.format(e))
-        return {'pro_counts': pro_counts, 'pro_names': pro_names}
-
-    def count_issues_created_days_ago(self, project_id, days):
-        """
-        统计周期内新增问题数
-        :param project_id: 项目标识
-        :param days: 统计过去几天内数据
-        :return: 新增问题列表
-        """
-        pass
-
-    def count_issues_closed_days_ago(self, project_id, days):
-        """
-        统计周期内关闭问题数
-        :param project_id: 项目标识
-        :param days: 统计过去几天内数据
-        :return:关闭问题列表
-        """
-        pass
-
-    def count_issues_due_days(self, project_id, days):
-        """
-        统计周期内仍存续且未解决的问题
-        :param project_id: 项目标识
-        :param days: 天数上限
-        :return:未解决列表
-        """
-        pass
+    # project.all.export, 导出项目清单
+    projects.export('atom', savepath='', filename='redmine projects.atom')
 
 
+def read_issue(redmine:Redmine):
+    pro_identifier = 'demp'
+    i_id = 1112
+    # issue.get
+    issue = redmine.issue.get(i_id)
+    issue_dict = dict(issue)
+    print('问题/任务编号为{}的项目是: {}'.format(i_id ,issue.subject))
+    print('详细信息：\n{}\ndetail:'.format(issue_dict))
+    # for key in sorted(issue_dict):
+    #     print('{}: {}'.format(key, issue[key]))
+
+    # issue.all 返回所有已打开的问题
+    issues = redmine.issue.all(limit=20)
+    print('所有问题/任务集合：{}'.format(issues))
+    print('列出Redmine上所有已打开问题/任务编号、所属项目、主题：')
+    # for iss in issues:
+    #     print(iss.id, iss.project['name'], iss.subject, iss.created_on)
+
+    # issue.filter 返回匹配筛选器的一组任务(问题)。
+    issues = redmine.issue.filter(project_id=pro_identifier)
+    print('项目{} 的问题/任务数量为{}, 清单如下：\n编号 主题'.format(pro_identifier, len(issues)))
+    for iss in issues:
+        print(iss.id, iss.subject)
 
 if __name__ == "__main__":
-    # visit_redmine_comp()
-    # urll = "http://192.168.11.118:7777/redmine/"
-    # usern = "fanchunhui"
-    # passw = "a6361255"
-    # identifierr = 'demp'
-    urll = "http://192.168.39.40/redmine"
-    usern = "yonghuyi"
-    passw = "11111111"
-    identifierr = "xiangmuyi"
+    urll = "http://192.168.11.118:7777/redmine/"
+    usern = "fanchunhui"
+    passw = "a6361255"
+    identifierr = 'demp'
 
+    red = login_redmine(urll, usern, passw)
+    read_project(red)
+    read_issue(red)
+
+    # 公司电脑服务器
+    # urll = "http://192.168.39.40/redmine"
+    # usern = "yonghuyi"
+    # passw = "11111111"
+    # identifierr = "xiangmuyi"
+    # 个人电脑服务器
     # urll = "http://192.168.0.110/redmine"
     # usern = "yonghuyi"
     # passw = "11111111"
     # identifierr = "xiangmuyi"
-    redminego = RedmineGo(urll, usern, passw)
-    print(redminego.count_projects())
+
+
+
