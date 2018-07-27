@@ -58,8 +58,18 @@ def read_issue(redmine:Redmine):
     # issue.filter 返回匹配筛选器的一组任务(问题)。
     issues = redmine.issue.filter(project_id=pro_identifier)
     print('项目{} 的问题/任务数量为{}, 清单如下：\n编号 主题'.format(pro_identifier, len(issues)))
-    for iss in issues:
-        print(iss.id, iss.subject)
+    # for iss in issues:
+    #     print(iss.id, iss.subject)
+
+
+def read_membership(redmine:Redmine):
+    pro_identifier = 'demp'
+    res_id = 100
+    membership = redmine.project_membership.get(res_id)
+    # print('编号为{}的项目成员为: {}'.format(res_id, membership))
+    # memberships = redmine.project_membership.filter(project_id=pro_identifier)
+    print('项目为{}的项目成员组为: {}'.format(pro_identifier, memberships))
+
 
 if __name__ == "__main__":
     urll = "http://192.168.11.118:7777/redmine/"
@@ -70,6 +80,7 @@ if __name__ == "__main__":
     red = login_redmine(urll, usern, passw)
     read_project(red)
     read_issue(red)
+    read_membership(red)
 
     # 公司电脑服务器
     # urll = "http://192.168.39.40/redmine"

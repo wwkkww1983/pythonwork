@@ -8,7 +8,7 @@
 import os
 from random import shuffle
 import logging as log
-from get_HMI import open_browser, open_project, check_hmi
+from get_HMI import open_browser, open_project, check_hmi, set_num_value
 from fx_communication_protocol import LxPlcCom
 import xlrd, xlwt
 from serial import Serial
@@ -50,6 +50,8 @@ def create_report(report_path, urls):
     # 定义用于存放数据的表（二维列表）
     data_area = []
     if os.path.exists(report_path):
+        # # 如果该报告文件存在，直接删除
+        # os.remove('Ngrok问题测试报告.xls')
         # 如果该报告文件存在，在拷贝到内存中，新文件获取该数据并进行初始化
         e_report_xls = xlrd.open_workbook(report_path)
         e_report_sheet = e_report_xls.sheet_by_index(0)
@@ -63,15 +65,15 @@ def create_report(report_path, urls):
         # 如果报告文件不存在，进行配置初始化
         report_sheet.write(0, 0, 'Ngrok问题网络切换PMI连接检测')
         sheet_head = ['ID',
-                      'HMI_Name',
+                      'HMI_NAME',
                       'G4router0_SUCS',
-                      'G4router0_Fail',
+                      'G4router0_FAIL',
                       'Router0_SUCS',
                       'Router0_FAIL',
                       'Switch_SUCS',
                       'Switch_FAIL',
-                      'Total_n',
-                      'Fail_n',
+                      'TOTAL_n',
+                      'FAIL_n',
                       'URL']
 
         for i in range(len(sheet_head)):
@@ -203,6 +205,15 @@ def set_device_power(prt, pwcd):
     close_port(prt)
 
 
+def set_device_power2(proj, powercode):
+    num_value = {0: "SPAN_0NUM_24_0"}
+    div = proj.find_element_by_xpath('/html/body/div[@id="divfrm0"]/span[@id="{}"]'.format(num_value[0]))
+    time.sleep(0.5)
+    div.click()
+    time.sleep(0.5)
+    set_num_value(proj, powercode)
+
+
 def main_no_plc():
     # 初始化
     # 关闭PLC控制电源，4G路由器持续生效
@@ -303,7 +314,54 @@ def main_4g_onoff():
         log.info('powercode {} checking finished'.format(powercodes))
 
 
+def main_switch_onoff():
+    # 初始化记录文件
+    url_xls = 'ngrok测试用例设备信息.xls'
+    urls = get_hmiurls(url_xls)
+    report_path = 'Ngrok问题测试报告.xls'
+    rept_xls, rept_sht, dt_ar = create_report(report_path, urls)
+    log.info('hmi urls from:' + url_xls)
+    log.info('report file:' + report_path)
+    log.info('record format: [device] [hmi name] [alive] [date str] [time str] [info]')
+    log.info('start checking remote hmi status')
+
+    # 开始测试
+    proj_control = open_browser()    # 浏览器窗口1：主控HMI监控
+    proj_control.set_window_position(x=0, y=0)
+    proj_control.set_window_size(width=700, height=800)
+    time.sleep(2)
+    proj_control.get(r'http://192.168.39.23')
+    time.sleep(2)
+    times = 0    # 测试次数
+    browser = open_browser()    # 浏览器窗口2：HMI监控
+    browser.set_window_position(x=720, y=0)
+    browser.set_window_size(width=700, height=800)
+    time.sleep(3)
+    # 重新定义 机器电源码对应设备
+    code_device_map = {'01110000': 'switch0', '01011000': 'g4router0', '01010100': 'router0'}
+    while times <= 200:
+        for powcode in code_device_map.keys():
+            times += 1
+            log.info('current powercode:{}, net swtich times:{}'.format(powcode, times))
+            # set_device_power2(proj_control, '01010000')    # 三个设备下电
+            # time.sleep(30)
+            try:
+                set_device_power2(proj_control, powcode)    # 只有一个设备上电
+            except Exception as e:
+                print(e)
+            time.sleep(180)
+            t = threading.Thread(target=get_each_hmi_status,
+                                 args=(browser, urls, code_device_map[powcode], rept_sht, dt_ar))
+            t.setDaemon(True)
+            t.start()
+            t.join()
+        rept_xls.save(report_path)
+        time.sleep(400)
+        log.info('powercode {} checking finished'.format('01110000'))
+
+
 if __name__ == '__main__':
     # data_report()
-    main_4g_onoff()
+    # main_4g_onoff()
     # main_no_plc()
+    main_switch_onoff()
