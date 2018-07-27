@@ -10,13 +10,17 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
-from datetime import datetime as dt
 import logging as log
 # from selenium.webdriver.common.keys import Keys
 
 log.basicConfig(filename=os.path.join(os.getcwd(), 'log.txt'),
                 level=log.INFO,
                 format='%(asctime)s %(levelname)s: %(message)s')
+NUM_KEYB = {'0': 'SPAN_1000KY_3_1000',
+            '1': 'SPAN_1000KY_5_1000',
+            'CLR': 'SPAN_1000KY_12_1000',
+            'ESC': 'SPAN_1000KY_13_1000',
+            'ENTER': 'SPAN_1000KY_23_1000'}
 
 
 def open_browser():
@@ -25,7 +29,7 @@ def open_browser():
     return browser
 
 
-def open_project(brsr, httppath):
+def open_project(brsr: webdriver, httppath):
     """打开工程网页"""
     try:
         for i in range(3):
@@ -45,7 +49,7 @@ def open_project(brsr, httppath):
     return brsr
 
 
-def check_hmi(proj):
+def check_hmi(proj: webdriver):
     # 尝试查找页面元素并返回用于判断页面存在的信息
     hmi_alive = False
     hmi_date = '-'
@@ -103,19 +107,52 @@ def check_hmi(proj):
             return hmi_alive, hmi_date, hmi_time, check_info
     return hmi_alive, hmi_date, hmi_time, check_info
 
+
+def click_button(proj: webdriver, y):
+    button = {0: 'SPAN_0BS_0_0',
+              1: 'SPAN_0BS_1_0',
+              2: 'SPAN_0BS_2_0',
+              3: 'SPAN_0BS_3_0',
+              4: 'SPAN_0BS_4_0',
+              5: 'SPAN_0BS_5_0',
+              6: 'SPAN_0BS_6_0',
+              7: 'SPAN_0BS_0_0', }
+    div = proj.find_element_by_xpath('/html/body/div[@id="divfrm0"]/span[@id="{}"]'.format(button[0]))
+    div.click()
+    # print(div.get_attribute('src'), div.get_attribute('id'))
+
+
+def type_num(proj: webdriver, num_str):
+    proj.find_element_by_id(NUM_KEYB['CLR'])
+    time.sleep(0.5)
+    for i in list(num_str):
+        proj.find_element_by_id(NUM_KEYB[i]).click()
+        time.sleep(0.5)
+    time.sleep(0.5)
+    proj.find_element_by_id(NUM_KEYB['ENTER']).click()
+
+
+def set_num_value(proj: webdriver, num_str: str):
+    y = list(num_str)
+    num_str_new = ''.join([y.pop() for i in range(8)])
+    type_num(proj, num_str_new)
+
+
 if __name__ == "__main__":
-    log.info('hmi checking format: [hmi name] [alive] [date str] [time str] [info]')
-    hmiurl = r"http://d3bbfa1084f1a5eb107baf22a622a32e.hmi.we-con.com.cn:9999/"
-    hmitempname = hmiurl[-28:-24]
+    # log.info('hmi checking format: [hmi name] [alive] [date str] [time str] [info]')
+    # hmiurl = r"http://d3bbfa1084f1a5eb107baf22a622a32e.hmi.we-con.com.cn:9999/"
+    # hmitempname = hmiurl[-28:-24]
+    hmiurl = 'http://192.168.39.23'
     browser = open_browser()
     project = open_project(browser, hmiurl)
-    time.sleep(3)
-    hmialive, hmidate, hmitime, checkinfo = check_hmi(project)
-    log.info('[{}], [{}], [{}], [{}], [{}]'.format(hmitempname, hmialive, hmidate, hmitime, checkinfo))
-    time.sleep(1)
-    try:
-        project.quit()
-        log.info('browser closed safely.')
-    except:
-        log.error('broser closed ERROR.')
-
+    time.sleep(2)
+    # time.sleep(3)
+    # hmialive, hmidate, hmitime, checkinfo = check_hmi(project)
+    # log.info('[{}], [{}], [{}], [{}], [{}]'.format(hmitempname, hmialive, hmidate, hmitime, checkinfo))
+    # time.sleep(1)
+    # try:
+    #     project.quit()
+    #     log.info('browser closed safely.')
+    # except:
+    #     log.error('broser closed ERROR.')
+    set_num_value(project, '01111101')
