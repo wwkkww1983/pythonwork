@@ -168,25 +168,26 @@ class Download(object):
     # #     print(e)
 
 if __name__ == '__main__':
-    input("LEVI Download工程自动下载测试工具 V1.0\n输入任意字符开始测试：\n")
-    n = 5
-    while True:
-        pth = input("请输入Download.exe完整路径：\n")
-        fpth = input("请输入待下载.hmt工程文件完整路径：\n")
-        if os.path.exists(pth) and os.path.exists(fpth):
-            print("文件检查无误\n")
-        else:
-            print("文件检查失败！")
-            continue
-        n = input("请输入下载测试次数：")
-        if n.isdigit() and int(n) > 0:
-            print("确认下载次数为：{}".format(n))
-            break
-        else:
-            print("次数输入有误，请重新输入(必须为正整数)！")
-            continue
-    # pth = r'D:\Program Files\WECONSOFT\LeviStudiofor芯唐\20180723测试\Download.exe'
-    # fpth = r"E:\芯唐测试\2035t 2043t 2043e硬件测试\测试工程\芯唐接口测试 - 加密 - 2043t\xtpdf - 硬件接口可用性.ehmt"
+    # input("LEVI Download工程自动下载测试工具 V1.0\n输入任意字符开始测试：\n")
+    n = 10000
+    # while True:
+    #     pth = input("请输入Download.exe完整路径：\n")
+    #     fpth = input("请输入待下载.hmt工程文件完整路径：\n")
+    #     if os.path.exists(pth) and os.path.exists(fpth):
+    #         print("文件检查无误\n")
+    #     else:
+    #         print("文件检查失败！")
+    #         continue
+    #     n = input("请输入下载测试次数：")
+    #     if n.isdigit() and int(n) > 0:
+    #         print("确认下载次数为：{}".format(n))
+    #         break
+    #     else:
+    #         print("次数输入有误，请重新输入(必须为正整数)！")
+    #         continue
+    pth = r"D:\Program Files\WECONSOFT\LeviStudio\20180809发布\Download.exe"
+    # pth = r"D:\Program Files\WECONSOFT\LeviStudiofor芯唐\20180723测试\Download.exe"
+    fpth = r"E:\流程18\芯唐图库修改版本U盘更新工失败\闭环-触摸屏没有厚宽转换键\闭环旋切机中文版.ehmt"
     download = Download(pth, fpth)
     download.start()
     download.set()
