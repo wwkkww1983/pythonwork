@@ -6,7 +6,7 @@
 # date:      2018/7/26
 # -----------------------------------------------------------
 
-from pywinauto import application
+from pywinauto import application, mouse
 from time import sleep
 import os
 from datetime import datetime
@@ -46,8 +46,8 @@ class Download(object):
         self.app.start(self.exepath)
         sleep(1)
         self.win = self.app['Dialog']
+        self.win.move_window(0, 0)
         self.window_ready = True
-
     def set(self):
         try:
             self.win[u'PC端口：ComboBox'].Select(u'USB:DownloadLink')
@@ -88,13 +88,13 @@ class Download(object):
             except Exception:
                 print("USB link not found. ({})".format(i))
                 log.error("USB link not found. ({})".format(i))
-        sleep(5)
         self.set()
         sleep(5)
-        if self.win['PC-->HMI(&D)Button'].is_enabled():
-            self.win['PC-->HMI(&D)Button'].Click()
-        sleep(5)
-        self.win[u'文件名(&N):Edit'].SetText(self.filepath)
+        if self.win[u'PC端口：ComboBox'].is_enabled():
+            self.win[u'PC-->HMI(&D)Button'].Click()
+        # mouse.click(button='left', coords=(180, 370))    # 操作坐标，前提是窗口在顶层。
+        sleep(2)
+        self.app[u'打开Dialog'][u'文件名(&N):Edit'].SetText(self.filepath)
         sleep(.5)
         self.win['打开(&O)Button'].Click()
         print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '下载开始')
@@ -117,7 +117,7 @@ class Download(object):
             sleep(1)
             try:
                 if self.app.top_window()['Static2'].window_text() == txt:
-                    sleep(3)
+                    sleep(2)
                     # 主对话框中已包含“名称”为'Static2'的控件，当文本变为txt时，说明该对话框被下载成功对话框覆盖
                     self.app.top_window()['确定Button'].Click()
                     download_result = True
@@ -133,6 +133,7 @@ class Download(object):
             print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '下载完成')
             log.info('{} {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '下载完成'))
         self.result = download_result
+        sleep(15)    # 等待重启
 
     # def get_port(self, port='com3', baudrate=9600):
     #     t = None
@@ -168,26 +169,25 @@ class Download(object):
     # #     print(e)
 
 if __name__ == '__main__':
-    # input("LEVI Download工程自动下载测试工具 V1.0\n输入任意字符开始测试：\n")
-    n = 10000
-    # while True:
-    #     pth = input("请输入Download.exe完整路径：\n")
-    #     fpth = input("请输入待下载.hmt工程文件完整路径：\n")
-    #     if os.path.exists(pth) and os.path.exists(fpth):
-    #         print("文件检查无误\n")
-    #     else:
-    #         print("文件检查失败！")
-    #         continue
-    #     n = input("请输入下载测试次数：")
-    #     if n.isdigit() and int(n) > 0:
-    #         print("确认下载次数为：{}".format(n))
-    #         break
-    #     else:
-    #         print("次数输入有误，请重新输入(必须为正整数)！")
-    #         continue
-    pth = r"D:\Program Files\WECONSOFT\LeviStudio\20180809发布\Download.exe"
-    # pth = r"D:\Program Files\WECONSOFT\LeviStudiofor芯唐\20180723测试\Download.exe"
-    fpth = r"E:\流程18\芯唐图库修改版本U盘更新工失败\闭环-触摸屏没有厚宽转换键\闭环旋切机中文版.ehmt"
+    input("LEVI Download工程自动下载测试工具 V1.0\n输入任意字符开始测试：\n")
+    # n = 10000
+    while True:
+        pth = input("请输入Download.exe完整路径：\n")
+        fpth = input("请输入待下载.hmt工程文件完整路径：\n")
+        if os.path.exists(pth) and os.path.exists(fpth):
+            print("文件检查无误\n")
+        else:
+            print("文件检查失败！")
+            continue
+        n = input("请输入下载测试次数：")
+        if n.isdigit() and int(n) > 0:
+            print("确认下载次数为：{}".format(n))
+            break
+        else:
+            print("次数输入有误，请重新输入(必须为正整数)！")
+            continue
+    # pth = r"D:\Program Files\WECONSOFT\LeviStudio\20180809发布\Download.exe"
+    # fpth = r"E:\流程18\芯唐图库修改版本U盘更新工失败\闭环-触摸屏没有厚宽转换键\闭环旋切机中文版.ehmt"
     download = Download(pth, fpth)
     download.start()
     download.set()
@@ -214,5 +214,6 @@ if __name__ == '__main__':
                 n
             ))
         elif download.result == 0:
-            break
+            log.error("下载失败")
+            continue
     input("确认测试完成并已经保存数据，输入任意字符结束本程序:\n")
