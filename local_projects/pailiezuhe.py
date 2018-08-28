@@ -23,10 +23,10 @@ def get_combs(nums: list, n: int):
         for i in range(1, n+1):
             per += list(permutations(nums, i))
         print("""
-        \n随机数列：{}
-        \n组合内元素个数：小于等于{}
-        \n生成的组合个数：{}
-        \n组合列表：略
+        随机数列：{}
+        组合内元素个数：小于等于{}
+        生成的组合个数：{}
+        组合列表：略
         """.format(nums, n, len(per)))
     return per
 
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     combs = get_combs(nums, 3)
     targetvalue = 50
     target = pick_fittest_numcom(combs, targetvalue)
-    print("最佳(和接近{})的组合： {}".format(targetvalue, target))
+    print("        最佳(和接近{})的组合： {}".format(targetvalue, target))
