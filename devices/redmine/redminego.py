@@ -12,8 +12,8 @@ import json
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
-STATUS_ID = {"新建": 1, "进行中": 2, "已完成": 3}    # 待定
-TRACKER_ID = {"BUG": 1, "任务": 2}    # 待定
+STATUS_ID = {"新建": 1, "进行中": 2, "已完成": 3}  # 待定
+TRACKER_ID = {"BUG": 1, "任务": 2}  # 待定
 
 
 class RedmineGo(object):
@@ -39,6 +39,15 @@ class RedmineGo(object):
             self.projects = self.redmine.project.all()
         except Exception as e:
             log.error('fail to get all projects, please check. detail: {}'.format(e))
+        if self.projects:
+            i = 0
+            dic = {}
+            for pro in self.projects:
+                dic[pro.identifier] = dict(pro)
+                i += i
+            dic['count'] = len(self.projects)
+            with open("projects.json", 'w', encoding='utf-8') as f:
+                f.write(json.dumps(dic, ensure_ascii=False, indent=4))
 
     def count_projects(self):
         """
@@ -99,6 +108,15 @@ class RedmineGo(object):
             self.issues = self.redmine.issue.all()
         except Exception as e:
             log.error('fail to get all issues, please check. detail: {}'.format(e))
+        if self.issues:
+            i = 0
+            dic = {}
+            for iss in self.issues:
+                dic[iss.id] = dict(iss)
+                i += i
+            dic['count'] = len(self.issues)
+            with open("issues.json", 'w', encoding='utf-8') as f:
+                f.write(json.dumps(dic, ensure_ascii=False, indent=4))
 
     def count_issues(self):
         issue_counts = 0
@@ -160,10 +178,24 @@ class RedmineGo(object):
     #     pass
 
     def get_all_users(self):
-        try:
-            self.users = self.redmine.user.all()
-        except Exception as e:
-            log.error('fail to get all users, please check. detail: {}'.format(e))
+        # try:
+        #     self.users = self.redmine.user.all()
+        # except Exception as e:
+        #     log.error('fail to get all users, please check. detail: {}'.format(e))
+        if self.issues:
+            users = {}
+            for iss in redminego.issues:
+                iss = dict(iss)
+                try:
+                    if iss['assigned_to']['name'] not in users:
+                        users[iss['assigned_to']['name']] = iss['assigned_to']['id']
+                except Exception as e:
+                    print(e)
+                    print(iss['id'])    # 存在未指派的任务。。。
+                    continue
+            print(users, len(users))
+            with open('users.json', 'w', encoding='utf-8') as f:
+                f.write(json.dumps(users, ensure_ascii=False, indent=4))
 
     def count_users(self):
         user_counts = 0
@@ -197,7 +229,7 @@ class RedmineGo(object):
 
 
 if __name__ == '__main__':
-    urll = "http://192.168.11.118:7777/redmine/"    # 公司Redmine服务器
+    urll = "http://192.168.11.118:7777/redmine/"  # 公司Redmine服务器
     usern = "fanchunhui"
     passw = "a6361255"
     project_identifierr = 'demp'
@@ -208,44 +240,35 @@ if __name__ == '__main__':
     # passw = "admin111"
 
     redminego = RedmineGo(urll, usern, passw)
+    redminego.get_all_projects()
+    redminego.get_all_issues()
+    redminego.get_all_users()
 
+    # 获取全部项目
     # redminego.get_all_projects()
     # print(redminego.count_projects())
 
     # redminego.get_project_by_identifier(project_identifierr)
     # print(dict(redminego.project))
-    #
-    redminego.get_issue_by_resource_id(res_id)
-    iss = dict(redminego.issue)
-    for key, value in iss.items():
-        print(key, value)
 
-    redminego.get_all_issues()
-    # print(redminego.count_issues())
-    users = {}
-    for iss in redminego.issues:
-        iss = dict(iss)
-        try:
-            if iss['assigned_to']['name'] not in users:
-                users[iss['assigned_to']['name']] = iss['assigned_to']['id']
-        except Exception as e:
-            print(e)
-            print(iss['id'])    # 存在未指派的任务。。。
-            continue
-    print(users, len(users))
-    with open('users.json', 'w', encoding='utf-8') as f:
-        f.write(json.dumps(users, ensure_ascii=False, indent=4))
+    # redminego.get_issue_by_resource_id(res_id)
+    # iss = dict(redminego.issue)
+    # for key, value in iss.items():
+    #     print(key, value)
 
+    # redminego.get_all_issues()
+    # # print(redminego.count_issues())
 
-
-
+    # 通过过滤器进行任务筛选，灵活组合条件可以完成绝大部分筛选任务
     # redminego.get_issues_by_filter(project_id='demp',
     #                                tracker_id=None,
-    #                                status_id="*",
-    #                                assigned_to_id="*",
-    #                                start_date='><2018-07-31|2018-08-28',
-    #                                due_date='><2018-07-31|2018-08-28')
+    #                                status_id="1",
+    #                                assigned_to_id="35",    # 被指派人ID，这里不能通过指派人姓名进行过滤
+    #                                # start_date='><2018-07-31|2018-08-28',
+    #                                # due_date='><2018-07-31|2018-08-28'
+    #                                )
     # print(redminego.count_issues())
+
     # for iss in redminego.issues:
     #     redminego.get_issue_info(iss)
 
