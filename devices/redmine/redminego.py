@@ -17,16 +17,21 @@ TRACKER_ID = {"BUG": 1, "任务": 2}  # 待定
 
 
 class RedmineGo(object):
-    def __init__(self, url, user, passwd):
+    def __init__(self):
         self.redmine = None
         self.project = None
         self.projects = None
         self.issue = None
         self.issues = None
+        self.user = None
+        self.users = None
         self.membership = None
         self.memberships = None
+
+    def login(self,  url, user, passwd):
         try:
             self.redmine = Redmine(url, username=user, password=passwd)
+            log.info('logged in with {} on {}'.format(user, url))
         except Exception as e:
             log.error('fail to log redmine, please check url/username/password. detail: {}'.format(e))
 
@@ -48,6 +53,7 @@ class RedmineGo(object):
             dic['count'] = len(self.projects)
             with open("projects.json", 'w', encoding='utf-8') as f:
                 f.write(json.dumps(dic, ensure_ascii=False, indent=4))
+                log.info('projects info loaded')
 
     def count_projects(self):
         """
@@ -117,6 +123,7 @@ class RedmineGo(object):
             dic['count'] = len(self.issues)
             with open("issues.json", 'w', encoding='utf-8') as f:
                 f.write(json.dumps(dic, ensure_ascii=False, indent=4))
+            log.info('issues info loaded')
 
     def count_issues(self):
         issue_counts = 0
@@ -178,6 +185,10 @@ class RedmineGo(object):
     #     pass
 
     def get_all_users(self):
+        """
+        生成用户缓存文件
+        :return: no return
+        """
         # try:
         #     self.users = self.redmine.user.all()
         # except Exception as e:
@@ -194,6 +205,7 @@ class RedmineGo(object):
                     print(iss['id'])    # 存在未指派的任务。。。
                     continue
             print(users, len(users))
+            self.users = users
             with open('users.json', 'w', encoding='utf-8') as f:
                 f.write(json.dumps(users, ensure_ascii=False, indent=4))
 
@@ -227,6 +239,21 @@ class RedmineGo(object):
     def get_membership_info(membership):
         pass
 
+def get_ones_issues(names):
+    with open('issues.json', 'r', encoding='utf-8') as f:
+        issues = json.loads(f.read())
+    print('项目名称==', '任务id==', '任务主题==', '任务类型==', '分配给')
+    for issid, iss in issues.items():
+        try:
+            if iss["assigned_to"]['name'] in names and iss['status']['id'] in [1, 2, 7, 9]:
+                print('{}=={}=={}=={}=={}'.format(iss['project']['name'],
+                                          issid,
+                                          iss['subject'],
+                                          iss["tracker"]['name'],
+                                          iss["assigned_to"]['name']))
+        except Exception:
+            pass
+
 
 if __name__ == '__main__':
     urll = "http://192.168.11.118:7777/redmine/"  # 公司Redmine服务器
@@ -234,15 +261,17 @@ if __name__ == '__main__':
     passw = "a6361255"
     project_identifierr = 'demp'
     res_id = 1608
+    names = ['范 春回', '黄 海燕', '王 艳如', '陶 艳杰']
 
     # urll = "http://192.168.39.40/redmine"    # 公司pc私人Redmine服务器
     # usern = "admin"
     # passw = "admin111"
 
-    redminego = RedmineGo(urll, usern, passw)
-    redminego.get_all_projects()
-    redminego.get_all_issues()
-    redminego.get_all_users()
+    redminego = RedmineGo()
+    redminego.login(urll, usern, passw)
+    # redminego.get_all_projects()
+    # redminego.get_all_issues()
+    # redminego.get_all_users()
 
     # 获取全部项目
     # redminego.get_all_projects()
@@ -275,3 +304,5 @@ if __name__ == '__main__':
     # redminego.get_all_users()    # 暂无访问公司服务器权限
     # print(redminego.count_users())
     # print(redminego.get_user_info(redminego.users[1]))
+
+    get_ones_issues(names)
