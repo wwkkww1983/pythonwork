@@ -12,7 +12,7 @@ import json
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
-STATUS_ID = {"新建": 1, "进行中": 2, "已完成": 3}  # 待定
+STATUS_ID = {"新建": 1, "进行中": 2, "已完成": 3, '审核&评审': 7, '待验证': 9}  # 待定
 TRACKER_ID = {"BUG": 1, "任务": 2}  # 待定
 
 
@@ -50,7 +50,7 @@ class RedmineGo(object):
             for pro in self.projects:
                 dic[pro.identifier] = dict(pro)
                 i += i
-            dic['count'] = len(self.projects)
+
             with open("projects.json", 'w', encoding='utf-8') as f:
                 f.write(json.dumps(dic, ensure_ascii=False, indent=4))
                 log.info('projects info loaded')
@@ -120,7 +120,6 @@ class RedmineGo(object):
             for iss in self.issues:
                 dic[iss.id] = dict(iss)
                 i += i
-            dic['count'] = len(self.issues)
             with open("issues.json", 'w', encoding='utf-8') as f:
                 f.write(json.dumps(dic, ensure_ascii=False, indent=4))
             log.info('issues info loaded')
@@ -201,13 +200,14 @@ class RedmineGo(object):
                     if iss['assigned_to']['name'] not in users:
                         users[iss['assigned_to']['name']] = iss['assigned_to']['id']
                 except Exception as e:
-                    print(e)
-                    print(iss['id'])    # 存在未指派的任务。。。
+                    # print(e)
+                    # print(iss['id'])    # 存在未指派的任务。。。
                     continue
-            print(users, len(users))
+            # print(users, len(users))
             self.users = users
             with open('users.json', 'w', encoding='utf-8') as f:
                 f.write(json.dumps(users, ensure_ascii=False, indent=4))
+                log.info('users info loaded')
 
     def count_users(self):
         user_counts = 0
@@ -239,20 +239,19 @@ class RedmineGo(object):
     def get_membership_info(membership):
         pass
 
+
 def get_ones_issues(names):
     with open('issues.json', 'r', encoding='utf-8') as f:
         issues = json.loads(f.read())
-    print('项目名称==', '任务id==', '任务主题==', '任务类型==', '分配给')
+    log.info('{}, {}, {}, {}, {}'.format('项目名称', '任务id', '任务主题', '任务类型', '分配给'))
     for issid, iss in issues.items():
-        try:
+        if "assigned_to" in iss.keys():
             if iss["assigned_to"]['name'] in names and iss['status']['id'] in [1, 2, 7, 9]:
-                print('{}=={}=={}=={}=={}'.format(iss['project']['name'],
-                                          issid,
-                                          iss['subject'],
-                                          iss["tracker"]['name'],
-                                          iss["assigned_to"]['name']))
-        except Exception:
-            pass
+                log.info('{}, {}, {}, {}, {}'.format(iss['project']['name'],
+                                                     issid,
+                                                     iss['subject'],
+                                                     iss["tracker"]['name'],
+                                                     iss["assigned_to"]['name']))
 
 
 if __name__ == '__main__':
@@ -261,7 +260,7 @@ if __name__ == '__main__':
     passw = "a6361255"
     project_identifierr = 'demp'
     res_id = 1608
-    names = ['范 春回', '黄 海燕', '王 艳如', '陶 艳杰']
+    names = ['范 春回', '黄 海燕', '王 艳如', '陶 艳杰', '兰 秋琳', '李 云', '赖 永珍', '叶 倩', '张 艳虹', '贾 小洁']
 
     # urll = "http://192.168.39.40/redmine"    # 公司pc私人Redmine服务器
     # usern = "admin"
