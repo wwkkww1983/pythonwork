@@ -194,7 +194,7 @@ class RedmineGo(object):
         #     log.error('fail to get all users, please check. detail: {}'.format(e))
         if self.issues:
             users = {}
-            for iss in self.issues:
+            for iss in redminego.issues:
                 iss = dict(iss)
                 try:
                     if iss['assigned_to']['name'] not in users:
