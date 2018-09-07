@@ -120,9 +120,9 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     usb2CanDataAnal = Usb2CanDataAnalTool()
-    filePath = r'C:\Users\fan\OneDrive\pythonwork\local_projects\IO\canOpenAnal.txt'
-    ff =usb2CanDataAnal.readfile(filePath)
-    usb2CanDataAnal.set_file_info(ff[0])
-    usb2CanDataAnal.set_data_table(ff[1], ff[2], ff[3]-70000)
+    # filePath = r'C:\Users\fan\OneDrive\pythonwork\local_projects\IO\canOpenAnal.txt'
+    # ff =usb2CanDataAnal.readfile(filePath)
+    # usb2CanDataAnal.set_file_info(ff[0])
+    # usb2CanDataAnal.set_data_table(ff[1], ff[2], ff[3]-70000)
     usb2CanDataAnal.show()
     sys.exit(app.exec_())

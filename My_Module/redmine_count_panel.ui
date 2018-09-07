@@ -25,13 +25,13 @@
    <property name="title">
     <string>任务类型</string>
    </property>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>151</width>
-      <height>121</height>
+      <x>11</x>
+      <y>27</y>
+      <width>141</width>
+      <height>111</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -220,9 +220,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>170</y>
+     <y>200</y>
      <width>681</width>
-     <height>291</height>
+     <height>261</height>
     </rect>
    </property>
    <property name="title">
@@ -238,6 +238,19 @@
      </rect>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton_count">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>查询</string>
+   </property>
   </widget>
  </widget>
  <resources/>
