@@ -18,20 +18,20 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>171</width>
+     <width>131</width>
      <height>151</height>
     </rect>
    </property>
    <property name="title">
     <string>任务类型</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>11</x>
-      <y>27</y>
-      <width>141</width>
-      <height>111</height>
+      <y>17</y>
+      <width>111</width>
+      <height>121</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -69,9 +69,9 @@
   <widget class="QGroupBox" name="groupBox_taskStatus">
    <property name="geometry">
     <rect>
-     <x>189</x>
+     <x>150</x>
      <y>10</y>
-     <width>181</width>
+     <width>141</width>
      <height>151</height>
     </rect>
    </property>
@@ -83,7 +83,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>161</width>
+      <width>121</width>
       <height>121</height>
      </rect>
     </property>
@@ -129,9 +129,9 @@
   <widget class="QGroupBox" name="groupBox_assigned">
    <property name="geometry">
     <rect>
-     <x>380</x>
+     <x>300</x>
      <y>10</y>
-     <width>311</width>
+     <width>391</width>
      <height>151</height>
     </rect>
    </property>
@@ -143,18 +143,11 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>291</width>
+      <width>371</width>
       <height>121</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton_assignedClear">
-       <property name="text">
-        <string>清除</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QComboBox" name="comboBox_assignedTo">
        <item>
@@ -201,7 +194,24 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton_assignedDel">
+       <property name="text">
+        <string>删除选中</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="pushButton_assignedClear">
+       <property name="text">
+        <string>清除</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" colspan="2">
+      <widget class="QListWidget" name="listWidget_assignedTo"/>
+     </item>
+     <item row="1" column="0" colspan="2">
       <widget class="QListWidget" name="listWidget_partMembers">
        <item>
         <property name="text">
@@ -209,9 +219,6 @@
         </property>
        </item>
       </widget>
-     </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="QListWidget" name="listWidget_assignedTo"/>
      </item>
     </layout>
    </widget>
@@ -222,7 +229,7 @@
      <x>10</x>
      <y>200</y>
      <width>681</width>
-     <height>261</height>
+     <height>271</height>
     </rect>
    </property>
    <property name="title">
@@ -234,7 +241,7 @@
       <x>10</x>
       <y>20</y>
       <width>661</width>
-      <height>51</height>
+      <height>241</height>
      </rect>
     </property>
    </widget>
@@ -242,7 +249,7 @@
   <widget class="QPushButton" name="pushButton_count">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>610</x>
      <y>170</y>
      <width>75</width>
      <height>23</height>
@@ -250,6 +257,32 @@
    </property>
    <property name="text">
     <string>查询</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_renew">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>170</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>更新数据库</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_set">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>170</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>查询设置</string>
    </property>
   </widget>
  </widget>

@@ -12,10 +12,6 @@ import json
 log.basicConfig(level=log.INFO,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
-STATUS_ID = {"新建": 1, "进行中": 2, "已完成": 3, '审核&评审': 7, '已挂起': 8, '待验证': 9}  # 待定
-TRACKER_ID = {"BUG": 1, "任务": 2, "测试": 24}  # 待定
-
-
 class RedmineGo(object):
     def __init__(self):
         self.redmine = None
@@ -194,7 +190,7 @@ class RedmineGo(object):
         #     log.error('fail to get all users, please check. detail: {}'.format(e))
         if self.issues:
             users = {}
-            for iss in self.issues:
+            for iss in redminego.issues:
                 iss = dict(iss)
                 try:
                     if iss['assigned_to']['name'] not in users:
@@ -247,6 +243,8 @@ if __name__ == '__main__':
     project_identifierr = 'demp'
     res_id = 1608
     names = ['范 春回', '黄 海燕', '王 艳如', '陶 艳杰', '兰 秋琳', '李 云', '赖 永珍', '叶 倩', '张 艳虹', '贾 小洁']
+
+
 
 
     def get_ones_issues(names):
