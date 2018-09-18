@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'redmine_count_panel.ui'
 #
-# Created: Tue Sep 11 15:40:42 2018
+# Created: Wed Sep 12 09:24:04 2018
 #      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!

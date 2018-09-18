@@ -152,33 +152,6 @@ class RedmineGo(object):
         except Exception as e:
             log.error('fail to print issue info. plcease check. detail: {}'.format(e))
 
-    # def count_issues_created_days_ago(self, project_id, days: int):
-    #     """
-    #     统计周期内新增问题数
-    #     :param project_id: 项目标识
-    #     :param days: 统计过去几天内数据
-    #     :return: 新增问题列表
-    #     """
-    #     pass
-    #
-    # def count_issues_closed_days_ago(self, project_id, days: int):
-    #     """
-    #     统计周期内关闭问题数
-    #     :param project_id: 项目标识
-    #     :param days: 统计过去几天内数据
-    #     :return:关闭问题列表
-    #     """
-    #     pass
-    #
-    # def count_issues_due_days(self, project_id, days):
-    #     """
-    #     统计周期内仍存续且未解决的问题
-    #     :param project_id: 项目标识
-    #     :param days: 天数上限
-    #     :return:未解决列表
-    #     """
-    #     pass
-
     def get_all_users(self):
         """
         生成用户缓存文件
@@ -190,7 +163,7 @@ class RedmineGo(object):
         #     log.error('fail to get all users, please check. detail: {}'.format(e))
         if self.issues:
             users = {}
-            for iss in redminego.issues:
+            for iss in self.issues:
                 iss = dict(iss)
                 try:
                     if iss['assigned_to']['name'] not in users:

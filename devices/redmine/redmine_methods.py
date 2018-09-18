@@ -20,23 +20,47 @@ def get_some_issues(status_id_in: list, tracker_id_in: list, assigned_to_name_in
     """
     with open('issues.json', 'r', encoding='utf-8') as f:
         issues = json.loads(f.read())
-    print(','.join(fields))
+    with open('users.json', 'r', encoding='utf-8') as f1:
+        users = json.loads(f1.read())
+    user_ids = [users[i] for i in assigned_to_name_in]
+    print(','.join(fields) + ',tester')
     for issid, iss in issues.items():
         if "due_date" not in iss.keys():
             iss["due_date"] = "无"
         if "assigned_to" in iss.keys():
             # 包含被指派人的任务才能正常进行绩效统计
-            if iss["assigned_to"]['name'] in assigned_to_name_in and iss['status']['id'] in status_id_in \
-                    and iss["tracker"]["id"] in tracker_id_in:
-                # 跟踪项：被指派人、状态、任务类型
-                new = []
-                for i in field_list:
-                    u = i.split(' ')
-                    if len(u) == 1:
-                        new.append(str(iss[u[0]]))
-                    if len(u) == 2:
-                        new.append(str(iss[u[0]][u[1]]))
-                print(','.join(new))
+            if iss['status']['id'] in status_id_in and iss["tracker"]["id"] in tracker_id_in:
+                # 状态、任务类型
+                if iss["assigned_to"]['name'] in assigned_to_name_in:
+                    # 跟踪项：被指派人在测试部范围内
+                    new = []
+                    for i in field_list:
+                        u = i.split(' ')
+                        if len(u) == 1:
+                            new.append(str(iss[u[0]]))
+                        if len(u) == 2:
+                            new.append(str(iss[u[0]][u[1]]))
+                    print(','.join(new))
+                else:
+                    # 被指派人不是测试部范围，要查看字段“测试人员”是否为测试部人员：
+                    try:
+                        for i in iss["custom_fields"]:
+                            if i['id'] == 7:
+                                if int(i['value']) in user_ids:
+                                    new = []
+                                    for x in field_list:
+                                        u = x.split(' ')
+                                        if len(u) == 1:
+                                            new.append(str(iss[u[0]]))
+                                        if len(u) == 2:
+                                            new.append(str(iss[u[0]][u[1]]))
+                                    for key in users.keys():
+                                        if users[key] == int(i['value']):
+                                            new.append(key)
+                                    print(','.join(new))
+                    except Exception as e:
+                        pass
+
 
 
 if __name__ == '__main__':
