@@ -9,7 +9,7 @@
 from ui_redmine_count_panel import Ui_RedminePanel
 from redmine_methods import get_some_issues
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView
+from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView, QMessageBox
 import logging as log
 from redminego import RedmineGo
 log.basicConfig(level=log.DEBUG,
@@ -30,23 +30,36 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.statuses = None
         self.tasks = None
         self.assignedTo = None
+        self.messagebox = QMessageBox()
         self.comboBox_assignedTo.setCurrentText('测试部')
         self.users = {
             '软件一部': ['刘 衍青', '洪 慰'],
             '软件二部': ['许 章赫', '黄 元盛'],
             '软件三部': ['刘 建敏', '刘 小彬'],
-            '测试部': ['范 春回', '叶 倩', '兰 秋琳', '王 艳如', '贾 小洁', '黄海燕', '陶艳杰', '赖永珍', '张艳虹'],
+            '测试部': ['范 春回', '叶 倩', '兰 秋琳', '王 艳如', '贾 小洁', '黄 海燕', '陶 艳杰', '赖 永珍',
+                    '张 艳虹'],
             '技术支持部': ['林 艳梅', '宋 飏'],
             '硬件部': ['李 祥', '魏 龙强'],
             '外贸支持': ['徐 玉洁', '许 清杭']
         }
         self.switch_assigned_to()
         self.switch_assigned_to()
+
+        self.setWindowTitle('Redmine任务查询工具V1.0')
+
+        # 设置可以进行多选
         self.listWidget_partMembers.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.listWidget_assignedTo.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget_taskList.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
+        # 设置可以进行自动排序
+        self.tableWidget_taskList.setSortingEnabled(True)
+
     def get_task_type(self):
+        """
+         获取任务类型
+        :return:
+        """
         checked_tasks = []
         for chb in [
             self.checkBox_taskTest,
@@ -60,6 +73,10 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.tasks = checked_tasks
 
     def get_status(self):
+        """
+        获取任务状态
+        :return:
+        """
         checked_statuses = []
         for chb in [
             self.checkBox_statusNew,
@@ -74,6 +91,10 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.statuses = checked_statuses
 
     def switch_assigned_to(self):
+        """
+        对切换部门，并显示当前部门成员，也可以切换到全部，显示所有成员
+        :return:
+        """
         self.listWidget_partMembers.clear()
         usrs = []
         text = self.comboBox_assignedTo.currentText()
@@ -97,6 +118,10 @@ class RedminePannel(QWidget, Ui_RedminePanel):
                 self.listWidget_assignedTo.addItem(item.text())
 
     def del_assigned_to(self):
+        """
+        删除被指派成员，注意代码顺序不可调换
+        :return:
+        """
         items = self.listWidget_assignedTo.selectedItems()
         for item in items:
             n = self.listWidget_assignedTo.currentRow()
@@ -111,31 +136,44 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.assignedTo = items2
 
     def count(self):
+        """
+        获取查询信息，排布在表格控件中
+        :return:
+        """
         tasks = self.tasks
         statuses = self.statuses
         assignedto = self.assignedTo
-        task_ids = [TRACKER_ID[i] for i in tasks]
-        status_ids = [STATUS_ID[i] for i in statuses]
-        log.info('要查询的条件是taskes={}, statuses={}, assigned to={}'.format(tasks, statuses, assignedto))
-        issues = get_some_issues(status_ids, task_ids, assignedto, field_list)
+        if tasks == [] or statuses == [] or assignedto == []:
+            self.messagebox.information(self,
+                                        '提示',
+                                        '任务类型或者任务状态或者被指派人不能为空，请确认无误后再查询',
+                                        QMessageBox.Ok)
+        else:
+            task_ids = [TRACKER_ID[i] for i in tasks]
+            status_ids = [STATUS_ID[i] for i in statuses]
+            log.info('要查询的条件是taskes={}, statuses={}, assigned to={}'.format(tasks, statuses, assignedto))
+            issues = get_some_issues(status_ids, task_ids, assignedto, field_list)
+            horiheaderitems = issues[0].split('|||')  # 获取表头字段
+            tasklist = [i.split('|||') for i in issues[1:-1]]  # 获取任务列表，并将每个任务分离成列表
+            x = len(horiheaderitems)
+            y = len(tasklist)
+            self.tableWidget_taskList.setColumnCount(x)
+            self.tableWidget_taskList.setRowCount(y)  # 设置表宽度和长度
+            self.tableWidget_taskList.setHorizontalHeaderLabels(horiheaderitems)  # 设置表头
 
-        # print(issues)
-        horiheaderitems = issues[0].split('|||')
-        x = len(horiheaderitems)
-        y = len(issues)
-        self.tableWidget_taskList.setColumnCount(x)
-        self.tableWidget_taskList.setHorizontalHeaderLabels(horiheaderitems)
-        self.tableWidget_taskList.setHorizontalHeader().setResizeMode()
-        # for i in range(len(horiheaderitems)):
-        #     item = QtWidgets.QTableWidgetItem(horiheaderitems[i])
-        #     self.tableWidget_taskList.setHorizontalHeaderItem(i, item)
-        for issue in issues:
-            pass
-        return tasks, statuses, assignedto
+            # 必须保证所有项跟字段具有相同的宽度
+            for i in range(y):
+                for j in range(x):
+                    # 按照表格坐标设置每个任务的每个元素
+                    item = QtWidgets.QTableWidgetItem(tasklist[i][j])
+                    self.tableWidget_taskList.setItem(i, j, item)
 
     def clickbutton(self):
         self.pushButton_assignedAdd.clicked.connect(self.add_assigned_to)
+
+        # 单独的对列表控件进行全部清除的方法
         self.pushButton_assignedClear.clicked.connect(self.listWidget_assignedTo.clear)
+
         self.comboBox_assignedTo.currentTextChanged.connect(self.switch_assigned_to)
         self.pushButton_assignedDel.clicked.connect(self.del_assigned_to)
         self.pushButton_count.clicked.connect(self.get_task_type)

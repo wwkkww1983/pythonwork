@@ -43,6 +43,7 @@ def get_some_issues(status_id_in: list, tracker_id_in: list, assigned_to_name_in
                             new.append(str(iss[u[0]]))
                         if len(u) == 2:
                             new.append(str(iss[u[0]][u[1]]))
+                    new.append('无')
                     new1.append('|||'.join(new))
                 else:
                     # 被指派人不是测试部范围，要查看字段“测试人员”是否为测试部人员：
@@ -63,9 +64,10 @@ def get_some_issues(status_id_in: list, tracker_id_in: list, assigned_to_name_in
                                     new2.append('|||'.join(new))
                     except Exception as e:
                         pass
-    # for i in (new1 + new2):
-    #     print(i)
+
     x = [fie] + new1 + new2
+    for i in x:
+        print(i)
     return x
 
 
