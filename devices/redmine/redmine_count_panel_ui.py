@@ -6,12 +6,18 @@
 # date:      2018/9/7
 # -----------------------------------------------------------
 
-from ui_redmine_count_panel import Ui_RedminePanel
-from redmine_methods import get_some_issues
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView, QMessageBox
 import logging as log
+import webbrowser
+
+from PyQt5 import QtWidgets
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView, QMessageBox
+from redmine_methods import get_some_issues
 from redminego import RedmineGo
+from ui_redmine_count_panel import Ui_RedminePanel
+import _thread as thread
+from time import sleep
+
 log.basicConfig(level=log.DEBUG,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 STATUS_ID = {"新建": 1, "进行中": 2, "已完成": 3, '审核&评审': 7, '已挂起': 8, '待验证': 9}  # 待定
@@ -26,6 +32,7 @@ field_list = ['id', 'project name', 'subject', 'tracker name',
 class RedminePannel(QWidget, Ui_RedminePanel):
     def __init__(self, parent=None):
         super(RedminePannel, self).__init__(parent)
+        self.redminego = self.login()
         self.setupUi(self)
         self.statuses = None
         self.tasks = None
@@ -44,7 +51,6 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         }
         self.switch_assigned_to()
         self.switch_assigned_to()
-
         self.setWindowTitle('Redmine任务查询工具V1.0')
 
         # 设置可以进行多选
@@ -54,6 +60,14 @@ class RedminePannel(QWidget, Ui_RedminePanel):
 
         # 设置可以进行自动排序
         self.tableWidget_taskList.setSortingEnabled(True)
+
+    def login(self):
+        urll = "http://192.168.11.118:7777/redmine/"  # 公司Redmine服务器
+        usern = "fanchunhui"
+        passw = "a6361255"
+        redminego = RedmineGo()
+        redminego.login(urll, usern, passw)
+        return redminego
 
     def get_task_type(self):
         """
@@ -140,6 +154,9 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         获取查询信息，排布在表格控件中
         :return:
         """
+        # 打开可排序性会导致重新排列后显示数据丢失，故先关闭。重新设置数据后再打开
+        self.tableWidget_taskList.setSortingEnabled(False)
+
         tasks = self.tasks
         statuses = self.statuses
         assignedto = self.assignedTo
@@ -162,11 +179,51 @@ class RedminePannel(QWidget, Ui_RedminePanel):
             self.tableWidget_taskList.setHorizontalHeaderLabels(horiheaderitems)  # 设置表头
 
             # 必须保证所有项跟字段具有相同的宽度
+            font = QFont()
+            font.setUnderline(True)
             for i in range(y):
                 for j in range(x):
                     # 按照表格坐标设置每个任务的每个元素
                     item = QtWidgets.QTableWidgetItem(tasklist[i][j])
+                    if j == 0:
+                        item.setFont(font)
                     self.tableWidget_taskList.setItem(i, j, item)
+        self.tableWidget_taskList.setSortingEnabled(True)    # 重新打开可排序性
+
+    def updatedata(self):
+        self.redminego.projects = None
+        self.redminego.issues = None
+        self.redminego.users = None
+        self.pushButton_count.setDisabled(True)  # 更新过程禁止操作查询
+        self.messagebox = QMessageBox()
+        self.messagebox.information(self,
+                                    '提示',
+                                    '点击OK开始数据更新，数据更新过程可能会造成一定卡顿，请耐心等待提示。',
+                                    QMessageBox.Ok)
+        thread.start_new_thread(self.redminego.get_all_issues, ())
+        thread.start_new_thread(self.redminego.get_all_projects, ())
+        i = 0
+        while i < 15:
+            sleep(1)
+            i += 1
+            try:
+                if self.redminego.issues and self.redminego.projects:
+                    thread.start_new_thread(self.redminego.get_all_users, ())
+                    if self.redminego.users:
+                        self.messagebox = QMessageBox()
+                        self.messagebox.information(self,
+                                                    '提示',
+                                                    '数据更新完毕！请点击OK继续查询。',
+                                                    QMessageBox.Ok)
+                        self.pushButton_count.setDisabled(False)  # 更新完毕恢复允许操作查询
+                        break
+            except Exception as e:
+                log.ERROR("更新数据超时，请稍后再试".format(e))
+
+    def openurl(self, x, y):
+        if y == 0:
+            id = self.tableWidget_taskList.item(x, y).text()
+            webbrowser.open('http://192.168.11.118:7777/redmine/issues/{}'.format(id))
 
     def clickbutton(self):
         self.pushButton_assignedAdd.clicked.connect(self.add_assigned_to)
@@ -181,13 +238,15 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.pushButton_count.clicked.connect(self.get_assigned_to)
         self.pushButton_count.clicked.connect(self.count)
 
+        # 执行项目、用户、任务的更新
+        self.pushButton_renew.clicked.connect(self.updatedata)
+
 
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    redminego = RedmineGo()
-    # redminego.login(urll, usern, passw)
     red = RedminePannel()
     red.show()
     red.clickbutton()
+    red.tableWidget_taskList.cellClicked[int, int].connect(red.openurl)
     sys.exit(app.exec_())

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'redmine_count_panel.ui'
 #
-# Created: Tue Sep 25 01:43:13 2018
+# Created: Tue Sep 25 11:48:08 2018
 #      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -104,7 +104,7 @@ class Ui_RedminePanel(object):
     def retranslateUi(self, RedminePanel):
         _translate = QtCore.QCoreApplication.translate
         RedminePanel.setWindowTitle(_translate("RedminePanel", "Dialog"))
-        self.checkBox_statusCheck.setText(_translate("RedminePanel", "评审或审核"))
+        self.checkBox_statusCheck.setText(_translate("RedminePanel", "审核&评审"))
         self.pushButton_assignedAdd.setText(_translate("RedminePanel", "添加"))
         self.comboBox_assignedTo.setItemText(0, _translate("RedminePanel", "软件一部"))
         self.comboBox_assignedTo.setItemText(1, _translate("RedminePanel", "软件二部"))

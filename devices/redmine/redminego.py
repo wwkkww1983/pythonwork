@@ -50,6 +50,7 @@ class RedmineGo(object):
             with open("projects.json", 'w', encoding='utf-8') as f:
                 f.write(json.dumps(dic, ensure_ascii=False, indent=4))
                 log.info('projects info loaded')
+            return True
 
     def count_projects(self):
         """
@@ -119,6 +120,7 @@ class RedmineGo(object):
             with open("issues.json", 'w', encoding='utf-8') as f:
                 f.write(json.dumps(dic, ensure_ascii=False, indent=4))
             log.info('issues info loaded')
+        return True
 
     def count_issues(self):
         issue_counts = 0
@@ -177,6 +179,7 @@ class RedmineGo(object):
             with open('users.json', 'w', encoding='utf-8') as f:
                 f.write(json.dumps(users, ensure_ascii=False, indent=4))
                 log.info('users info loaded')
+            return True
 
     def count_users(self):
         user_counts = 0

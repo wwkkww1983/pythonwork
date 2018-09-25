@@ -19,7 +19,7 @@
      <item row="3" column="1">
       <widget class="QCheckBox" name="checkBox_statusCheck">
        <property name="text">
-        <string>评审或审核</string>
+        <string>审核&amp;评审</string>
        </property>
       </widget>
      </item>
