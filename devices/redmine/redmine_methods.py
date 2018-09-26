@@ -66,8 +66,8 @@ def get_some_issues(status_id_in: list, tracker_id_in: list, assigned_to_name_in
                         pass
 
     x = [fie] + new1 + new2
-    for i in x:
-        print(i)
+    # for i in x:
+    #     print(i)
     return x
 
 

@@ -5,7 +5,7 @@
 # Author:    fan
 # date:      2018/9/7
 # -----------------------------------------------------------
-from redmine_count_panel_ui import RedminePannel
+from redmine_count_panel import RedminePannel
 from redminego import RedmineGo
 from redmine_methods import get_some_issues
 from PyQt5.QtWidgets import QApplication

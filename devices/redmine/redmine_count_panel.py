@@ -17,6 +17,7 @@ from redminego import RedmineGo
 from ui_redmine_count_panel import Ui_RedminePanel
 import _thread as thread
 from time import sleep
+from os import path
 
 log.basicConfig(level=log.DEBUG,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
@@ -39,6 +40,8 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.assignedTo = None
         self.messagebox = QMessageBox()
         self.comboBox_assignedTo.setCurrentText('测试部')
+        self.checkBox_taskBug.setChecked(True)
+        self.checkBox_statusWaitcheck.setChecked(True)
         self.users = {
             '软件一部': ['刘 衍青', '洪 慰'],
             '软件二部': ['许 章赫', '黄 元盛'],
@@ -154,41 +157,43 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         获取查询信息，排布在表格控件中
         :return:
         """
-        # 打开可排序性会导致重新排列后显示数据丢失，故先关闭。重新设置数据后再打开
-        self.tableWidget_taskList.setSortingEnabled(False)
-
-        tasks = self.tasks
-        statuses = self.statuses
-        assignedto = self.assignedTo
-        if tasks == [] or statuses == [] or assignedto == []:
-            self.messagebox.information(self,
-                                        '提示',
-                                        '任务类型或者任务状态或者被指派人不能为空，请确认无误后再查询',
-                                        QMessageBox.Ok)
+        if not (path.exists('issues.json') and path.exists('projects.json') and path.exists('users.json')):
+            self.updatedata()
         else:
-            task_ids = [TRACKER_ID[i] for i in tasks]
-            status_ids = [STATUS_ID[i] for i in statuses]
-            log.info('要查询的条件是taskes={}, statuses={}, assigned to={}'.format(tasks, statuses, assignedto))
-            issues = get_some_issues(status_ids, task_ids, assignedto, field_list)
-            horiheaderitems = issues[0].split('|||')  # 获取表头字段
-            tasklist = [i.split('|||') for i in issues[1:-1]]  # 获取任务列表，并将每个任务分离成列表
-            x = len(horiheaderitems)
-            y = len(tasklist)
-            self.tableWidget_taskList.setColumnCount(x)
-            self.tableWidget_taskList.setRowCount(y)  # 设置表宽度和长度
-            self.tableWidget_taskList.setHorizontalHeaderLabels(horiheaderitems)  # 设置表头
+            # 打开可排序性会导致重新排列后显示数据丢失，故先关闭。重新设置数据后再打开
+            self.tableWidget_taskList.setSortingEnabled(False)
+            tasks = self.tasks
+            statuses = self.statuses
+            assignedto = self.assignedTo
+            if tasks == [] or statuses == [] or assignedto == []:
+                self.messagebox.information(self,
+                                            '提示',
+                                            '任务类型或者任务状态或者被指派人不能为空，请确认无误后再查询',
+                                            QMessageBox.Ok)
+            else:
+                task_ids = [TRACKER_ID[i] for i in tasks]
+                status_ids = [STATUS_ID[i] for i in statuses]
+                log.info('要查询的条件是taskes={}, statuses={}, assigned to={}'.format(tasks, statuses, assignedto))
+                issues = get_some_issues(status_ids, task_ids, assignedto, field_list)
+                horiheaderitems = issues[0].split('|||')  # 获取表头字段
+                tasklist = [i.split('|||') for i in issues[1:-1]]  # 获取任务列表，并将每个任务分离成列表
+                x = len(horiheaderitems)
+                y = len(tasklist)
+                self.tableWidget_taskList.setColumnCount(x)
+                self.tableWidget_taskList.setRowCount(y)  # 设置表宽度和长度
+                self.tableWidget_taskList.setHorizontalHeaderLabels(horiheaderitems)  # 设置表头
 
-            # 必须保证所有项跟字段具有相同的宽度
-            font = QFont()
-            font.setUnderline(True)
-            for i in range(y):
-                for j in range(x):
-                    # 按照表格坐标设置每个任务的每个元素
-                    item = QtWidgets.QTableWidgetItem(tasklist[i][j])
-                    if j == 0:
-                        item.setFont(font)
-                    self.tableWidget_taskList.setItem(i, j, item)
-        self.tableWidget_taskList.setSortingEnabled(True)    # 重新打开可排序性
+                # 必须保证所有项跟字段具有相同的宽度
+                font = QFont()
+                font.setUnderline(True)
+                for i in range(y):
+                    for j in range(x):
+                        # 按照表格坐标设置每个任务的每个元素
+                        item = QtWidgets.QTableWidgetItem(tasklist[i][j])
+                        if j == 0:
+                            item.setFont(font)
+                        self.tableWidget_taskList.setItem(i, j, item)
+            self.tableWidget_taskList.setSortingEnabled(True)  # 重新打开可排序性
 
     def updatedata(self):
         self.redminego.projects = None
@@ -198,7 +203,7 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.messagebox = QMessageBox()
         self.messagebox.information(self,
                                     '提示',
-                                    '点击OK开始数据更新，数据更新过程可能会造成一定卡顿，请耐心等待提示。',
+                                    '点击OK开始更新，数据更新过程(持续约10秒)可能会造成一定卡顿，请耐心等待提示。',
                                     QMessageBox.Ok)
         thread.start_new_thread(self.redminego.get_all_issues, ())
         thread.start_new_thread(self.redminego.get_all_projects, ())
