@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project filever="1.0">
+	<AddrInfo ScrnNo="0" HasNoPlcAddr="1">
+		<HMIAddr>
+			<WordAddr>
+				<Add Addr="HDW_W_0010000" Len="1" Fast="0"/></WordAddr></HMIAddr></AddrInfo>
+<AddrInfo ScrnNo="2" HasNoPlcAddr="1">
+<HMIAddr>
+
+<WordAddr>
+<Add Addr="HDW_W_0020000" Len="1" Fast="0"/></WordAddr></HMIAddr></AddrInfo></project>
