@@ -29,7 +29,7 @@ def rewritehsc( hscpath, tagname:str, tagstart:int=0, tagfinish:int=99):
     str8 = '" FigureFile="'
     wordtag = [tagname + str(i) for i in range(tagstart, tagfinish+1)]
     bittag = [tagname + str(i) for i in range(tagstart, tagfinish+1)]
-    with open(hscpath, 'r') as f:
+    with open(hscpath, 'r', encoding='utf-8') as f:
         for line in f.readlines():
             if (str1 in line) and (str2 in line):
                 locate1 = line.find(str1)
@@ -75,11 +75,11 @@ def rewritehsc( hscpath, tagname:str, tagstart:int=0, tagfinish:int=99):
         pass
     else:
         os.mkdir(new)
-    with open(os.path.join(new, hscname), 'w') as f:
+    with open(os.path.join(new, hscname), 'w', encoding='utf-8') as f:
         for line in newf:
             f.write(line)
 
 
 if __name__ == '__main__':
-    rewritehsc('0.hsc', 'D', 0, 99)
-    rewritehsc('2.hsc', 'M', 0, 99)
+    rewritehsc('0.hsc', 'M', 0, 9)
+    rewritehsc('2.hsc', 'D', 0, 10)

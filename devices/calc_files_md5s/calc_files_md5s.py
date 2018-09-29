@@ -15,7 +15,7 @@ log.basicConfig(level=log.ERROR,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s: %(message)s')
 
 
-def cal_md5(fileb, nbyte=1024):
+def cal_md5(fileb, nbyte=65536):
     # 针对‘file'类型输入
     md5 = hashlib.md5()
     while True:
@@ -50,14 +50,12 @@ def defolder(folderpath:str):
     return name_file_dict
 
 
-
-
 def dezip(zippath:str):
     name_file_dict = {}
     zip = zipfile.ZipFile(zippath)
     for name in zip.namelist():
         fb = zip.open(name, 'rU')    # f为byte类型
-        name_file_dict[name] = fb
+        name_file_dict[name.encode('cp437').decode('gbk')] = fb    # 骚操作，先按zip文件名编码方式还原后再用gbk解码
     return name_file_dict
 
 
@@ -108,10 +106,14 @@ def main(import_type:str, path:str):
     # log.info(md5s)
     print('\n', import_type, path)
     for k in sorted(md5s.keys()):
+        # 必须进行排序，使得结果具有一致性。使用字典原因在于用控件换时间。
         print('{}, {}'.format(k, md5s[k]))
     return md5s
 
 if __name__ == '__main__':
     main('file', 'productfile.osf')
-    main('zip', 'productfile.osf')
+    main('zip', 'calc_files_md5s.zip')
     main('folder', '.')
+    main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
+    main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
+
