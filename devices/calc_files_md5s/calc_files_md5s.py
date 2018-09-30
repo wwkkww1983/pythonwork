@@ -29,6 +29,7 @@ def cal_md5(fileb, nbyte=65536):
 
 
 def defile(filepath:str):
+    # 打开类型“文件”
     try:
         f = open(filepath, 'rb')
         return {filepath: f}
@@ -38,19 +39,21 @@ def defile(filepath:str):
 
 
 def defolder(folderpath:str):
+    # 打开类型“文件夹”
     name_file_dict = {}
     os.chdir(folderpath)
     for root, dirs, files in os.walk(folderpath):
         for i in files:
             fp = os.path.join(root, i)
             fb = open(fp, 'rb')
-            fpp = fp[len(folderpath):]    # 截去相对路径
+            fpp = fp[len(folderpath):]    # 截取相对路径作为字典键值
             name_file_dict[fpp] = fb   # 组装相对路径和文件流为字典
     log.info(name_file_dict)
     return name_file_dict
 
 
 def dezip(zippath:str):
+    # 打开类型“zip”
     name_file_dict = {}
     zip = zipfile.ZipFile(zippath)
     for name in zip.namelist():
@@ -60,6 +63,7 @@ def dezip(zippath:str):
 
 
 def derar(zippath:str):
+    # 打开类型“RAR”
     name_file_dict = {}
     rar = rarfile.RarFile(zippath)
     for name in rar.namelist():
@@ -104,16 +108,60 @@ def main(import_type:str, path:str):
                 else:
                     log.error('the selected file is not supported, please check.')
     # log.info(md5s)
-    print('\n', import_type, path)
+    # print('\n', import_type, path)
     for k in sorted(md5s.keys()):
         # 必须进行排序，使得结果具有一致性。使用字典原因在于用控件换时间。
-        print('{}, {}'.format(k, md5s[k]))
+        print('{},{}'.format(k, md5s[k]))
     return md5s
 
+
+def lookfolder(folderpath:str):
+    # 打开类型“文件夹”
+    name_file_dict = {}
+    os.chdir(folderpath)
+    for root, dirs, files in os.walk(folderpath):
+        for i in files:
+            fp = os.path.join(root, i)
+            fb = None
+            name_file_dict[fp] = fb   # 组装相对路径和文件流为字典
+    log.info(name_file_dict)
+    return name_file_dict
+
+
+def walk_special_package(rootpath, filename):
+    dic = lookfolder(rootpath)
+    for k in sorted(dic.keys()):
+        p, n = os.path.split(k)
+        if 'backup' not in p:
+            if n == filename:
+                print('\n', k)
+                main('zip', k)
+
 if __name__ == '__main__':
-    main('file', 'productfile.osf')
-    main('zip', 'calc_files_md5s.zip')
-    main('folder', '.')
-    main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
-    main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
+    # main('file', 'productfile.osf')
+    # main('zip', 'calc_files_md5s.zip')
+    # main('folder', '.')
+    # main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
+    # main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
+    # while True:
+    #     # 循环输入zip路径，打印zip内文件MD5
+    #     p = input('输入文件路径，按回车开始校验：')
+    #     if not p:
+    #         continue
+    #     else:
+    #         if p[0] == '"':
+    #             p = p[1:]
+    #         if p[-1] == '"':
+    #             p = p[:-1]
+    #         if not os.path.exists(p):
+    #             continue
+    #         else:
+    #             main('zip', p)
+    root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用'
+    root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM'
+    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_通用'
+    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
+    name = 'productfile.osf'
+    walk_special_package(root, name)
+    # print(lookfolder(root))
 
