@@ -80,6 +80,19 @@ def calc_files_md5s(name_file_dic:dict):
     return md5s
 
 
+def lookfolder(folderpath:str):
+    # 打开类型“文件夹”,返回所有文件的绝对路径，本函数不需要用到文件流，为了保持接口一致仍返回字典
+    name_file_dict = {}
+    os.chdir(folderpath)
+    for root, dirs, files in os.walk(folderpath):
+        for i in files:
+            fp = os.path.join(root, i)    # 合成文件绝对路径
+            fb = None
+            name_file_dict[fp] = fb   # 组装绝对路径和文件流为字典
+    log.info(name_file_dict)
+    return name_file_dict
+
+
 def main(import_type:str, path:str):
     md5s = None
     if not import_type:
@@ -115,19 +128,6 @@ def main(import_type:str, path:str):
     return md5s
 
 
-def lookfolder(folderpath:str):
-    # 打开类型“文件夹”
-    name_file_dict = {}
-    os.chdir(folderpath)
-    for root, dirs, files in os.walk(folderpath):
-        for i in files:
-            fp = os.path.join(root, i)
-            fb = None
-            name_file_dict[fp] = fb   # 组装相对路径和文件流为字典
-    log.info(name_file_dict)
-    return name_file_dict
-
-
 def walk_special_package(rootpath, filename):
     dic = lookfolder(rootpath)
     for k in sorted(dic.keys()):
@@ -136,6 +136,7 @@ def walk_special_package(rootpath, filename):
             if n == filename:
                 print('\n', k)
                 main('zip', k)
+
 
 if __name__ == '__main__':
     # main('file', 'productfile.osf')
@@ -157,11 +158,12 @@ if __name__ == '__main__':
     #             continue
     #         else:
     #             main('zip', p)
-    root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用'
-    root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM'
+    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用'
+    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM'
     # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_通用'
     # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
+    root = r'C:\MyWorkSpace\pythonwork\devices\vbox_auto_test'
     name = 'productfile.osf'
     walk_special_package(root, name)
-    # print(lookfolder(root))
+    print(lookfolder(root))
 
