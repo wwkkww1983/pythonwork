@@ -19,7 +19,7 @@ class TestTriangle(unittest.TestCase):
         # 测试用例
         sidecases = [(3, 4, 5), (100, 101, 102), (-1, 3, 5), (5, 0, 3)]
         # 预期测试结果设置
-        results = [True, True, False, True]
+        results = [True, True, False, False]
         for sidecase, result in zip(sidecases, results):
             # 执行测试对象方法
             self.triangle.maketriangle(*sidecase)
