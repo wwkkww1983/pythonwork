@@ -1,4 +1,4 @@
-XXXX测试用例
-1.模块1
+start.addstr.3
 1, input1, input2, input3, input1input2input3
 2, input4, input5, input6, input4input5input6
+end.addstr

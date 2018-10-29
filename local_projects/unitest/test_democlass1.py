@@ -8,6 +8,7 @@
 import unittest
 from democlass1 import Demo
 
+
 class TestDemo(unittest.TestCase):
     def setUp(self):
         self.demo = Demo()
@@ -23,24 +24,31 @@ class TestDemo(unittest.TestCase):
         self.demo = None
 
     def test_addstr(self):
+        resultline = "\n==================== test cases ===================="
+        print(resultline)
         for line in self.data:
-            if line not in ["title"] + [str(i) for i in range(100)]:
+            print(line)
+        resultline = "\n==================== test report ===================="
+        print(resultline)
+        paramnum = None
+        for line in self.data:
+            if "start" in line:
+                line2list = [i for i in line.split('.')]
+                paramnum = int(line2list[2])
+                resultline = line
+            if "," in line:
                 line2list = [j.strip() for j in line.split(',')]    # 分解字符串，去空格
-                if line2list.__len__() != 1:
-                    # 非用例行（标题，模块名）禁用半角逗号
-                    inputs = line2list[1:4]
-                    result = line2list[4]
-                    # self.demo.addstr(*inputs)
-                    try:
-                        self.result = (self.demo.addstr(*inputs) == result)
-                    except:
-                        self.result = False
-                    self.results.append(line2list[0] + ', ' + str(self.result) + '\n')
-                    self.assertEqual(1, 1)
-                else:
-                    self.results.append(line+'\n')
-            else:
-                self.results.append(line+'\n')
+                inputs = line2list[1:paramnum+1]
+                de_outputs = line2list[paramnum+1:]    # 预期输出
+                try:
+                    result = ([self.demo.addstr(*inputs)] == de_outputs)
+                except:
+                    result = False
+                resultline = line2list[0] + ', ' + str(result)
+                self.assertEqual(1, 1)
+            if "end" in line:
+                resultline = line
+            print(resultline)
 
 if __name__ == '__main__':
     unittest.main()
