@@ -6,7 +6,7 @@
 # date:      2018/10/29
 # -----------------------------------------------------------
 
-import requests as req
+import requests
 import json
 import hashlib
 import time
@@ -18,7 +18,29 @@ debug = False
 
 
 class VboxHttpApi(object):
-    def __init__(self, url, keyvalue, commonparadic, headerswithoutcommon, apilogin):
+    def __init__(self,
+                 url="http://api.v-box.net/box-data/api/",
+                 keyvalue="key=f1cd9351930d4e589922edbcf3b09a7c",
+                 commonparadic=None,
+                 headerswithoutcommon=None,
+                 apilogin='we-data/login'
+                 ):
+        if commonparadic is None:
+            commonparadic = {
+                             "comid": "1",
+                             "compvtkey": "27a010966282423fbd202bf3f45267c0",
+                             "ts": None,  # ts在调用参数时动态生成
+                            }
+        if headerswithoutcommon is None:
+            headerswithoutcommon = {
+                                    "Host": '192.168.45.186:8686',
+                                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+                                                  'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                  'Chrome/31.0.1650.63 '
+                                                  'Safari/537.36',
+                                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                                    "Connection": "keep-alive"
+                                   }
         self.url = url
         self.keyvalue = keyvalue
         self.common_para_dic = commonparadic
@@ -40,6 +62,19 @@ class VboxHttpApi(object):
         :return: 排序后的字典key构成的列表
         """
         return sorted(dic)
+
+    @staticmethod
+    def merge_dic(*dics):
+        """
+        合并字典
+        :param dics:
+        :return:
+        """
+        dic_l = []
+        for dic in dics:
+            if dic:
+                dic_l.extend(list(dic.items()))  # 将字典中所有键值对放到一个list中
+        return dict(dic_l)  # 字典化并返回
 
     def url_encode(self, lst, dic):
         encoded_url = ''
@@ -69,14 +104,11 @@ class VboxHttpApi(object):
         commondic["ts"] = nowtime()
 
         if api == self.api_login:
-            businessdic["password"] = self.cal_md5(businessdic["password"])
-
+            businessdic["password"] = self.cal_md5(businessdic["password"])  # 登录操作需要密码
         else:
-            commondic["sid"] = sid
-
-        mergedic = dict(list(businessdic.items()) + list(commondic.items()))
+            commondic["sid"] = sid  # 登录之外的操作需要sid
+        mergedic = self.merge_dic(businessdic, commondic)    # 合并全局参数字典和业务参数字典
         commondic["sign"] = self.sign_easy(mergedic)
-
         headers_dict = self.headers_without_common.copy()
         headers_dict["common"] = json.dumps(commondic)
 
@@ -85,7 +117,7 @@ class VboxHttpApi(object):
                   "common_para_dict2: {cpd}\n\n"
                   "headers: {hds}\n".format(nd=mergedic, cpd=commondic, hds=headers_dict))
 
-        r = req.post(newurl, data=mergedic, headers=headers_dict)
+        r = requests.post(newurl, data=mergedic, headers=headers_dict)  # 提交
         return r
 
     def login(self, logindic):
@@ -94,23 +126,9 @@ class VboxHttpApi(object):
         return login_result
 
 if __name__ == '__main__':
-    #url_test = "http://192.168.45.186:8686/box-data/api/"
-    url = "http://api.v-box.net/box-data/api/"
-    keyvalue = "key=f1cd9351930d4e589922edbcf3b09a7c"
-    common_para_dic = {
-                       "comid": "1",
-                       "compvtkey": "27a010966282423fbd202bf3f45267c0",
-                       "ts": None,  # ts在调用参数时动态生成
-                      }
-    headers_without_common = {
-                              "Host": '192.168.45.186:8686',
-                              "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
-                                            'AppleWebKit/537.36 (KHTML, like Gecko) '
-                                            'Chrome/31.0.1650.63 '
-                                            'Safari/537.36',
-                              "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                              "Connection": "keep-alive"
-                              }
+    # url_test = "http://192.168.45.186:8686/box-data/api/"
+    # url = "http://api.v-box.net/box-data/api/"
+
     api_login = 'we-data/login'
     api_get_boxes_list = 'we-data/boxs'
 
@@ -118,7 +136,7 @@ if __name__ == '__main__':
                       "password": "123456",
                       "isremember": 1
                       }
-    a = VboxHttpApi(url, keyvalue, common_para_dic, headers_without_common, api_login)
+    a = VboxHttpApi()
     r1 = a.login(login_data_dic)
     sid = a.sid
     r2 = a.post(api_get_boxes_list, {}, sid)

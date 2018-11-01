@@ -24,10 +24,10 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-
     message_str = ' ' + str(msg.payload)[2:-1]
     message = json.loads(message_str)
-    mess = "{}, {}, {}".format(msg.topic, nowtimefmt(), message["act"])
+    mess = "{}, {}, {}, {}".format(nowtimefmt(), msg.topic, message['machine_code'], message["act"])
+    # mess = message['act']
     print(mess)
 
 client.user_data_set(userdata["username"])
