@@ -6,9 +6,8 @@
 # date:      2018/10/28
 # -----------------------------------------------------------
 import os
-from pymouse import PyMouse
-from pykeyboard import PyKeyboard
 import time
+import pyautogui
 
 
 def get_html(html_path):
@@ -36,14 +35,18 @@ def set_html(lines, html_path):
     return new_lines
 
 
+def del_bookmark():
+    time.sleep(5)
+    for i in range(50):
+        pyautogui.click(x=217, y=97, clicks=1, button='right')
+        time.sleep(.1)
+        pyautogui.hotkey('D')
+        time.sleep(.1)
+
+
 if __name__ == "__main__":
+    pass
+    # 主功能实现：从旧书签文件中获取所有连接，去除重复连接，生成新的书签文件
     # html_lines = get_html("bookmarks_2018_10_28.html")
     # new = set_html(html_lines, "new.html")
-    mouse = PyMouse()
-    keyboard = PyKeyboard()
-    time.sleep(5)
-    for i in range(200):
-        mouse.click(217, 97, 2, 1)
-        time.sleep(.1)
-        keyboard.type_string("D")
-        time.sleep(.1)
+    del_bookmark()
