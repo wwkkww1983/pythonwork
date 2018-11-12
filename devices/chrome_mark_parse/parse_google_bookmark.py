@@ -42,10 +42,10 @@ def del_bookmark():
     # 利用pyautogui模块函数实现鼠标右击和键盘输入字母键实现浏览器书签栏书签删除
     time.sleep(5)
     for i in range(50):
-        pyautogui.click(x=217, y=97, clicks=1, button='right')
-        time.sleep(.1)
+        pyautogui.click(x=217, y=93, clicks=1, button='right')
+        time.sleep(.05)
         pyautogui.hotkey('D')
-        time.sleep(.1)
+        time.sleep(.05)
 
 
 if __name__ == "__main__":
