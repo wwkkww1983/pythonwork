@@ -45,9 +45,10 @@ def defolder(folderpath:str):
     for root, dirs, files in os.walk(folderpath):
         for i in files:
             fp = os.path.join(root, i)
-            fb = open(fp, 'rb')
+            with open(fp, 'rb') as fb:
+                fbmd5 = cal_md5(fb)
             fpp = fp[len(folderpath):]    # 截取相对路径作为字典键值
-            name_file_dict[fpp] = fb   # 组装相对路径和文件流为字典
+            name_file_dict[fpp] = fbmd5   # 组装相对路径和文件流为字典
     log.info(name_file_dict)
     return name_file_dict
 
@@ -108,8 +109,9 @@ def main(import_type:str, path:str):
                     nd = defile(path)
                     md5s = calc_files_md5s(nd)
                 elif import_type is 'folder':
-                    nd = defolder(path)
-                    md5s = calc_files_md5s(nd)
+                    # nd = defolder(path)
+                    # md5s = calc_files_md5s(nd)
+                    md5s = defolder(path)
                 elif import_type is 'zip':
                     nd = dezip(path)
                     md5s = calc_files_md5s(nd)
@@ -141,7 +143,7 @@ def walk_special_package(rootpath, filename):
 if __name__ == '__main__':
     # main('file', 'productfile.osf')
     # main('zip', 'calc_files_md5s.zip')
-    # main('folder', '.')
+    main('folder', r'D:\Program Files\WECONSOFT\PIStudio\20181105回归1')
     # main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # while True:
@@ -162,8 +164,8 @@ if __name__ == '__main__':
     # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM'
     # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_通用'
     # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
-    root = r'C:\MyWorkSpace\pythonwork\devices\vbox_auto_test'
-    name = 'productfile.osf'
-    walk_special_package(root, name)
-    print(lookfolder(root))
+    # root = r'C:\MyWorkSpace\pythonwork\devices\vbox_auto_test'
+    # name = 'productfile.osf'
+    # walk_special_package(root, name)
+    # print(lookfolder(root))
 
