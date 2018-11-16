@@ -27,8 +27,8 @@ def set_port(portnm: str, paud: int, bytesize: int, stopbits: int, parity: str):
     t.stopbits = stopbits
     t.parity = parity
     t.timeout = 0.3
-    print('port opened at port = %s; baud_rate = %d; data_size = %d; parity = %s; stop_bits = %d'
-          % (t.port, t.baudrate, t.bytesize, t.parity, t.stopbits))
+    # print('port opened at port = %s; baud_rate = %d; data_size = %d; parity = %s; stop_bits = %d'
+    #       % (t.port, t.baudrate, t.bytesize, t.parity, t.stopbits))
     time.sleep(.2)
     return t
 
@@ -85,8 +85,8 @@ def switch(port, y, value):
     data = l.pack_write_bit(y, value)
     for i in range(3):
         port.write(data)
-        time.sleep(0.1)
-    port.close()
+        time.sleep(0.05)
+    # port.close()
 
 
 if __name__ == '__main__':
