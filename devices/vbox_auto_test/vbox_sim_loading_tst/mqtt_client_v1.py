@@ -16,23 +16,13 @@ PORT = 1883
 userdata = {"username": "wecon", "password": "wecon123$%^"}
 nowtimefmt = lambda: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())    # 格式化当前时间
 nowtimestamp = lambda: time.mktime(time.localtime())
-box_acts = {}
-box_powerstate ={}
+box_acts = {}    # mqtt消息盒子机器码: act值
+box_powerstate ={}    # 盒子机器码: 当前上下电状态
 thetime = {"starttime": 0, "endtime": 0}
 
 
-def set_power(y: str, state: int) -> None:
+def set_power(y: str, state: int) -> None:    # 设置Y为0或1
     switch(port, y, state)
-
-
-def box_control(machinecode):
-    global box_powerstate
-    global box_acts
-    global machinecodes
-    if box_powerstate[machinecode] == 0:
-        time.sleep(5)
-        set_power(box_y[machinecode], 1)
-        box_powerstate[machinecode] = 1
 
 
 def on_connect(client, userdata, flags, rc):
@@ -74,10 +64,12 @@ def on_message(client, userdata, msg):
         box_record[machine_code]["success"] += 1
         box_record[machine_code]["constamp"] = nowtimestamp()  # 联网成功时间
         connectsecs = box_record[machine_code]["constamp"] - box_record[machine_code]["powstamp"]
+        # 将当前次的连接耗时与最大连接耗时、最小连接耗时比较后正确记录
         if box_record[machine_code]["min"] == 0 or connectsecs < box_record[machine_code]["min"]:
             box_record[machine_code]["min"] = connectsecs
         if box_record[machine_code]["max"] == 0 or connectsecs > box_record[machine_code]["max"]:
             box_record[machine_code]["max"] = connectsecs
+        # 计算平均值，第一次记录时原记录为0需特殊处理
         if box_record[machine_code]["aver"] == 0:
             box_record[machine_code]["aver"] = connectsecs
         else:
@@ -85,20 +77,21 @@ def on_message(client, userdata, msg):
             n = box_record[machine_code]["success"]
             aversecs = aversecs + (connectsecs - aversecs) / n
             box_record[machine_code]["aver"] = aversecs
-        set_power(box_y[machine_code], 0)
-        box_powerstate[machine_code] = 0
-        write_json(box_record)
+        set_power(box_y[machine_code], 0)    # 机器码对应盒子下电
+        box_powerstate[machine_code] = 0    # 记录下电状态
+        write_json(box_record)    # 文件保存记录
         print(box_record)
         # print([(i[12:15], box_record[i]) for i in box_record])
 
+
 def mqtt_go():
-    client = mqtt.Client()
+    client = mqtt.Client()  # 创建mqtt client对象
     client.user_data_set(userdata["username"])
-    client.username_pw_set(userdata["username"], userdata["password"])
+    client.username_pw_set(userdata["username"], userdata["password"])  # 设置mqtt用户信息
     client.on_connect = on_connect
     client.on_message = on_message
-    client.connect(HOST, PORT, 125)
-    client.loop_forever()
+    client.connect(HOST, PORT, 125)  # 设置连接超时，连接
+    client.loop_forever()  # client执行循环程序
     return client
 
 
@@ -106,21 +99,22 @@ def close_connect(mqtt_client: mqtt.Client):
     mqtt_client.disconnect()
 
 
-def vbox_contral():
+def vbox_control():
     global box_powerstate
     global box_acts
     global machinecodes
     global box_record
     while True:
-        time.sleep(1)
+        # 循环运行以下程序，遍历box_powerstate，若发现盒子已下电，则进行相关处理
+        time.sleep(0.2)
         # print([(m[12:15], box_powerstate[m]) for m in box_powerstate])
         for m in machinecodes:
             if box_powerstate[m] == 0:
-                box_record[m]["total"] += 1
-                box_acts[m] = "None"
+                box_record[m]["total"] += 1  # 测试次数+1
+                box_acts[m] = "None"  # act值置None
                 time.sleep(2)
-                set_power(box_y[m], 1)
-                box_powerstate[m] = 1
+                set_power(box_y[m], 1)  # 上电
+                box_powerstate[m] = 1  # 记录上电状态
                 box_record[m]["powstamp"] = nowtimestamp()  # 上电时间
                 time.sleep(0.1)
 
@@ -161,7 +155,7 @@ if __name__ == "__main__":
     # box_record = dict([(m, {"total": 0, "success": 0, "seconds": [0, 0, 0, 0]}) for m in machinecodes])
     topic = [("pibox/cts/" + machinecode, 0) for machinecode in machinecodes]
     threads = []
-    t2 = threading.Thread(target=vbox_contral, args=())
+    t2 = threading.Thread(target=vbox_control, args=())
     threads.append(t2)
     t1 = threading.Thread(target=mqtt_go, args=())
     threads.append(t1)
