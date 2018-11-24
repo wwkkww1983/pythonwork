@@ -58,8 +58,10 @@ def dezip(zippath:str):
     name_file_dict = {}
     zip = zipfile.ZipFile(zippath)
     for name in zip.namelist():
-        fb = zip.open(name, 'rU')    # f为byte类型
-        name_file_dict[name.encode('cp437').decode('gbk')] = fb    # 骚操作，先按zip文件名编码方式还原后再用gbk解码
+        # if name == "os.ents":  # 只计算压缩包内某个文件的MD5
+        if True:
+            fb = zip.open(name, 'rU')    # f为byte类型
+            name_file_dict[name.encode('cp437').decode('gbk')] = fb    # 骚操作，先按zip文件名编码方式还原后再用gbk解码
     return name_file_dict
 
 
@@ -81,7 +83,7 @@ def calc_files_md5s(name_file_dic:dict):
     return md5s
 
 
-def lookfolder(folderpath:str):
+def lookfolder(folderpath: str):
     # 打开类型“文件夹”,返回所有文件的绝对路径，本函数不需要用到文件流，为了保持接口一致仍返回字典
     name_file_dict = {}
     os.chdir(folderpath)
@@ -134,16 +136,17 @@ def walk_special_package(rootpath, filename):
     dic = lookfolder(rootpath)
     for k in sorted(dic.keys()):
         p, n = os.path.split(k)
-        if 'backup' not in p:
-            if n == filename:
-                print('\n', k)
-                main('zip', k)
+        for ver in ['6.4.0', '6_4_0', '6.4_0', '6_4.0']:
+            if ver in p:
+                if n == filename:  # 只针对特定压缩包文件进行读取压缩文件列表计算MD5
+                    print('\n', k)
+                    main('zip', k)
 
 
 if __name__ == '__main__':
     # main('file', 'productfile.osf')
-    # main('zip', 'calc_files_md5s.zip')
-    main('folder', r'D:\Program Files\WECONSOFT\PIStudio\20181105回归1')
+    main('zip', r"\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用\NUC972_700ML_通用_6.3.96_2018-09-30\productfile.osf")
+    # main('folder', r'D:\Program Files\WECONSOFT\PIStudio\20181105回归1')
     # main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # while True:
@@ -160,12 +163,15 @@ if __name__ == '__main__':
     #             continue
     #         else:
     #             main('zip', p)
-    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用'
-    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM'
-    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_通用'
-    # root = r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
+    # roots = [
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_通用',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
+    # ]
     # root = r'C:\MyWorkSpace\pythonwork\devices\vbox_auto_test'
     # name = 'productfile.osf'
-    # walk_special_package(root, name)
-    # print(lookfolder(root))
+    # for root in roots:
+    #     print("\n", root)
+    #     walk_special_package(root, name)
 
