@@ -130,11 +130,11 @@ class Download(object):
             print('HMI软重启，等待看到LOGO')
             sleep(5)    # 等待看到LOGO
             port_plc = set_port('com6', 9600, 7, 1, 'E')
-            switch(port_plc, 'Y0', 0)    # HMI下电
+            write_bit(port_plc, 'Y0', 0)    # HMI下电
             print('出现LOGO，HMI下电，等待重新上电')
             time.sleep(5)
             port_plc.open()
-            switch(port_plc, 'Y0', 1)  # HMI上电
+            write_bit(port_plc, 'Y0', 1)  # HMI上电
             print('HMI 上电，等待重启完成')
             time.sleep(15)    # 等待重启
 
