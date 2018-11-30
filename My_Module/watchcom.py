@@ -79,21 +79,20 @@ def read_correct(pt: serial.Serial):
     return res
 
 
-def switch(port, y, value):
+def write_bit(port, bit, value):
     # 设置输出状态，vlaue=0:复位； value=1:置位
     l = LxPlcCom()
-    data = l.pack_write_bit(y, value)
-    for i in range(3):
+    data = l.pack_write_bit(bit, value)
+    for i in range(5):
         port.write(data)
         time.sleep(0.05)
     # port.close()
 
 
 if __name__ == '__main__':
-    port_hmi = set_port('com2', 115200, 7, 1, 'E')
-    a = read_correct(port_hmi)
-    print('HMI port read ok? {}'.format(a))
-
-    port_plc = set_port('com6', 9600, 7, 1, 'E')
-    switch(port_plc, 'Y0', 1)
+    # port_hmi = set_port('com2', 115200, 7, 1, 'E')
+    # a = read_correct(port_hmi)
+    # print('HMI port read ok? {}'.format(a))
+    port_plc = set_port('com7', 9600, 7, 1, 'E')
+    write_bit(port_plc, 'Y0', 0)
 
