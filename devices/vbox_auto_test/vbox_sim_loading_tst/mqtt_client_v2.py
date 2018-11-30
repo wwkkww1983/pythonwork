@@ -111,6 +111,18 @@ def on_message(client, userdata, msg):
             n = box_record[machine_code]["success"]
             aversecs = aversecs + (connectsecs - aversecs) / n
             box_record[machine_code]["aver"] = aversecs
+
+        # 单台盒子的数据记录
+        info = '{}, {}, {}, {}, {}\n'.format(
+            nowtimefmt(),
+            box_record[machine_code]["total"],
+            box_record[machine_code]["success"],
+            connectsecs,
+            box_record[machine_code]["aver"]
+        )
+        with open(machine_code + '.csv', 'a', encoding='utf-8') as ff:
+            ff.write(info)
+
         set_power(box_y[machine_code], 0)    # 机器码对应盒子下电
         box_powerstate[machine_code] = 0    # 记录下电状态
         write_json(box_record)    # 文件保存记录
@@ -187,10 +199,12 @@ if __name__ == "__main__":
             "min": 0,  # 最短连接时长（s）
             "max": 0  # 最长连接时长（s）
         }
-    # box_y = dict([(m, "y" + m[14]) for m in machinecodes])
-    # box_acts = dict([(m, "None") for m in machinecodes])
-    # box_powerstate = dict([(m, 0) for m in machinecodes])
-    # box_record = dict([(m, {"total": 0, "success": 0, "seconds": [0, 0, 0, 0]}) for m in machinecodes])
+
+    for i in machinecodes:    # 增加单台盒子的上下电及联网记录
+        with open(i + '.csv', 'w', encoding='utf-8') as f:
+            f.write('machinecode={}\n'.format(i))
+            f.write('time, total, success, last, aver\n')
+
     topic = [("pibox/cts/" + machinecode, 0) for machinecode in machinecodes]
     threads = []
     t2 = threading.Thread(target=vbox_control, args=())

@@ -9,7 +9,7 @@ import paho.mqtt.client as mqtt
 import time
 import json
 import threading
-from watchcom import set_port, switch
+from watchcom import set_port, write_bit
 
 HOST = "mqtt.v-box.net"
 PORT = 1883
@@ -19,7 +19,7 @@ nowtimestamp = lambda localtime: time.mktime(localtime)
 
 
 def set_power(y: str, state: int) -> None:
-    switch(port, y, state)
+    write_bit(port, y, state)
 
 
 def on_connect(client, userdata, flags, rc):
