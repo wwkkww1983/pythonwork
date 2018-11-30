@@ -80,11 +80,11 @@ class EveryMd5s(object):
         self.name_file_dict = name_file_dict
         return name_file_dict
 
-    def get_files_abspaths_in_folder(self, folderpath: str):
+    def get_all_files_abspaths_in_dir(self, dir: str):
         # 打开类型“文件夹”,返回所有文件的绝对路径
         name_file_list = []
-        os.chdir(folderpath)
-        for root, dirs, files in os.walk(folderpath):
+        os.chdir(dir)
+        for root, dirs, files in os.walk(dir):
             for i in files:
                 fp = os.path.join(root, i)  # 合成文件绝对路径
                 name_file_list.append(fp)  # 绝对路径
@@ -103,6 +103,6 @@ class EveryMd5s(object):
 
 if __name__ == "__main__":
     this = EveryMd5s()
-    this.get_files_abspaths_in_folder(r'..\vbox_auto_test')
+    this.get_all_files_abspaths_in_dir(r'..\vbox_auto_test')
     for file in this.allfilesabspaths:
         print(file)
