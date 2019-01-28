@@ -55,24 +55,26 @@ def open_port(pt: serial.Serial):
         print(pt.port, ': opened')
 
 
-def read_correct(pt: serial.Serial):
+def read_correct(pt: serial.Serial, readbytes):
     """
     if port is alive, keep reading data with readline mode
     :param pt:
     :return:
     """
-    res = None
     if not pt.is_open:
         res = False
     else:
         try:
-            time.sleep(0.01)
+            time.sleep(0.02)
             for i in range(20):
-                datab = pt.readline(15)
-                if datab == b'\x02014407M008047\x03':
-                    print('the read bytes is: {}'.format(datab))
+                datab = pt.readline(20)
+                # print(datab)
+                if datab == readbytes:
+                    print('read target bytes: {}'.format(datab))
                     res = True
-                    break
+                    return res
+            print("read target bytes fail.")
+            res = False
         except Exception as e:
             print(e)
             res = False
@@ -90,9 +92,9 @@ def write_bit(port, bit, value):
 
 
 if __name__ == '__main__':
-    # port_hmi = set_port('com2', 115200, 7, 1, 'E')
-    # a = read_correct(port_hmi)
-    # print('HMI port read ok? {}'.format(a))
-    port_plc = set_port('com7', 9600, 7, 1, 'E')
-    write_bit(port_plc, 'Y0', 0)
+    port_hmi = set_port('com9', 115200, 7, 1, 'E')
+    a = read_correct(port_hmi, b'\x0201440AM008253\x03')
+    print('HMI port read ok? {}'.format(a))
+    # port_plc = set_port('com7', 9600, 7, 1, 'N')
+    # write_bit(port_plc, 'Y0', 0)
 
