@@ -1,0 +1,71 @@
+'@B_2#Y0 站号1 定时器@W_HDW0004
+@W_HSW134 = 1  '开启读透
+if @B_HDX9.0 = 1  then  '开启站号1
+
+    if @B_HDX0.1 = 1 then  '写时间到LEVI2000
+        BMOV(@W_HDW1000, @W_HSW28, 6)
+        BMOV(@W_1:410, @W_HSW28, 6)
+        SleepA(200)
+        if @B_1:010000 = 0 then
+            @B_1:010000 = 1  '确认写入。从站设置当此位为1时，将时间写入系统时间寄存器
+        endif
+        SleepA(200)
+        if @B_1:010000 = 0 then  '写入完成，下一步
+            FILL(@W_HDW1000, 0xffff, 12)
+            FILL(@W_1:410, 0xffff, 6)
+            @B_HDX0.1 = 0
+            @B_HDX0.2 = 1
+        endif
+    endif
+    
+    if @B_HDX0.2 = 1 then  '延迟，下电，延时
+        @W_HDW0004 = @W_HDW0004 + 1
+        if @W_HDW0004 >= 50 then
+            @B_2#Y0 = 0
+            if @B_2#Y0 = 0 then
+                if @W_HDW0004 >= 100 then  '下电5秒
+                    @B_2#Y0 = 1
+                    @W_HDW0004 = 0
+                    @B_HDX0.2 = 0
+                    @B_HDX0.3 = 1
+                endif
+            endif
+        endif
+    endif
+    
+    if @B_HDX0.3 = 1 then  '延时等HMI上电，读取时间
+        @W_HDW0004 = @W_HDW0004 + 1
+        if @W_HDW0004 >= 80 then
+            BMOV(@W_HDW1000, @W_HSW28, 6)
+            BMOV(@W_HDW1006, @W_1:400, 6)
+            if @W_HDW0004 >= 100 then
+                @W_HDW0004 = 0
+                @B_HDX0.3 = 0
+                @B_HDX0.4 = 1
+            endif
+        endif
+    endif
+
+    if @B_HDX0.4 = 1 then  '比较，计数，数据记录
+        if @W_HDW1000=@W_HDW1006 and @W_HDW1001=@W_HDW1007 and @W_HDW1002=@W_HDW1008 and @W_HDW1003=@W_HDW1009 then
+            if ((@W_HDW1004=@W_HDW1010) & (Abs(@W_HDW1005-@W_HDW1011)<=5)) or ((Abs(@W_HDW1004-@W_HDW1010)=1) & (55<(@W_HDW1005+@W_HDW1011)<65)) then
+                '测试通过1
+                @W_HDW0001 = @W_HDW0001+1  '正确计数
+            else
+                @W_HDW0002 = @W_HDW0002+1  '错误计数
+            endif
+        else
+           @W_HDW0002 = @W_HDW0002+1  '错误计数
+        endif
+        @W_HDW0003 = @W_HDW0003+1  '测试计数
+        @B_HDX0.0 = 1  '数据记录并自动清零
+        SleepA(200)
+        if @B_HDX0.0 = 0 then
+            @B_HDX0.4 = 0
+            @B_HDX0.1 = 1  '比较结束，进入下一轮测试（写入时间）
+        endif
+    endif
+
+endif
+
+@W_HSW134 = 1  '关闭读透
