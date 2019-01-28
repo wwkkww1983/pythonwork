@@ -48,6 +48,7 @@ class Download(object):
         self.win = self.app['Dialog']
         self.win.move_window(0, 0)
         self.window_ready = True
+
     def set(self):
         try:
             self.win[u'PC端口：ComboBox'].Select(u'USB:DownloadLink')
@@ -169,25 +170,25 @@ class Download(object):
     # #     print(e)
 
 if __name__ == '__main__':
-    input("LEVI Download工程自动下载测试工具 V1.0\n输入任意字符开始测试：\n")
-    # n = 10000
-    while True:
-        pth = input("请输入Download.exe完整路径：\n")
-        fpth = input("请输入待下载.hmt工程文件完整路径：\n")
-        if os.path.exists(pth) and os.path.exists(fpth):
-            print("文件检查无误\n")
-        else:
-            print("文件检查失败！")
-            continue
-        n = input("请输入下载测试次数：")
-        if n.isdigit() and int(n) > 0:
-            print("确认下载次数为：{}".format(n))
-            break
-        else:
-            print("次数输入有误，请重新输入(必须为正整数)！")
-            continue
-    # pth = r"D:\Program Files\WECONSOFT\LeviStudio\20180809发布\Download.exe"
-    # fpth = r"E:\流程18\芯唐图库修改版本U盘更新工失败\闭环-触摸屏没有厚宽转换键\闭环旋切机中文版.ehmt"
+    # input("LEVI Download工程自动下载测试工具 V1.0\n输入任意字符开始测试：\n")
+    n = 10000
+    # while True:
+    #     pth = input("请输入Download.exe完整路径：\n")
+    #     fpth = input("请输入待下载.hmt工程文件完整路径：\n")
+    #     if os.path.exists(pth) and os.path.exists(fpth):
+    #         print("文件检查无误\n")
+    #     else:
+    #         print("文件检查失败！")
+    #         continue
+    #     n = input("请输入下载测试次数：")
+    #     if n.isdigit() and int(n) > 0:
+    #         print("确认下载次数为：{}".format(n))
+    #         break
+    #     else:
+    #         print("次数输入有误，请重新输入(必须为正整数)！")
+    #         continue
+    pth = r"D:\LeviStudio\Download.exe"
+    fpth = r"D:\Levi下载测试\2070.ehmt"
     download = Download(pth, fpth)
     download.start()
     download.set()
