@@ -64,25 +64,41 @@ def set_power(x):
 def start():
     testcount = 0
     errcount = 0
+    excepcount = 0
     while testcount <= 10000:
-        testcount += 1
-        hmi.write_register(1, 0, testcount)
-        hmi.write_register(1, 1, errcount)
-        data = data_generator()
-        write(data)
-        writedata = [[data[0]] * 100, [data[1]] * 100, [data[2]] * 100]
-        time.sleep(5)
-        set_power(0)
-        time.sleep(5)
-        set_power(1)
-        time.sleep(10)
-        readdata = read()
-        result = compare(writedata, readdata)
-        if result is True:
-            pass
-        else:
-            errcount += 1
-        print("test result: {}. {} times error in {} times test".format(result, errcount, testcount))
+        try:
+            testcount += 1
+            hmi.write_register(1, 0, testcount)
+            hmi.write_register(1, 1, errcount)
+            data = data_generator()
+            write(data)
+            writedata = [[data[0]] * 100, [data[1]] * 100, [data[2]] * 100]
+            time.sleep(5)
+            set_power(0)
+            time.sleep(5)
+            set_power(1)
+            time.sleep(10)
+            readdata = read()
+            result = compare(writedata, readdata)
+            if result is True:
+                pass
+            else:
+                errcount += 1
+            print("{} - test result: {}. {} times error in {} times test. exception count={}".format(
+                nowtimestr(), result, errcount, testcount, excepcount))
+        except Exception as e:
+            print("exception happens. {}".format(e))
+            excepcount += 1
+            continue
+
 
 if __name__ == '__main__':
     start()
+    # readdata = read()
+    # for i in readdata:
+    #     x = i[0]
+    #     for j in i:
+    #         if j != x:
+    #             print("error")
+    #             break
+

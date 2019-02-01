@@ -136,7 +136,11 @@ def walk_special_package(rootpath, filename):
     dic = lookfolder(rootpath)
     for k in sorted(dic.keys()):
         p, n = os.path.split(k)
-        for ver in ['6.4.0', '6_4_0', '6.4_0', '6_4.0']:
+        # for ver in ['6_0_7', '6_0_3']:  # 71Y 6.0.3通用版，6.0.7永康玻璃杯版
+        for ver in ['6_0_9']:  # 71Y 6.0.9版本
+        # for ver in ['6.4.0', '6_4_0', '6.4_0', '6_4.0']:  # 61Y 6.4.0通用版
+        # for ver in ['6.4.18']:  # 61Y 6.4.18通用版
+
             if ver in p:
                 if n == filename:  # 只针对特定压缩包文件进行读取压缩文件列表计算MD5
                     print('\n', k)
@@ -145,7 +149,7 @@ def walk_special_package(rootpath, filename):
 
 if __name__ == '__main__':
     # main('file', 'productfile.osf')
-    main('zip', r"\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用\NUC972_700ML_通用_6.3.96_2018-09-30\productfile.osf")
+    # main('zip', r"\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用\NUC972_700ML_通用_6.3.96_2018-09-30\productfile.osf")
     # main('folder', r'D:\Program Files\WECONSOFT\PIStudio\20181105回归1')
     # main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
@@ -163,15 +167,24 @@ if __name__ == '__main__':
     #             continue
     #         else:
     #             main('zip', p)
+    # 61Y（64M存储版本生产镜像路径）
     # roots = [
     #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用',
     #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM',
     #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_通用',
     #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
     # ]
-    # root = r'C:\MyWorkSpace\pythonwork\devices\vbox_auto_test'
-    # name = 'productfile.osf'
-    # for root in roots:
-    #     print("\n", root)
-    #     walk_special_package(root, name)
+    # 71Y（128M存储版本生产镜像路径）
+    roots = [
+        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\通用',
+        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\OEM',
+        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\Unicode_通用',
+        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\Unicode_OEM',
+        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\标准S机型\永康玻璃杯'
+    ]
+
+    name = 'productfile.osf'
+    for root in roots:
+        print("\n", root)
+        walk_special_package(root, name)
 
