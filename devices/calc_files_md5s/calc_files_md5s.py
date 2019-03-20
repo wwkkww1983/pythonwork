@@ -150,7 +150,7 @@ def walk_special_package(rootpath, filename):
 if __name__ == '__main__':
     # main('file', 'productfile.osf')
     # main('zip', r"\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\通用\NUC972_700ML_通用_6.3.96_2018-09-30\productfile.osf")
-    # main('folder', r'D:\Program Files\WECONSOFT\PIStudio\20181105回归1')
+    main('folder', r'Z:\OneDrive\文档')
     # main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # main('zip', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
     # while True:
@@ -175,16 +175,15 @@ if __name__ == '__main__':
     #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\Unicode_OEM'
     # ]
     # 71Y（128M存储版本生产镜像路径）
-    roots = [
-        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\通用',
-        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\OEM',
-        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\Unicode_通用',
-        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\Unicode_OEM',
-        r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\标准S机型\永康玻璃杯'
-    ]
-
-    name = 'productfile.osf'
-    for root in roots:
-        print("\n", root)
-        walk_special_package(root, name)
+    # roots = [
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\通用',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\OEM',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\Unicode_通用',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\Unicode_OEM',
+    #     r'\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_NUC972DF71Y_LEVI\标准S机型\永康玻璃杯'
+    # ]
+    # name = 'productfile.osf'
+    # for root in roots:
+    #     print("\n", root)
+    #     walk_special_package(root, name)
 
