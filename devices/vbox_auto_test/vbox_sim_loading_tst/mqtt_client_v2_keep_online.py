@@ -12,9 +12,11 @@ import threading
 from watchcom import set_port, write_bit
 from modbus_rtu_master import ModbusRtu
 
-HOST = "mqtt.v-box.net"
+# HOST = "mqtt.v-box.net"
+HOST = "192.168.45.190"
 PORT = 1883
-userdata = {"username": "wecon", "password": "wecon123$%^"}
+# userdata = {"username": "wecon", "password": "wecon123$%^"}
+userdata = {"username": "admin", "password": "password"}
 nowtimefmt = lambda: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())    # 格式化当前时间
 nowtimestamp = lambda: time.mktime(time.localtime())
 box_acts = {}    # mqtt消息盒子机器码: act值
