@@ -7,6 +7,9 @@ import threading
 def music(func):
     for i in range(5):
         print("I was listening to music %s. %s" % (func, ctime()))
+        if i == 2:
+            print("I stop to go outside. {}".format(ctime()))
+            exit()
         sleep(4)
 
 def movie(func):
