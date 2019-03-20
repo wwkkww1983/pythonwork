@@ -3,13 +3,13 @@
 # create on 2017.3.1
 # author:fan
 
-from serial import Serial
+
 import struct
 import binascii
 import time
-
-t = Serial('com2')
-t.baudrate = 115200
+from serial import Serial  # 导入模块
+t = Serial('com2')  # 创建Serial实例
+t.baudrate = 115200  # 设置参数（参数设置请以实际为准）
 t.bytesize = 7
 t.stopbits = 1
 t.parity = 'E'
