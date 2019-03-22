@@ -221,7 +221,7 @@ class MqttClient(object):
         # line["client_id"] = client_id
         line["time"] = logtime
         line["timestamp"] = logtimestamp
-        line["machinecode"] = machine_code[12:15]
+        line["machinecode"] = machine_code[-4:]
         logfilename = "{}.csv".format(machine_code)
         logline = ",".join([str(line[key]) for key in line_k])
 
@@ -281,7 +281,7 @@ def power_and_net_control():
     con_line = "{}, {}, {}, {}, {}, {}".format(nowtimefmt(), "linked", 1, 0, "--", 0)
     write_line_to_csv("control.csv", con_line)
     while True:
-        linked_time = randint(5, 50)
+        linked_time = randint(10, 60)
         time.sleep(linked_time)
         plc.write_coil(1, 0xfc00, 0)
         count_broken += 1
@@ -314,8 +314,8 @@ def power_and_net_control():
 
 def loopall():
     threads = []
-    t4 = threading.Thread(target=power_and_net_control, args=())
-    threads.append(t4)
+    # t4 = threading.Thread(target=power_and_net_control, args=())
+    # threads.append(t4)
     # t3 = threading.Thread(target=write_record_to_csv, args=())
     # threads.append(t3)
     # t2 = threading.Thread(target=publish, args=())
@@ -330,19 +330,28 @@ def loopall():
 
 if __name__ == '__main__':
 
-    # 设置要测试的机器码，印度，波兰，泰国
-    vbox_india = [
+    # 设置要测试的机器码，印度（晚2.5小时），波兰（晚6小时），泰国（晚1小时）
+    vbox_wecon = [
         "V0200118051788206bc83233386",
         "V020011811156635a9e4f5f58d3",
         "V02001181115661a675e8634171",
         "V020011811156605a9e4f5f659b",
         "V02001181115662a2d12c524140",
         "V02001181115664a2d12c0e20a2",
-        # "V02001180517880c2d35f9f14f6"
+        # "V02001180517880c2d35f9f14f6" 暂不使用
     ]
-    vbox_poland = []
-    vbox_thailand = []
-    vbox = vbox_india + vbox_poland + vbox_thailand
+    vbox_india = [
+        "V010011809170059eefb5e1144b",  # Ethernet  ok
+        "V010011807160329eefb5e172e6",  # Wifi      ok
+        "V0200118031300206bc832305a7",  # 4G        not ok
+    ]
+    vbox_poland = [
+        "V020011801290046a933a475a48",  # 4G        ok
+    ]
+    vbox_thailand = [
+        "V0200118030900206bc832020a3",  # WIfi?     not ok
+    ]
+    vbox = vbox_wecon + vbox_india + vbox_poland + vbox_thailand
     topic = []
     dic = dict()
     line = dict()
@@ -371,7 +380,7 @@ if __name__ == '__main__':
     write_line_to_csv("control.csv", con_lin0 + con_lin1, "w")
 
     # 设置账户并连接主机
-    host, port, keepalive, userdata = "192.168.45.190", 1883, 125, {"username": "admin", "password": "password"}
+    host, port, keepalive, userdata = "mqtt.v-box.net", 1883, 125, {"username": "admin", "password": "password"}
     parse_params = dict()  # 参数设计：停止条件（消息计数、计时、特殊条件）
     client = MqttClient(host, port, keepalive, userdata, **parse_params)
     client.connect()
