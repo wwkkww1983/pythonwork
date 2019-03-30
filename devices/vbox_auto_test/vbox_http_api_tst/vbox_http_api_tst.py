@@ -13,8 +13,10 @@ import hashlib
 import time
 
 debug = False
-url_test = "http://192.168.45.186:8686/box-data/api/"
-url_normal = "http://api.v-box.net/box-data/api/"
+host_test = "192.168.45.190:8686"
+url_test = "http://" + host_test + "/box-data/api/"
+host_normal = "api.v-box.net"
+url_normal = "http://" + host_normal + "/box-data/api/"
 api_login = 'we-data/login'
 api_boxes_list = 'we-data/boxs'
 nowtime = lambda: int(round(time.time() * 1000))  # 当前时间戳单位ms
@@ -27,12 +29,12 @@ common_para_dic = {"comid": "1",
                    "ts": None,  # ts在调用参数时动态生成
                    }
 
-login_data_dic = {"alias": "test_fanch",
+login_data_dic = {"alias": "test_fan",
                   "password": "123456",
                   "isremember": 1
                   }
 
-headers_without_common = {"Host": '192.168.45.186:8686',
+headers_without_common = {"Host": host_normal,
                           "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
                                         'AppleWebKit/537.36 (KHTML, like Gecko) '
                                         'Chrome/31.0.1650.63 '
@@ -87,6 +89,9 @@ def sign_easy(merged_dic: dict):
 
 
 def post(api: str, business_dic: dict, sid):
+    print("--------api:", api)
+    print("----post data:", business_dic)
+    print("----sid:", sid)
     newurl = url_normal + api
     businessdic = business_dic.copy()  # 使用字典备份，避免原字典被污染
     commondic = common_para_dic.copy()
@@ -108,21 +113,28 @@ def post(api: str, business_dic: dict, sid):
         print("newdict: {nd}\n\n"
               "common_para_dict2: {cpd}\n\n"
               "headers: {hds}\n".format(nd=mergedic, cpd=commondic, hds=headers_dict))
-
+    print("----newdict: {nd}\n"
+          "----common_para_dict2: {cpd}\n"
+          "----headers: {hds}".format(nd=mergedic, cpd=commondic, hds=headers_dict))
     r = req.post(newurl, data=mergedic, headers=headers_dict)
-    return r
+    js = r.json()
+    print("----feedback data: {}\n".format(js))
+    return js
+
+
+def do_login(str_api, dic_data, sid=''):
+    pass
 
 
 if __name__ == '__main__':
 
     r1 = post(api_login, login_data_dic, '')
-    sid = r1.json()["result"]["sid"]
-    print("log in result:", r1.json(), '\n')
-    print('sid: ', sid, '\n')
+    sid = r1["result"]["sid"]
+
     r2 = post(api_boxes_list, {}, sid)
-    print('box list info', r2.json())
-    f = open("boxeslistresult.json", "w", encoding="utf-8")
-    f.write(json.dumps(r2.json(), ensure_ascii=False, indent=4))
+
+    with open("boxeslistresult.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(r2, ensure_ascii=False, indent=4))
 
     # 以下：将周期性获取盒子在线状态，形成记录
     # with open("vbox_state_log.csv", 'w', encoding='gb2312') as f:
