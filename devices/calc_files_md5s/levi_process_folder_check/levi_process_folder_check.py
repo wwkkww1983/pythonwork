@@ -30,15 +30,6 @@ class FileCheck(object):
                 break
         return md5.hexdigest()
 
-    def defile(self, filepath:str):
-        # 打开类型“文件”
-        try:
-            f = open(filepath, 'rb')
-            return {filepath: f}
-        except Exception as e:
-            log.error("open file fail. -->{}".format(e))
-            return {}
-
     def checkfile(self, filepath:str):
         # 校验类型“文件”
         md5dic = dict()
@@ -51,21 +42,6 @@ class FileCheck(object):
             md5dic[filepath] = "md5错误"
         print(md5dic)
         return md5dic
-
-    def defolder(self, folderpath:str):
-        # 打开类型“文件夹”
-        name_file_dict = {}
-        os.chdir(folderpath)
-        for root, dirs, files in os.walk(folderpath):
-            for i in files:
-                fp = os.path.join(root, i)
-                with open(fp, 'rb') as fb:
-                    fbmd5 = self.calc_md5(fb)
-                fpp = fp[len(folderpath):]  # 截取相对路径作为字典键值
-                name_file_dict[fpp] = fbmd5  # 组装相对路径和文件流为字典
-        log.info(name_file_dict)
-        print(name_file_dict)
-        return name_file_dict
 
     def checkfolder(self, folderpath:str):
         # 校验类型“文件夹”
@@ -82,40 +58,43 @@ class FileCheck(object):
         print(md5dic)
         return md5dic
 
-    def dezip(self, zippath):
-        # 打开类型“zip”
-        name_file_dict = {}
-        zip = zipfile.ZipFile(zippath)
-        for name in zip.namelist():
-            # if name == "os.ents":  # 只计算压缩包内某个文件的MD5
-            if True:
-                fb = zip.open(name, 'rU')  # f为byte类型
-                name_file_dict[name.encode('cp437').decode('gbk')] = fb  # 骚操作，先按zip文件名编码方式还原后再用gbk解码
-        return name_file_dict
-
-    def checkzip(self, zippath:str, specialfilename=""):
+    def checkzip(self, zippath: str, specialfilenames=None):
         # 校验类型“zip”
         md5dic = dict()
         zip = zipfile.ZipFile(zippath)
         for name in zip.namelist():
-            # if name == "os.ents":  # 只计算压缩包内某个文件的MD5
-            if True:
+            if specialfilenames:
+                if name in specialfilenames:  # 只计算压缩包内某些文件的MD5
+                    fb = zip.open(name, 'rU')  # f为byte类型
+                    md5 = self.calc_md5(fb)
+                    md5dic[name.encode('cp437').decode('gbk')] = md5  # 骚操作，先按zip文件名编码方式还原后再用gbk解码
+            else:
                 fb = zip.open(name, 'rU')  # f为byte类型
                 md5 = self.calc_md5(fb)
                 md5dic[name.encode('cp437').decode('gbk')] = md5  # 骚操作，先按zip文件名编码方式还原后再用gbk解码
         print(md5dic)
         return md5dic
 
-    def derar(self, rarpath):
-        # 打开类型“RAR”
-        name_file_dict = {}
+    def checkrar(self, rarpath:str, specialfilenames=None):
+        # 校验类型“rar”
+        md5dic = dict()
         rar = rarfile.RarFile(rarpath)
         for name in rar.namelist():
-            fb = rar.open(name, 'rU')  # f为byte类型
-            name_file_dict[name] = fb
-        return name_file_dict
+            if specialfilenames is None:
+                fb = rar.open(name, "rU")
+                md5 = self.calc_md5(fb)
+                md5dic[name.encode('cp437').decode('gbk')] = md5
+            else:
+                if name in specialfilenames:
+                    fb = rar.open(name, "rU")
+                    md5 = self.calc_md5(fb)
+                    md5dic[name.encode('cp437').decode('gbk')] = md5
+        print(md5dic)
+        return md5dic
 
-    def calc_files_md5s(self, name_file_dic:dict):
+
+
+    def calc_files_md5s(self, name_file_dic: dict):
         md5s = {}
         for key in name_file_dic:
             md5s[key] = self.calc_md5(name_file_dic[key])
@@ -320,6 +299,7 @@ if __name__ == '__main__':
     check.checkfile(r"E:\MyWorkPlace\pythonwork\devices\calc_files_md5s\calc_files_md5s.zip")
     check.checkfolder(r"E:\MyWorkPlace\pythonwork\devices\calc_files_md5s")
     check.checkzip(r"E:\MyWorkPlace\pythonwork\devices\calc_files_md5s\calc_files_md5s.zip")
+    # check.checkrar(r"E:\免安装程序~\excutor.rar")  # 报错未解决
 
     #check.start_check('folder', r'D:\Program Files\WECONSOFT\LeviStudio\20190314发布测试2')
     # main('file', 'G:\STEP7_V54_SP4_Chin_PftW.zip')
