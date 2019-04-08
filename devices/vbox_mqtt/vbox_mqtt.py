@@ -166,8 +166,13 @@ class MqttClient(object):
         # act in ["1000","1002","1004"]
         logtime = nowtimefmt()
         logtimestamp = nowtimestamp()
-        machine_code = message["machine_code"]
-        client_id = message["client_id"]
+        machine_code = None
+        client_id = None
+        try:
+            machine_code = message["machine_code"]
+            client_id = message["client_id"]
+        except Exception as e:
+            print("message key error: {}. message info: {}".format(e, message))
         line = dic[machine_code]  # 先将dic赋值给临时变量（处理完后反向赋值，精简代码）
 
         if act == "1000":
@@ -334,16 +339,17 @@ def loopall():
 
 if __name__ == '__main__':
 
-    # 设置要测试的机器码，印度（晚2.5小时），波兰（晚6小时），泰国（晚1小时）
+    # 设置要测试的机器码，印度（晚2.5小时），波兰（晚6小时），泰国（晚1小时），越南（晚1小时）
     vbox_wecon = [
-        "V0200118051788206bc83233386",  # LAN 网络通断
-        "V020011811156635a9e4f5f58d3",  # LAN 持续连接
-        "V02001181115661a675e8634171",  # LAN 持续连接
-        "V020011811156605a9e4f5f659b",  # LAN 网络通断
-        "V02001181115662a2d12c524140",  # WIFI 网络通断
-        "V02001181115664a2d12c0e20a2",  # WIFI 网络通断
-        # "V02001180517880c2d35f9f14f6", 暂不使用
-        "V02001181119999a2d12c528096"  # 4G  持续连接
+        # "V0200118051788206bc83233386",  # LAN 网络通断 debug
+        # "V020011811156605a9e4f5f659b",  # LAN 网络通断 debug
+        # "V02001181115662a2d12c524140",  # WIFI 网络通断 debug
+        # "V02001181115664a2d12c0e20a2",  # WIFI 网络通断 debug
+        # "V020011811156635a9e4f5f58d3",  # LAN 持续连接 release
+        # "V02001181115661a675e8634171",  # LAN 持续连接 release
+        # "V02001180517880c2d35f9f14f6",  # 4G  持续连接 debug
+        # "V02001181119999a2d12c528096",  # 4G  持续连接 debug
+        # "V02001181119996a2d12c0dcfe5",  # WIFI 周期上下电 debug
     ]
     vbox_india = [
         "V010011809170059eefb5e1144b",  # Ethernet  ok
