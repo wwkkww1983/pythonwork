@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'redmine_count_panel.ui'
+# Form implementation generated from reading ui file 'E:\MyWorkPlace\pythonwork\devices\redmine\redmine_count_panel.ui'
 #
-# Created: Tue Sep 25 11:48:08 2018
+# Created: Mon Apr 15 15:38:14 2019
 #      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -96,6 +96,9 @@ class Ui_RedminePanel(object):
         self.groupBox_5 = QtWidgets.QGroupBox(RedminePanel)
         self.groupBox_5.setObjectName("groupBox_5")
         self.gridLayout_2.addWidget(self.groupBox_5, 6, 0, 1, 7)
+        self.pushButton_export = QtWidgets.QPushButton(RedminePanel)
+        self.pushButton_export.setObjectName("pushButton_export")
+        self.gridLayout_2.addWidget(self.pushButton_export, 5, 6, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout_2)
 
         self.retranslateUi(RedminePanel)
@@ -131,6 +134,7 @@ class Ui_RedminePanel(object):
         self.groupBox_3.setTitle(_translate("RedminePanel", "指派给"))
         self.groupBox_4.setTitle(_translate("RedminePanel", "查询"))
         self.groupBox_5.setTitle(_translate("RedminePanel", "任务清单"))
+        self.pushButton_export.setText(_translate("RedminePanel", "导出"))
 
 
 if __name__ == "__main__":

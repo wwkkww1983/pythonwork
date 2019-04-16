@@ -11,11 +11,13 @@ import webbrowser
 
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView, QMessageBox
+from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView, QMessageBox, QFileDialog
 from redmine_methods import get_some_issues
 from redminego import RedmineGo
 from ui_redmine_count_panel import Ui_RedminePanel
 import _thread as thread
+import xlwt
+import shutil
 from time import sleep
 from os import path
 
@@ -54,7 +56,8 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         }
         self.switch_assigned_to()
         self.switch_assigned_to()
-        self.setWindowTitle('Redmine任务查询工具V1.0')
+        # self.setWindowTitle('Redmine任务查询工具V1.0')
+        self.setWindowTitle('Redmine任务查询工具V1.01')  # 添加了导出为xls功能
 
         # 设置可以进行多选
         self.listWidget_partMembers.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -155,6 +158,7 @@ class RedminePannel(QWidget, Ui_RedminePanel):
     def count(self):
         """
         获取查询信息，排布在表格控件中
+        增加：统计完成后在目录生成报表 fanch 2019-04-15 16:21:04
         :return:
         """
         if not (path.exists('issues.json') and path.exists('projects.json') and path.exists('users.json')):
@@ -179,20 +183,27 @@ class RedminePannel(QWidget, Ui_RedminePanel):
                 tasklist = [i.split('|||') for i in issues[1:-1]]  # 获取任务列表，并将每个任务分离成列表
                 x = len(horiheaderitems)
                 y = len(tasklist)
+
+                file = xlwt.Workbook()
+                sheet = file.add_sheet('tasks')
+                for i in range(len(horiheaderitems)):
+                    sheet.write(0, i, horiheaderitems[i])
+
                 self.tableWidget_taskList.setColumnCount(x)
                 self.tableWidget_taskList.setRowCount(y)  # 设置表宽度和长度
                 self.tableWidget_taskList.setHorizontalHeaderLabels(horiheaderitems)  # 设置表头
-
                 # 必须保证所有项跟字段具有相同的宽度
                 font = QFont()
                 font.setUnderline(True)
                 for i in range(y):
                     for j in range(x):
                         # 按照表格坐标设置每个任务的每个元素
+                        sheet.write(i+1, j, tasklist[i][j])  # 将数据保存到对应表格中
                         item = QtWidgets.QTableWidgetItem(tasklist[i][j])
                         if j == 0:
                             item.setFont(font)
                         self.tableWidget_taskList.setItem(i, j, item)
+                file.save('tasks.xls')
             self.tableWidget_taskList.setSortingEnabled(True)  # 重新打开可排序性
 
     def updatedata(self):
@@ -225,6 +236,19 @@ class RedminePannel(QWidget, Ui_RedminePanel):
             except Exception as e:
                 log.ERROR("更新数据超时，请稍后再试".format(e))
 
+    def export(self):
+        # 将当前统计表导出到客户指定目录
+        save_path = None
+        if path.isfile("tasks.xls"):
+            savefiledialog = QFileDialog()
+            save_path, save_type = \
+                savefiledialog.getSaveFileName(self,
+                                               "导出到表格",
+                                               path.curdir,
+                                               "Excel2007表格文件(*.xls);;")
+        if save_path:
+            shutil.copy("tasks.xls", save_path)
+
     def openurl(self, x, y):
         if y == 0:
             id = self.tableWidget_taskList.item(x, y).text()
@@ -242,6 +266,7 @@ class RedminePannel(QWidget, Ui_RedminePanel):
         self.pushButton_count.clicked.connect(self.get_status)
         self.pushButton_count.clicked.connect(self.get_assigned_to)
         self.pushButton_count.clicked.connect(self.count)
+        self.pushButton_export.clicked.connect(self.export)
 
         # 执行项目、用户、任务的更新
         self.pushButton_renew.clicked.connect(self.updatedata)

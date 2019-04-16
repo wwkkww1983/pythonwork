@@ -204,6 +204,13 @@
        </property>
       </widget>
      </item>
+     <item row="5" column="6">
+      <widget class="QPushButton" name="pushButton_export">
+       <property name="text">
+        <string>导出</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
