@@ -176,7 +176,7 @@ def do_signin(str_api, dic_data, sid=''):
 
 
 def do_get_vboxs():
-    r2 = post(api_boxes_list, {}, sid)
+    r2 = post(api_getboxgroup, {}, sid)
     with open("boxeslistresult.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(r2, ensure_ascii=False, indent=4))
 
@@ -213,16 +213,20 @@ if __name__ == '__main__':
     r1 = post(api_signin, data_signin, '')
     sid = r1["result"]["sid"]
     print("sid:", sid)
+    do_get_vboxs()
 
-    do_saveplcinfo(sid)
-    allplcconf = do_showallplcconf(sid)
-    if allplcconf["code"] == 200:
-        conf = allplcconf["result"]["infoDatas"]
-        if len(conf) > 0:
-            data_unbundledplc["plc_id"] = conf[-1]["plcId"]
-    time.sleep(5)
-    do_unbundledplc(sid)
-    do_showallplcconf(sid)
+    # # 以下执行plc驱动增删改
+    # do_saveplcinfo(sid)
+    # allplcconf = do_showallplcconf(sid)
+    # if allplcconf["code"] == 200:
+    #     conf = allplcconf["result"]["infoDatas"]
+    #     if len(conf) > 0:
+    #         data_unbundledplc["plc_id"] = conf[-1]["plcId"]
+    # time.sleep(5)
+    # do_unbundledplc(sid)
+    # do_showallplcconf(sid)
+
+
     # 以下：将周期性获取盒子在线状态，形成记录
     # with open("vbox_state_log.csv", 'w', encoding='gb2312') as f:
     #     f.write('{0},{1},{2},{3},{4},{5},{6},{7},{8}\n'.format(
