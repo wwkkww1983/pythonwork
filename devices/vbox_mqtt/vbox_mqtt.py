@@ -236,10 +236,11 @@ class MqttClient(object):
             #     print(logline)
             # else:
             #     write_line_to_csv(logfilename, logline)
-            if line["warning"] != "第一条上线消息":
+            if line["warning"] != "第一条数据记录消息":
                 print(logline)
             else:
                 write_line_to_csv(logfilename, logline)
+                print(logline)
         else:
             write_line_to_csv(logfilename, logline)
         dic[machine_code] = line  # 反向赋值，更新dic
@@ -341,31 +342,39 @@ if __name__ == '__main__':
 
     # 设置要测试的机器码，印度（晚2.5小时），波兰（晚6小时），泰国（晚1小时），越南（晚1小时）
     vbox_wecon = [
-        "V0200118051788206bc83233386",  # LAN 网络通断
-        "V020011811156605a9e4f5f659b",  # LAN 网络通断
-        "V02001181115662a2d12c524140",  # WIFI 网络通断
-        "V02001181115664a2d12c0e20a2",  # WIFI 网络通断
-        "V020011811156635a9e4f5f58d3",  # LAN 持续连接
-        "V02001181115661a675e8634171",  # LAN 持续连接
-        "V02001180517880c2d35f9f14f6",  # 4G  持续连接
-        "V02001181119999a2d12c528096",  # 4G  持续连接
-        "V02001181119996a2d12c0dcfe5",  # WIFI 周期上下电
+        # "V0200118051788206bc83233386",  # LAN 网络通断
+        # "V020011811156605a9e4f5f659b",  # LAN 网络通断
+        # "V02001181115662a2d12c524140",  # WIFI 网络通断
+        # "V02001181115664a2d12c0e20a2",  # WIFI 网络通断
+        # "V020011811156635a9e4f5f58d3",  # LAN 持续连接
+        # "V02001181115661a675e8634171",  # LAN 持续连接
+        # "V02001180517880c2d35f9f14f6",  # 4G  持续连接
+        # "V02001181119999a2d12c528096",  # 4G  持续连接
+        # "V02001181119996a2d12c0dcfe5",  # WIFI 周期上下电
     ]
-    vbox_india = [
+    vbox_forign = [
+        # # india
         # "V010011809170059eefb5e1144b",  # Ethernet  ok
         # "V010011807160329eefb5e172e6",  # Wifi      ok
         # "V0200118031300206bc832305a7",  # 4G        ok
-    ]
-    vbox_poland = [
+        #
+        # # poland
         # "V020011801290046a933a475a48",  # 4G        ok
-    ]
-    vbox_thailand = [
+        #
+        # # thailand
         # "V0200118030900206bc832020a3",  # WIfi?     ok
-    ]
-    vbox_vietnam = [
+        #
+        # # vietnam
         # "V02002181120005a2d12c52c89f",  # 4G
     ]
-    vbox = vbox_wecon + vbox_india + vbox_poland + vbox_thailand + vbox_vietnam
+    vbox_vpn = [
+        "V01001190423704a685e08d5f31",  # wifi V-BOX1
+        "V01001190423703a685e0e37557",  # wifi V-BOX2
+        "V01001190423706a685e08df163",  # wifi V-BOX3
+        "V01001190423705a685e0e37515",  # wifi V-BOX4
+        "V020011806280085a828594122e",  # wifi V-BOX5
+    ]
+    vbox = vbox_wecon + vbox_forign + vbox_vpn
     topic = []
     dic = dict()
     line = dict()
