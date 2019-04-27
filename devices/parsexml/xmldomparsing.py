@@ -10,20 +10,20 @@ import xml.dom.minidom
 from time import sleep
 
 newf = []
-with open('0.hsc', 'r') as f:
-    for line in f.readlines():
-        if not (('CharSize="' in line) and ('" WordAddr' in line)):
-            newf.append(line)
-        else:
-            locate1 = line.find('CharSize="')
-            locate2 = line.find('" WordAddr')
-            stx = line[(locate1+len('CharSize="')):locate2]
-            newline = line[0:(locate1+len('CharSize="'))] + 'iamfont' + line[locate2:]
-            # print(newline)
-            newf.append(newline)
-with open('0_.hsc', 'w') as f:
-    for line in newf:
-        f.write(line)
+# with open('0.hsc', 'r') as f:
+#     for line in f.readlines():
+#         if not (('CharSize="' in line) and ('" WordAddr' in line)):
+#             newf.append(line)
+#         else:
+#             locate1 = line.find('CharSize="')
+#             locate2 = line.find('" WordAddr')
+#             stx = line[(locate1+len('CharSize="')):locate2]
+#             newline = line[0:(locate1+len('CharSize="'))] + 'iamfont' + line[locate2:]
+#             # print(newline)
+#             newf.append(newline)
+# with open('0_.hsc', 'w') as f:
+#     for line in newf:
+#         f.write(line)
 
 
 # DOMTree = xml.dom.minidom.parse('0_.hsc')
