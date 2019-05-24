@@ -47,11 +47,17 @@ class MqttClient(object):
             1: 0
         }
 
-    def onconnect(self, client, userdata, flags, rc):
-        print("Connected with result code " + str(rc))
+    def on_connect(self, client, userdata, flags, rc):
+        logline = '{}, connect from server with result code: {}'.format(nowtimefmt(), rc)
+        write_line_to_csv("control.csv", logline)
         self.client.subscribe(self.sub_topic)  # 将订阅放到连接回调中意味着如果连接丢失可以进行重新连接
 
-    def onmessage(self, client, userdata, msg):
+    def on_disconect(self, userdata, rc):
+        if rc != 0:
+            logline = '{}, lost the connect from server with result code: {}'.format(nowtimefmt(), rc)
+            write_line_to_csv("control.csv", logline)
+
+    def on_message(self, client, userdata, msg):
         # self.tst_sub_message(msg)
         # print("msg.payload: ", msg.payload)
         message_str = ""
@@ -90,8 +96,6 @@ class MqttClient(object):
 
     def subscribe(self, topic):
         self.sub_topic = topic
-        self.client.on_connect = self.onconnect
-        self.client.on_message = self.onmessage
 
     def tst_sub_message(self, message):
         print(message.payload)
@@ -101,6 +105,9 @@ class MqttClient(object):
         #     print(gzip.decompress(message.payload))
 
     def mqtt_go(self):
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+        self.client.on_disconnect = self.on_disconect
         self.client.loop_forever()
 
     def modify_monitor_value(self, **params2):
@@ -240,7 +247,6 @@ class MqttClient(object):
                 print(logline)
             else:
                 write_line_to_csv(logfilename, logline)
-                print(logline)
         else:
             write_line_to_csv(logfilename, logline)
         dic[machine_code] = line  # 反向赋值，更新dic
@@ -347,7 +353,7 @@ if __name__ == '__main__':
         # "V02001181115662a2d12c524140",  # WIFI 网络通断
         # "V02001181115664a2d12c0e20a2",  # WIFI 网络通断
         # "V020011811156635a9e4f5f58d3",  # LAN 持续连接
-        # "V02001181115661a675e8634171",  # LAN 持续连接
+        "V02001181115661a675e8634171",  # LAN 持续连接
         # "V02001180517880c2d35f9f14f6",  # 4G  持续连接
         # "V02001181119999a2d12c528096",  # 4G  持续连接
         # "V02001181119996a2d12c0dcfe5",  # WIFI 周期上下电
@@ -368,11 +374,11 @@ if __name__ == '__main__':
         # "V02002181120005a2d12c52c89f",  # 4G
     ]
     vbox_vpn = [
-        "V01001190423704a685e08d5f31",  # wifi V-BOX1
-        "V01001190423703a685e0e37557",  # wifi V-BOX2
-        "V01001190423706a685e08df163",  # wifi V-BOX3
-        "V01001190423705a685e0e37515",  # wifi V-BOX4
-        "V020011806280085a828594122e",  # wifi V-BOX5
+        # "V01001190423704a685e08d5f31",  # V-BOX1
+        # "V01001190423703a685e0e37557",  # V-BOX2
+        # "V01001190423706a685e08df163",  # V-BOX3
+        # "V01001190423705a685e0e37515",  # V-BOX4
+        # "V020011806280085a828594122e",  # V-BOX5
     ]
     vbox = vbox_wecon + vbox_forign + vbox_vpn
     topic = []

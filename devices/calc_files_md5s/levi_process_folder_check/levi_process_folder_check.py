@@ -52,7 +52,8 @@ HMIINDEX = {
     'LEVI 2070D_TV': 71
 }
 OEMINDEX = {
-    "OEM泉州科源": "JITOO"
+    "OEM泉州科源": "JITOO",
+    "OEM万维": "Exibl"
 }
 
 
@@ -125,7 +126,7 @@ def osf_compare(srcpath, oempath, logopath, datpath, cpu="61y"):
                 assert l1[0] == 'codeoem'
                 assert l2[0] == 'hmitype'
                 assert l1[1] == OEMINDEX[productinfo[2]] + '\n'
-                assert l2[1] == str(HMIINDEX["LEVI " + productinfo[1]])
+                assert l2[1] == str(HMIINDEX["LEVI " + productinfo[1]]) + '\n'  # 补上\n
                 print("success, {}, {}, OEM={}, hmitype={}".format(
                     filename, dic2[filename], OEMINDEX[productinfo[2]], str(HMIINDEX["LEVI " + productinfo[1]])))
             else:
@@ -137,11 +138,11 @@ def osf_compare(srcpath, oempath, logopath, datpath, cpu="61y"):
 
 if __name__ == '__main__':
     check = FileCheck()
-    generalpath = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\OEM_通用-productfile.osf"
+    generalpath = r"E:\Redmine2019\LEVIOEM测试\OEM_通用_6.4.18\NUC972_2043T_OEM_6.4.18_2019-01-23\productfile.osf"
     # p2 = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\OEM_科源-productfile.osf"
-    oempath = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\NUC972_2070_OEM泉州科源_6.4.18_2019-01-23"
-    logofile = "Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\logo.NTB"
-    codeoemfile = "Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\codeoem.dat"
+    oempath = r"E:\Redmine2019\LEVIOEM测试\测试 #9036 万维机电有限公司 生产镜像（700ML 2043T 102ML） 测试\OEM_万维\NUC972_2043T_OEM万维_6.4.18_2019-01-23"
+    logofile = r"E:\Redmine2019\LEVIOEM测试\OEM_通用_6.4.18\LOGOS\4.3寸\logo.NTB"
+    codeoemfile = r"E:\Redmine2019\LEVIOEM测试\测试 #9036 万维机电有限公司 生产镜像（700ML 2043T 102ML） 测试\OEM_万维\NUC972_2043T_OEM万维_6.4.18_2019-01-23\codeoem.dat"
     # check.start_check("zip", p1)
     # check.start_check("zip", p2)
     osf_compare(generalpath, oempath, logofile, codeoemfile)

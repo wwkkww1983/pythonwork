@@ -72,6 +72,7 @@ class FileCheck(object):
                 fb = zip.open(name, 'rU')  # f为byte类型
                 md5 = self.calc_md5(fb)
                 md5dic[name.encode('cp437').decode('gbk')] = md5  # 骚操作，先按zip文件名编码方式还原后再用gbk解码
+        zip.close()
         # print(md5dic)
         return md5dic
 
@@ -91,18 +92,6 @@ class FileCheck(object):
                     md5dic[name.encode('cp437').decode('gbk')] = md5
         # print(md5dic)
         return md5dic
-
-    def lookfolder(self, folderpath: str):
-        # 打开类型“文件夹”,返回所有文件的绝对路径，本函数不需要用到文件流，为了保持接口一致仍返回字典
-        name_file_dict = {}
-        os.chdir(folderpath)
-        for root, dirs, files in os.walk(folderpath):
-            for i in files:
-                fp = os.path.join(root, i)  # 合成文件绝对路径
-                fb = None
-                name_file_dict[fp] = fb  # 组装绝对路径和文件流为字典
-        log.info(name_file_dict)
-        return name_file_dict
 
     def start_check(self, import_type: str, import_path: str):
         md5s = None
@@ -137,12 +126,25 @@ class FileCheck(object):
         print("********************MD5校验结果********************\n")
         return md5s
 
+    def lookfolder(self, folderpath: str):
+        # 打开类型“文件夹”,返回所有文件的绝对路径，本函数不需要用到文件流，为了保持接口一致仍返回字典
+        # 修改为返回绝对路径列表
+        name_file_dict = {}
+        os.chdir(folderpath)
+        for root, dirs, files in os.walk(folderpath):
+            for i in files:
+                fp = os.path.join(root, i)  # 合成文件绝对路径
+                fb = None
+                name_file_dict[fp] = fb  # 组装绝对路径和文件流为字典
+        log.info(name_file_dict)
+        return list(name_file_dict.keys())
+
     def walk_special_package(self, rootpath, filename):
-        dic = self.lookfolder(rootpath)
-        for k in sorted(dic.keys()):
+        filelist = self.lookfolder(rootpath)
+        for k in sorted(filelist):
             p, n = os.path.split(k)
             # for ver in ['6_0_7', '6_0_3']:  # 71Y 6.0.3通用版，6.0.7永康玻璃杯版
-            for ver in ['6_0_9']:  # 71Y 6.0.9版本
+            for ver in ['6.4.18']:  # 71Y 6.0.9版本
                 # for ver in ['6.4.0', '6_4_0', '6.4_0', '6_4.0']:  # 61Y 6.4.0通用版
                 # for ver in ['6.4.18']:  # 61Y 6.4.18通用版
                 if ver in p:
@@ -158,7 +160,10 @@ if __name__ == '__main__':
     # check.start_check("folder", r"E:\MyWorkPlace\pythonwork\devices\calc_files_md5s")
     # check.checkzip(r"E:\MyWorkPlace\pythonwork\devices\calc_files_md5s\calc_files_md5s.zip")
     # check.start_check("zip", r"E:\MyWorkPlace\pythonwork\devices\calc_files_md5s\calc_files_md5s.zip")
-    p1 = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\OEM_通用-productfile.osf"
-    p2 = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\OEM_科源-productfile.osf"
-    logofile = "Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\logo.NTB"
-    codeoemfile = "Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\codeoem.dat"
+    # p1 = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\OEM_通用-productfile.osf"
+    # p2 = r"Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\OEM_科源-productfile.osf"
+    # logofile = "Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\logo.NTB"
+    # codeoemfile = "Z:\MyworkSpace\pythonwork\Temp\OEM镜像对比\codeoem.dat"
+    rp = r"\\192.168.11.20\hmi软件镜像\nuc972(V1.0 ~ V1.4)\组态_LEVI\OEM\OEM_通用"
+    fn = r"productfile.osf"
+    check.walk_special_package(rp, fn)

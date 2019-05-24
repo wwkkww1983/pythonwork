@@ -13,6 +13,7 @@ import gzip
 from make_time_formated import *
 from zipfile import zlib
 
+
 nowtimefmt = lambda: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())  # 格式化当前时间
 nowtimestamp = lambda: time.mktime(time.localtime())
 ACT_MEANING = {  # 盒子端发布消息含义，1004为服务器发出的遗言消息
@@ -325,7 +326,8 @@ def loopall():
     for t in threads:
         t.setDaemon(True)
         t.start()
-    t.join()
+    for t in threads:
+        t.join()
 
 
 if __name__ == '__main__':
