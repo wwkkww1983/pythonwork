@@ -32,8 +32,8 @@ It will log some returned info to a .log file in current folder when started.
             time.sleep(5)
             file = os.popen(ping)
             log = ""
-            lines = file.readlines()
-            for line in lines:
+            LINES = file.readlines()
+            for line in LINES:
                 line = line.strip()
                 if line == '请求超时。' or line == 'Request timed out.':
                     log = "{}, 超时".format(nowtimestr()) if line == '请求超时。' else "{}, timed out.".format(nowtimestr())
@@ -48,7 +48,7 @@ It will log some returned info to a .log file in current folder when started.
                     # splitword = wordmatched[0][2]  # 获取时间数值前面是=或<或>，作为分隔符
                     print("{}, {}".format(nowtimestr(), wordmatched[0]))
                     log = "{}, {}".format(nowtimestr(), wordmatched[0])
-                    lines = []
+                    LINES = []
                     continue
                 else:
                     continue

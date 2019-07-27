@@ -2,7 +2,6 @@
 from PyQt5.QtCore import (pyqtSignal, pyqtSlot,  QMutex, QMutexLocker, QPoint, QSize, Qt,
                           QThread, QWaitCondition)
 from PyQt5.QtWidgets import QWidget, QMessageBox, QPushButton, QLabel, QLCDNumber, QApplication, QGridLayout
-from usb_hid import MYUSBHID as myhid
 from sys import argv,exit
 from time import sleep
 
