@@ -1,0 +1,54 @@
+C:\Python34\python.exe Z:/MyworkSpace/pythonwork/devices/vbox_auto_test/vbox_http_api_tst/vnet_third_party_api_cls.py
+----api: we-data/login
+----post data: {'password': '123456', 'alias': 'test_fan', 'isremeber': 0}
+----sid:
+----url: http://api.v-box.net/box-data/api/we-data/login
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407215","result":{"utype":1,"ztRole":1,"sid":"31f1fd40fa1247c98313a81739da7776"}}
+
+----api: we-data/boxs
+----post data: {}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/boxs
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407326","result":{"list":[{"groupName":"默认组","boxList":[{"machineCode":"V02001180517884c2d35f9f3386","devModel":"V-BOX S-4G","isAlarm":1,"boxName":"884 3386","remark":null,"state":"1","map":"","boxId":"150"},{"machineCode":"V0200118051788206bc83233386","devModel":"V-BOX S-4G","isAlarm":1,"boxName":"882 3386","remark":"","state":"1","map":"","boxId":"157"}]}]}}
+
+----api: we-data/realgroups
+----post data: {'boxId': '150'}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/realgroups
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407497","result":{"list":[{"groupName":"默认组","groupId":906}]}}
+
+----api: we-data/realcfgs
+----post data: {'pageIndex': 1, 'groupId': 906, 'boxId': '150', 'pageSize': 10}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/realcfgs
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407603","result":{"cfgList":[{"monitorId":136340,"dataId":105,"monitorName":"00","updTime":1562041029000,"dataLimit":"0 99999","digitBinary":"十进制","addr":"0","rid":"0","roleType":3,"digitCount":"","addrType":0},{"monitorId":136337,"dataId":105,"monitorName":"40","updTime":1562040615000,"dataLimit":"0 99999","digitBinary":"十进制","addr":"0","rid":"4","roleType":3,"digitCount":"5,0","addrType":2}],"totalPage":1,"totalRecord":2,"currentPage":1}}
+
+----api: we-data/realdata
+----post data: {'pageIndex': 1, 'groupId': 906, 'boxId': '150', 'pageSize': 10}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/realdata
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407703","result":{"totalPage":1,"list":[{"com":4395,"monitorId":136340,"monitorName":"00","groupId":0,"state":"1","value":"1"},{"com":4395,"monitorId":136337,"monitorName":"40","groupId":0,"state":"1","value":"50"}],"totalRecord":2,"currentPage":1}}
+
+----api: we-data/updrealdata
+----post data: {'monitorId': 136340, 'value': '1'}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/updrealdata
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407818","result":{}}
+
+----api: we-data/monitors
+----post data: {}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/monitors
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062407964","result":{"list":[{"monitorId":136338,"monitorName":"40","groupId":12707},{"monitorId":136339,"monitorName":"40","groupId":12708}]}}
+
+----api: we-data/historydata
+----post data: {'pageIndex': 1, 'monitorId': 136338, 'pageSize': 10}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/historydata
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062408073","result":{"totalPage":35,"list":[{"monitorTime":1562062357216,"groupName":"60","monitorTime_show":"2019-07-02 18:12:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562062297216,"groupName":"60","monitorTime_show":"2019-07-02 18:11:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562062237216,"groupName":"60","monitorTime_show":"2019-07-02 18:10:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562062177216,"groupName":"60","monitorTime_show":"2019-07-02 18:09:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562062117216,"groupName":"60","monitorTime_show":"2019-07-02 18:08:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562062057216,"groupName":"60","monitorTime_show":"2019-07-02 18:07:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562061997216,"groupName":"60","monitorTime_show":"2019-07-02 18:06:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562061937216,"groupName":"60","monitorTime_show":"2019-07-02 18:05:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562061877216,"groupName":"60","monitorTime_show":"2019-07-02 18:04:37.216","monitorName":"40","groupId":12707,"value":"50"},{"monitorTime":1562061817216,"groupName":"60","monitorTime_show":"2019-07-02 18:03:37.216","monitorName":"40","groupId":12707,"value":"50"}],"totalRecord":348,"currentPage":1}}
+
+----api: we-data/alarmdata
+----post data: {'pageIndex': 1, 'pageSize': 10, 'boxId': '150'}
+----sid: 31f1fd40fa1247c98313a81739da7776
+----url: http://api.v-box.net/box-data/api/we-data/alarmdata
+----feedback data: {"code":200,"msg":"ok","reqId":"1562062408255","result":{"totalPage":0,"list":[],"totalRecord":0,"currentPage":1}}

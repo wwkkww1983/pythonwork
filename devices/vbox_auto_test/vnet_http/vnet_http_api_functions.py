@@ -19,9 +19,14 @@ nowtimefmt = lambda: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())    # �
 keyvalue = "key=5cee621329f24e5cbdc43daa959ce9a1"  # headers参数，特定值，研发提供（猜测跟公司绑定）
 
 host_test = "192.168.45.190:8686"
-url_test = "http://" + host_test + "/box-data/api/"
+# url_test = "http://" + host_test + "/box-data/api/"
+url_test = "http://" + host_test + "/box-web/api/"
 host_normal = "rc.v-box.net:8080"
-url_normal = "http://" + host_normal + "/box-web200/api/"
+url_normal = "http://" + host_normal + "/box-web/api/"
+
+# 变更内外网时，修改这两个参数
+host = host_test
+url = url_test
 
 api_signin = 'user/signin'  # 登录接口
 api_check = 'user/check'  # 检查？该接口无提交数据
@@ -32,6 +37,7 @@ api_boxes = 'data/boxs'  # 获取盒子列表,获取数据与getboxgroup接口�
 api_saveplcinfo = 'plcInfoAction/savePlcInfo'  # 新建通讯口连接
 api_showallplcconf = 'plcInfoAction/showAllPlcConf'  # 获取所有通讯口设置信息
 api_unbundledplc = 'plcInfoAction/unbundledPlc'  # 删除指定通讯口
+api_chgstrategystate = 'strategyAction/chgStrategyState' # 修改制定脚本状态：启用/停用
 
 data_headers_common = {
     "cuid": "123456789",
@@ -44,7 +50,7 @@ data_headers_common = {
     # "sign": None,  # "6d1e9d8e01d778c05adefe29511255a0"
 }
 data_headers_without_common = {
-    "Host": host_normal,
+    "Host": host,
     "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
                   'AppleWebKit/537.36 (KHTML, like Gecko) '
                   'Chrome/69.0.3497.92 '
@@ -53,7 +59,7 @@ data_headers_without_common = {
     "Connection": "keep-alive"
 }
 data_signin = {
-    "alias": "test_fan",
+    "alias": "test_fann",
     "password": "123456",
     "isremeber": 0  # 网页接口这个键是个错别字
 }
@@ -94,7 +100,10 @@ data_showallplcconf = {
 data_unbundledplc = {
     "plc_id": None  # 应该从showallplcconf响应数据中取值，对通讯口id
 }
-
+data_chgstrategystate = {
+    "strategy_id": 864,
+    "state": 1
+}
 
 
 def cal_md5(string):
@@ -147,7 +156,7 @@ def post(api: str, business_dic: dict, sid):
     print("--------api:", api)
     print("----post data:", business_dic)
     print("----sid:", sid)
-    newurl = url_normal + api
+    newurl = url + api
     businessdic = business_dic.copy()  # 使用字典备份，避免原字典被污染
     commondic = data_headers_common.copy()
     commondic["ts"] = nowtime()
@@ -165,14 +174,16 @@ def post(api: str, business_dic: dict, sid):
         print("tosigndict: {nd}\n"
               "commondict: {cpd}\n"
               "headersdict: {hds}".format(nd=mergedic, cpd=commondic, hds=headers_dict))
+    print("----url: {}".format(newurl))
     r = req.post(newurl, data=businessdic, headers=headers_dict)
     js = r.json()
     print("----feedback data: {}\n".format(js))
     return js
 
 
-def do_signin(str_api, dic_data, sid=''):
-    pass
+def do_signin():
+    r_signin = post(api_signin, data_signin, '')
+    return r_signin
 
 
 def do_get_vboxs():
@@ -192,9 +203,15 @@ def do_showallplcconf(_sid):
 def do_unbundledplc(_sid):
     return post(api_unbundledplc, data_unbundledplc, _sid)
 
+
+def do_chgstrategystate(_sid):
+    return post(api_chgstrategystate, data_chgstrategystate, _sid)
+
 """
 辅助性函数
 """
+
+
 def text_to_dict(text: str):
     d = dict()
     if "&" in text:
@@ -209,11 +226,22 @@ def text_to_dict(text: str):
     return d
 
 if __name__ == '__main__':
-
-    r1 = post(api_signin, data_signin, '')
+    r1 = do_signin()
     sid = r1["result"]["sid"]
     print("sid:", sid)
     do_get_vboxs()
+    i = 1
+    slptime = 1
+    data_chgstrategystate["strategy_id"] = 770
+    while i <= 20000:
+        time.sleep(slptime)
+        data_chgstrategystate["state"] = 0
+        off = do_chgstrategystate(sid)["code"]
+        time.sleep(slptime)
+        data_chgstrategystate["state"] = 1
+        on = do_chgstrategystate(sid)["code"]
+        print("{}, count: {}/1000, off={}, on={}".format(nowtimefmt(), i, off, on))
+        i += 1
 
     # # 以下执行plc驱动增删改
     # do_saveplcinfo(sid)
