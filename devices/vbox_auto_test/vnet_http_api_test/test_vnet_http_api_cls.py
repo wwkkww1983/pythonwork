@@ -171,54 +171,10 @@ class VnetHttpApi(object):
         js = r.json()
         # print("----feedback data: {}\n".format(r.text))
         return js
-    #
-    # def do_signin(self):
-    #     r = self.post(api_signin, data_signin, '')
-    #     self.sid = r["result"]["sid"]
-    #     return r
-    #
-    # def do_boxes(self):
-    #     """获取盒子列表"""
-    #     r = self.post(api_boxes, {}, self.sid)
-    #     return r
-    #
-    # def do_realgroups(self):
-    #     r = self.post(api_realgroups, data_realgroups, self.sid)
-    #     return r
-    #
-    # def do_realcfgs(self):
-    #     r = self.post(api_realcfgs, data_realcfgs, self.sid)
-    #     return r
-    #
-    # def do_realdata(self):
-    #     """实时监控点数据列表"""
-    #     r = self.post(api_realdata, data_realdata, self.sid)
-    #     return r
-    #
-    # def do_updrealdata(self):
-    #     """修改实时监控点数据"""
-    #     r = self.post(api_updrealdata, data_updrealdata, self.sid)
-    #     return r
-    #
-    # def do_monitors(self):
-    #     """获取历史监控点名称列表"""
-    #     r = self.post(api_monitors, {}, self.sid)
-    #     return r
-    #
-    # def do_historydata(self):
-    #     """获取指定监控点历史数据"""
-    #     r = self.post(api_historydata, data_historydata, self.sid)
-    #     return r
-    #
-    # def do_alarmdata(self):
-    #     """获取报警数据"""
-    #     r = self.post(api_alarmdata, data_alarmdata, self.sid)
-    #     return r
 
 
 @ddt
 class TestVnetHttpApi(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.vnet = VnetHttpApi()
@@ -238,6 +194,7 @@ class TestVnetHttpApi(unittest.TestCase):
     #     data_signin["password"] = password
     #     r = self.vnet.do_signin()
     #     self.assertEqual(r["code"], 200)
+
     def test_do_boxes(self):
         r = self.vnet.post(api_boxes, {}, self.sid)
         self.assertEqual(r["code"], 200)
@@ -333,7 +290,7 @@ if __name__ == '__main__':
     # add_test(suite)
 
     runner = unittest.TextTestRunner(verbosity=2)
-    report_file = open("慧网接口测试报告.html", "wb")
+    report_file = open(r"C:\Users\fan\Desktop\慧网接口测试报告.html", "wb")
     runner = HTMLTestRunner.HTMLTestRunner(stream=report_file, title=u"慧网接口测试报告")
     runner.run(suite)
     report_file.close()

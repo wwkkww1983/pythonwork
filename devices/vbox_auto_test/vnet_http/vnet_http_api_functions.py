@@ -34,6 +34,7 @@ api_userinfo = 'user/userinfo'  # 获取用户信息，该接口无提交数据
 api_getboxgroup = 'baseInfoAction/getBoxGroup'  # 获取盒子分组信息,该接口无提交数据
 api_showbasefinfo = 'baseInfoAction/showBaseInfo'  # 获取盒子基本信息
 api_boxes = 'data/boxs'  # 获取盒子列表,获取数据与getboxgroup接口类似，该接口无提交数据
+# api_realdata = "/actDataAction/getFloatInfo"
 api_saveplcinfo = 'plcInfoAction/savePlcInfo'  # 新建通讯口连接
 api_showallplcconf = 'plcInfoAction/showAllPlcConf'  # 获取所有通讯口设置信息
 api_unbundledplc = 'plcInfoAction/unbundledPlc'  # 删除指定通讯口
