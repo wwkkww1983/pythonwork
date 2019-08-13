@@ -40,12 +40,21 @@ class TestVnetSignin(unittest.TestCase):
         r = self.vnet.post(api_signin, data_signin, '')
         self.assertEqual(r["code"], 11003)
 
+
 if __name__ == '__main__':
     # unittest.main()
+    # suite = unittest.TestSuite(map(TestVnetSignin, ["test_signin_correct",
+    #                                                 "test_signin_password_error",
+    #                                                 "test_signin_password_empty"]))
     suite = unittest.TestSuite()
-    # runner = unittest.TextTestRunner(verbosity=2)
-    report_file = open("v-net api test report.txt", "wb")
-    runner = unittest.TextTestRunner(stream=report_file, verbosity=2)
-    # runner = HTMLTestRunner.HTMLTestRunner(stream=report_file, title=u"慧网接口测试报告")
+    suite.addTest(TestVnetSignin("test_signin_correct"))
+    suite.addTest(TestVnetSignin("test_signin_password_error"))
+    suite.addTest(TestVnetSignin("test_signin_password_empty"))
+
+    # report_file = open("v-net api test report.txt", "w")
+    # runner = unittest.TextTestRunner(stream=report_file, verbosity=2)
+
+    report_file = open("v-net api test report.html", "wb")
+    runner = HTMLTestRunner.HTMLTestRunner(stream=report_file, title=u"慧网接口测试报告")
     runner.run(suite)
     report_file.close()
