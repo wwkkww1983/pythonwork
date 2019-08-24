@@ -135,6 +135,10 @@ class LeviDownload(object):
             mylog("download finished, the result is {}".format(self.project_downloaded_ok))
 
     def close_error_tip_win(self):
+        """
+        关闭可能的异常弹出提示框，注意：需要时才调用
+        :return:
+        """
         for i in range(10):
             sleep(1)
             if self.app.top_window()['Static'].window_text() == '传输中出现错误!':
