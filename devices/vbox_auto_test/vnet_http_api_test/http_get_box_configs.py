@@ -5,16 +5,10 @@
 # Author:    fan
 # date:      2019/7/25 025
 # -----------------------------------------------------------
-
-from unittest import TestSuite
-
 import requests as req
 import json
 import hashlib
 import time
-import unittest
-import HTMLTestRunner
-from ddt import ddt, data, unpack  # ddt 将测试变量参数化
 
 debug = False
 nowtime = lambda: int(round(time.time() * 1000))  # 当前时间戳单位ms
