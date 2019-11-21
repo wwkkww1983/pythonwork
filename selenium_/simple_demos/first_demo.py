@@ -11,9 +11,12 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
 if __name__ == "__main__":
     test_result = False
-    ie_webdriver_server_path = \
-        r'C:\Users\fan\OneDrive\pythonwork\selenium_\selenium_drivers\IEDriverServer.exe'
-    driver = webdriver.Ie(ie_webdriver_server_path)
+    # ie_webdriver_server_path = \
+    #     r'C:\Users\fan\OneDrive\pythonwork\selenium_\selenium_drivers\IEDriverServer.exe'
+    chromedriver = r"C:\WEBDRIVERS\chromedriver.exe"
+    # driver = webdriver.Ie(ie_webdriver_server_path)
+
+    driver = webdriver.Chrome(chromedriver)
     driver.get("http://www.baidu.com")
     search_input_element = driver.find_element_by_id('kw')
     search_input_element.send_keys("WebDriver")
@@ -27,7 +30,7 @@ if __name__ == "__main__":
         content_div = driver.find_element_by_id(str(i))
         title = str(content_div.find_element_by_css_selector(".t a").text.encode('utf8'))
 
-        if 'Watir' not in title:
+        if '51Testing' not in title:
             continue
         else:
             print('Find keyword watir, it was in index %d search result! Test case pass!' % i)
