@@ -41,10 +41,12 @@ def vbox_login(driver: webdriver):
 
 
 if __name__ == '__main__':
-    package = 'com.weikong.vbox'
-    activity = 'io.dcloud.PandoraEntry'
-    # package = 'com.tencent.mobileqq'
-    # activity = '.activity.SplashActivity'
+    # package = 'com.weikong.vbox'
+    # activity = 'io.dcloud.PandoraEntry'
+    package = 'com.tencent.mobileqq'
+    activity = '.activity.SplashActivity'
+
     driver = driver_init(activity, package)
-    # qq_login(driver)
-    vbox_login(driver)
+
+    qq_login(driver)
+    # vbox_login(driver)
